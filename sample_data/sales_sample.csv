@@ -1,0 +1,781 @@
+Sale Date,Item Code,Product Name,Qty Sold,Price,Customer,State
+01/07/2026,SKU-001,Wireless Mouse,3,₹599,Cust-3,Gujarat
+09/07/2026,SKU-001,Wireless Mouse,2,₹599,Cust-79,Maharashtra
+03/06/2026,SKU-001,Wireless Mouse,1,₹599,Cust-28,Gujarat
+04/09/2026,SKU-001,Wireless Mouse,2,₹599,Cust-51,Gujarat
+02/06/2026,SKU-001,Wireless Mouse,1,₹599,Cust-22,Gujarat
+27/06/2026,SKU-001,Wireless Mouse,3,₹599,Cust-18,Gujarat
+20/05/2026,SKU-001,Wireless Mouse,3,₹599,Cust-54,Gujarat
+02/07/2026,SKU-001,Wireless Mouse,2,₹599,Cust-20,Maharashtra
+23/08/2026,SKU-001,Wireless Mouse,2,₹599,Cust-30,Delhi
+09/08/2026,SKU-001,Wireless Mouse,1,₹599,Cust-63,Delhi
+22/08/2026,SKU-001,Wireless Mouse,3,₹599,Cust-37,Maharashtra
+31/08/2026,SKU-001,Wireless Mouse,4,₹599,Cust-69,Gujarat
+04/05/2026,SKU-001,Wireless Mouse,3,₹599,Cust-17,Delhi
+29/05/2026,SKU-001,Wireless Mouse,1,₹599,Cust-59,Delhi
+17/05/2026,SKU-001,Wireless Mouse,4,₹599,Cust-51,Gujarat
+29/06/2026,SKU-001,Wireless Mouse,1,₹599,Cust-62,Delhi
+27/06/2026,SKU-001,Wireless Mouse,1,₹599,Cust-25,Maharashtra
+15/08/2026,SKU-001,Wireless Mouse,4,₹599,Cust-21,Maharashtra
+12/07/2026,SKU-001,Wireless Mouse,1,₹599,Cust-14,Maharashtra
+15/05/2026,SKU-001,Wireless Mouse,2,₹599,Cust-69,Maharashtra
+06/07/2026,SKU-001,Wireless Mouse,1,₹599,Cust-10,Maharashtra
+03/05/2026,SKU-001,Wireless Mouse,4,₹599,Cust-20,Delhi
+04/08/2026,SKU-001,Wireless Mouse,3,₹599,Cust-78,Gujarat
+08/06/2026,SKU-001,Wireless Mouse,1,₹599,Cust-15,Gujarat
+10/06/2026,SKU-001,Wireless Mouse,4,₹599,Cust-62,Gujarat
+16/09/2026,SKU-001,Wireless Mouse,2,₹599,Cust-14,Delhi
+12/07/2026,SKU-001,Wireless Mouse,3,₹599,Cust-62,Delhi
+27/08/2026,SKU-001,Wireless Mouse,1,₹599,Cust-27,Delhi
+07/07/2026,SKU-001,Wireless Mouse,2,₹599,Cust-70,Maharashtra
+25/05/2026,SKU-001,Wireless Mouse,3,₹599,Cust-12,Delhi
+02/08/2026,SKU-001,Wireless Mouse,3,₹599,Cust-22,Gujarat
+11/08/2026,SKU-001,Wireless Mouse,3,₹599,Cust-29,Delhi
+19/08/2026,SKU-001,Wireless Mouse,2,₹599,Cust-52,Delhi
+10/08/2026,SKU-001,Wireless Mouse,2,₹599,Cust-67,Gujarat
+08/07/2026,SKU-001,Wireless Mouse,1,₹599,Cust-4,Gujarat
+09/06/2026,SKU-001,Wireless Mouse,3,₹599,Cust-25,Delhi
+06/05/2026,SKU-001,Wireless Mouse,3,₹599,Cust-58,Delhi
+10/07/2026,SKU-001,Wireless Mouse,3,₹599,Cust-11,Maharashtra
+11/09/2026,SKU-001,Wireless Mouse,2,₹599,Cust-61,Maharashtra
+13/07/2026,SKU-001,Wireless Mouse,2,₹599,Cust-62,Delhi
+04/05/2026,SKU-001,Wireless Mouse,1,₹599,Cust-62,Delhi
+11/07/2026,SKU-001,Wireless Mouse,1,₹599,Cust-16,Gujarat
+17/08/2026,SKU-001,Wireless Mouse,4,₹599,Cust-23,Gujarat
+28/04/2026,SKU-001,Wireless Mouse,3,₹599,Cust-12,Delhi
+28/06/2026,SKU-001,Wireless Mouse,4,₹599,Cust-52,Delhi
+16/09/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-22,Maharashtra
+30/09/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-76,Gujarat
+23/04/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-79,Delhi
+08/06/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-20,Delhi
+20/05/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-3,Maharashtra
+24/04/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-68,Delhi
+02/09/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-25,Maharashtra
+30/09/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-28,Gujarat
+01/06/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-76,Gujarat
+02/08/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-17,Maharashtra
+09/07/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-75,Delhi
+22/06/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-69,Maharashtra
+26/05/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-57,Maharashtra
+05/05/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-20,Maharashtra
+01/09/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-80,Delhi
+07/09/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-42,Delhi
+28/05/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-14,Delhi
+23/09/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-25,Gujarat
+27/09/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-65,Gujarat
+17/05/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-9,Gujarat
+16/07/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-36,Gujarat
+30/05/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-65,Maharashtra
+27/05/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-72,Maharashtra
+15/06/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-54,Maharashtra
+29/06/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-41,Maharashtra
+07/08/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-10,Maharashtra
+22/07/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-20,Delhi
+26/04/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-19,Gujarat
+02/09/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-29,Delhi
+13/09/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-63,Maharashtra
+11/08/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-56,Delhi
+26/06/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-54,Maharashtra
+08/07/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-12,Delhi
+06/07/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-44,Delhi
+12/06/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-3,Gujarat
+15/07/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-66,Maharashtra
+09/09/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-14,Maharashtra
+01/08/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-6,Maharashtra
+30/07/2026,SKU-002,USB-C Hub,2,"₹1,199",Cust-55,Delhi
+02/08/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-20,Delhi
+29/05/2026,SKU-002,USB-C Hub,4,"₹1,199",Cust-42,Maharashtra
+28/07/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-24,Gujarat
+19/09/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-3,Delhi
+15/09/2026,SKU-002,USB-C Hub,3,"₹1,199",Cust-11,Delhi
+12/08/2026,SKU-002,USB-C Hub,1,"₹1,199",Cust-34,Maharashtra
+13/06/2026,SKU-003,Phone Case,1,₹299,Cust-44,Delhi
+23/06/2026,SKU-003,Phone Case,3,₹299,Cust-80,Maharashtra
+26/09/2026,SKU-003,Phone Case,2,₹299,Cust-15,Maharashtra
+01/08/2026,SKU-003,Phone Case,1,₹299,Cust-24,Maharashtra
+20/07/2026,SKU-003,Phone Case,3,₹299,Cust-68,Maharashtra
+25/07/2026,SKU-003,Phone Case,4,₹299,Cust-65,Delhi
+23/08/2026,SKU-003,Phone Case,3,₹299,Cust-45,Maharashtra
+04/08/2026,SKU-003,Phone Case,1,₹299,Cust-2,Maharashtra
+31/05/2026,SKU-003,Phone Case,2,₹299,Cust-66,Gujarat
+06/08/2026,SKU-003,Phone Case,4,₹299,Cust-14,Delhi
+24/04/2026,SKU-003,Phone Case,4,₹299,Cust-64,Delhi
+29/06/2026,SKU-003,Phone Case,3,₹299,Cust-28,Maharashtra
+12/07/2026,SKU-003,Phone Case,2,₹299,Cust-18,Gujarat
+11/07/2026,SKU-003,Phone Case,1,₹299,Cust-17,Maharashtra
+19/09/2026,SKU-003,Phone Case,3,₹299,Cust-56,Maharashtra
+23/09/2026,SKU-003,Phone Case,1,₹299,Cust-49,Delhi
+27/07/2026,SKU-003,Phone Case,2,₹299,Cust-38,Maharashtra
+12/06/2026,SKU-003,Phone Case,2,₹299,Cust-21,Gujarat
+15/06/2026,SKU-003,Phone Case,1,₹299,Cust-34,Gujarat
+15/07/2026,SKU-003,Phone Case,3,₹299,Cust-32,Maharashtra
+20/07/2026,SKU-003,Phone Case,2,₹299,Cust-46,Maharashtra
+07/10/2026,SKU-003,Phone Case,3,₹299,Cust-49,Maharashtra
+08/06/2026,SKU-003,Phone Case,3,₹299,Cust-65,Delhi
+17/08/2026,SKU-003,Phone Case,2,₹299,Cust-65,Maharashtra
+14/09/2026,SKU-003,Phone Case,3,₹299,Cust-12,Maharashtra
+27/06/2026,SKU-003,Phone Case,1,₹299,Cust-51,Maharashtra
+23/07/2026,SKU-003,Phone Case,3,₹299,Cust-30,Maharashtra
+11/05/2026,SKU-003,Phone Case,2,₹299,Cust-77,Gujarat
+16/07/2026,SKU-003,Phone Case,4,₹299,Cust-20,Gujarat
+02/05/2026,SKU-003,Phone Case,2,₹299,Cust-6,Delhi
+29/05/2026,SKU-003,Phone Case,4,₹299,Cust-65,Maharashtra
+26/05/2026,SKU-003,Phone Case,1,₹299,Cust-75,Delhi
+26/04/2026,SKU-003,Phone Case,2,₹299,Cust-11,Maharashtra
+27/09/2026,SKU-003,Phone Case,2,₹299,Cust-47,Maharashtra
+03/07/2026,SKU-003,Phone Case,4,₹299,Cust-72,Maharashtra
+30/04/2026,SKU-003,Phone Case,1,₹299,Cust-69,Delhi
+06/08/2026,SKU-003,Phone Case,4,₹299,Cust-34,Maharashtra
+13/06/2026,SKU-003,Phone Case,1,₹299,Cust-65,Delhi
+14/09/2026,SKU-003,Phone Case,1,₹299,Cust-61,Gujarat
+18/09/2026,SKU-003,Phone Case,3,₹299,Cust-31,Delhi
+16/08/2026,SKU-003,Phone Case,2,₹299,Cust-59,Gujarat
+02/07/2026,SKU-003,Phone Case,1,₹299,Cust-62,Delhi
+26/07/2026,SKU-003,Phone Case,1,₹299,Cust-79,Delhi
+26/04/2026,SKU-003,Phone Case,2,₹299,Cust-10,Delhi
+31/08/2026,SKU-003,Phone Case,3,₹299,Cust-33,Delhi
+26/04/2026,SKU-004,Screen Guard,3,₹149,Cust-80,Delhi
+13/07/2026,SKU-004,Screen Guard,1,₹149,Cust-62,Maharashtra
+29/05/2026,SKU-004,Screen Guard,3,₹149,Cust-13,Delhi
+03/07/2026,SKU-004,Screen Guard,4,₹149,Cust-38,Delhi
+25/05/2026,SKU-004,Screen Guard,3,₹149,Cust-60,Gujarat
+01/06/2026,SKU-004,Screen Guard,1,₹149,Cust-71,Maharashtra
+21/06/2026,SKU-004,Screen Guard,1,₹149,Cust-61,Maharashtra
+23/06/2026,SKU-004,Screen Guard,4,₹149,Cust-10,Delhi
+03/06/2026,SKU-004,Screen Guard,3,₹149,Cust-50,Maharashtra
+04/07/2026,SKU-004,Screen Guard,1,₹149,Cust-75,Maharashtra
+12/07/2026,SKU-004,Screen Guard,3,₹149,Cust-47,Maharashtra
+14/05/2026,SKU-004,Screen Guard,3,₹149,Cust-15,Delhi
+14/06/2026,SKU-004,Screen Guard,2,₹149,Cust-64,Gujarat
+10/06/2026,SKU-004,Screen Guard,1,₹149,Cust-21,Maharashtra
+04/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-52,Gujarat
+01/09/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-45,Gujarat
+19/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-43,Maharashtra
+16/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-51,Maharashtra
+18/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-38,Gujarat
+04/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-51,Gujarat
+10/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-47,Gujarat
+29/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-36,Maharashtra
+24/09/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-20,Maharashtra
+31/07/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-66,Gujarat
+20/08/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-55,Maharashtra
+29/04/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-71,Delhi
+16/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-7,Delhi
+24/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-79,Maharashtra
+26/04/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-63,Maharashtra
+20/05/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-22,Gujarat
+23/06/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-37,Gujarat
+03/08/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-52,Delhi
+07/08/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-62,Delhi
+29/06/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-22,Delhi
+27/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-27,Delhi
+02/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-58,Gujarat
+14/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-18,Delhi
+19/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-12,Maharashtra
+12/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-41,Maharashtra
+05/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-73,Maharashtra
+02/10/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-50,Gujarat
+26/05/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-49,Gujarat
+13/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-64,Gujarat
+13/05/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-17,Delhi
+01/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-12,Gujarat
+05/08/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-52,Delhi
+15/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-40,Maharashtra
+05/09/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-55,Delhi
+08/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-1,Maharashtra
+29/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-58,Maharashtra
+10/09/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-20,Maharashtra
+27/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-59,Maharashtra
+19/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-1,Maharashtra
+09/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-39,Maharashtra
+30/04/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-68,Delhi
+18/06/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-13,Maharashtra
+23/07/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-50,Gujarat
+11/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-2,Delhi
+22/07/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-36,Gujarat
+25/04/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-61,Delhi
+08/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-4,Gujarat
+24/04/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-8,Maharashtra
+19/08/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-54,Maharashtra
+03/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-55,Gujarat
+10/08/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-5,Delhi
+13/07/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-47,Delhi
+28/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-1,Gujarat
+31/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-27,Gujarat
+17/08/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-25,Maharashtra
+10/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-34,Gujarat
+10/09/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-79,Maharashtra
+11/08/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-54,Delhi
+23/09/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-51,Maharashtra
+14/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-77,Maharashtra
+23/06/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-8,Maharashtra
+29/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-41,Delhi
+09/09/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-22,Gujarat
+20/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-68,Delhi
+10/06/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-40,Delhi
+03/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-43,Gujarat
+25/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-1,Maharashtra
+28/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-45,Gujarat
+06/09/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-49,Gujarat
+20/07/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-12,Maharashtra
+08/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-48,Delhi
+15/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-42,Gujarat
+08/06/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-53,Maharashtra
+30/04/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-6,Gujarat
+29/09/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-9,Maharashtra
+03/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-9,Delhi
+13/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-35,Gujarat
+03/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-34,Delhi
+18/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-39,Maharashtra
+08/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-4,Maharashtra
+10/09/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-60,Gujarat
+04/08/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-64,Maharashtra
+02/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-2,Delhi
+22/07/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-78,Maharashtra
+16/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-59,Gujarat
+08/05/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-66,Maharashtra
+29/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-32,Gujarat
+21/09/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-62,Delhi
+21/05/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-21,Gujarat
+11/09/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-34,Delhi
+16/09/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-13,Gujarat
+02/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-23,Maharashtra
+03/09/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-59,Delhi
+08/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-38,Gujarat
+28/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-48,Gujarat
+02/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-57,Maharashtra
+21/08/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-31,Maharashtra
+27/07/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-42,Maharashtra
+28/06/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-32,Delhi
+26/05/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-13,Delhi
+11/06/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-14,Maharashtra
+08/06/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-58,Gujarat
+27/09/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-30,Maharashtra
+25/09/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-77,Delhi
+19/08/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-48,Delhi
+23/08/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-78,Gujarat
+06/10/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-77,Delhi
+02/05/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-28,Maharashtra
+05/07/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-19,Maharashtra
+16/08/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-5,Delhi
+24/04/2026,SKU-005,Fast Charger 30W,2,₹799,Cust-2,Gujarat
+25/06/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-24,Delhi
+20/07/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-27,Maharashtra
+03/06/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-9,Gujarat
+12/09/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-71,Maharashtra
+27/04/2026,SKU-005,Fast Charger 30W,1,₹799,Cust-21,Gujarat
+30/07/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-37,Delhi
+21/07/2026,SKU-005,Fast Charger 30W,4,₹799,Cust-7,Gujarat
+15/05/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-54,Gujarat
+03/10/2026,SKU-005,Fast Charger 30W,3,₹799,Cust-26,Gujarat
+26/06/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-1,Gujarat
+28/08/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-15,Maharashtra
+26/06/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-59,Maharashtra
+04/09/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-7,Delhi
+01/09/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-12,Delhi
+01/05/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-65,Maharashtra
+31/08/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-37,Maharashtra
+27/05/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-9,Maharashtra
+01/07/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-26,Gujarat
+05/09/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-62,Gujarat
+24/09/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-12,Delhi
+02/05/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-29,Delhi
+26/06/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-61,Maharashtra
+16/05/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-6,Gujarat
+28/05/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-50,Gujarat
+06/09/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-32,Delhi
+19/08/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-72,Delhi
+28/09/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-16,Gujarat
+07/05/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-71,Delhi
+21/07/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-40,Delhi
+05/08/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-50,Delhi
+05/07/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-65,Gujarat
+23/08/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-1,Delhi
+04/06/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-31,Gujarat
+02/05/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-23,Gujarat
+27/06/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-9,Maharashtra
+08/07/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-47,Maharashtra
+16/06/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-6,Delhi
+04/09/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-41,Delhi
+30/05/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-7,Delhi
+03/07/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-4,Maharashtra
+03/05/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-25,Maharashtra
+04/06/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-22,Delhi
+12/08/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-45,Delhi
+04/08/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-42,Delhi
+29/07/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-19,Gujarat
+01/06/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-27,Delhi
+01/08/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-41,Gujarat
+28/09/2026,SKU-006,Bluetooth Earbuds,2,"₹1,799",Cust-24,Gujarat
+27/08/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-42,Gujarat
+25/08/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-15,Delhi
+25/09/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-58,Delhi
+27/05/2026,SKU-006,Bluetooth Earbuds,1,"₹1,799",Cust-33,Delhi
+29/04/2026,SKU-006,Bluetooth Earbuds,4,"₹1,799",Cust-48,Gujarat
+03/07/2026,SKU-006,Bluetooth Earbuds,3,"₹1,799",Cust-74,Maharashtra
+14/06/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-11,Gujarat
+01/07/2026,SKU-008,Webcam HD,2,"₹1,599",Cust-79,Delhi
+24/07/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-67,Gujarat
+21/06/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-1,Delhi
+26/07/2026,SKU-008,Webcam HD,2,"₹1,599",Cust-20,Gujarat
+13/05/2026,SKU-008,Webcam HD,4,"₹1,599",Cust-54,Delhi
+14/06/2026,SKU-008,Webcam HD,1,"₹1,599",Cust-17,Gujarat
+01/07/2026,SKU-008,Webcam HD,1,"₹1,599",Cust-3,Maharashtra
+30/07/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-39,Maharashtra
+25/05/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-69,Maharashtra
+08/06/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-76,Maharashtra
+04/07/2026,SKU-008,Webcam HD,3,"₹1,599",Cust-80,Gujarat
+10/07/2026,SKU-008,Webcam HD,2,"₹1,599",Cust-2,Maharashtra
+01/05/2026,SKU-008,Webcam HD,2,"₹1,599",Cust-58,Maharashtra
+21/09/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-35,Gujarat
+01/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-8,Delhi
+17/05/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-77,Delhi
+12/05/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-78,Delhi
+03/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-22,Maharashtra
+26/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-69,Maharashtra
+26/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-31,Maharashtra
+23/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-2,Delhi
+19/05/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-19,Gujarat
+17/08/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-79,Maharashtra
+30/05/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-9,Gujarat
+30/04/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-62,Delhi
+23/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-49,Gujarat
+10/06/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-58,Maharashtra
+11/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-34,Maharashtra
+26/04/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-16,Gujarat
+01/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-35,Delhi
+19/05/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-67,Gujarat
+24/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-11,Delhi
+04/10/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-34,Maharashtra
+17/08/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-42,Maharashtra
+30/06/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-77,Maharashtra
+02/07/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-61,Delhi
+06/10/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-56,Delhi
+09/08/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-28,Gujarat
+01/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-73,Maharashtra
+31/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-4,Maharashtra
+10/09/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-45,Maharashtra
+30/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-6,Maharashtra
+26/04/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-9,Delhi
+26/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-76,Gujarat
+17/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-50,Maharashtra
+05/08/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-27,Maharashtra
+29/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-12,Delhi
+29/04/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-62,Maharashtra
+04/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-27,Gujarat
+18/07/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-55,Gujarat
+02/10/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-33,Gujarat
+25/09/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-42,Delhi
+01/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-37,Delhi
+30/09/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-4,Gujarat
+28/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-45,Gujarat
+25/09/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-12,Delhi
+26/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-56,Maharashtra
+26/05/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-37,Maharashtra
+06/10/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-63,Maharashtra
+04/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-64,Delhi
+11/07/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-74,Maharashtra
+27/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-30,Gujarat
+26/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-11,Gujarat
+17/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-42,Gujarat
+13/09/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-51,Delhi
+15/09/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-4,Gujarat
+16/08/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-34,Gujarat
+21/05/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-49,Delhi
+09/08/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-17,Delhi
+08/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-45,Delhi
+16/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-58,Delhi
+19/05/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-22,Gujarat
+17/06/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-75,Maharashtra
+05/09/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-60,Delhi
+08/08/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-35,Gujarat
+02/05/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-20,Maharashtra
+16/07/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-21,Maharashtra
+16/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-34,Delhi
+11/09/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-14,Maharashtra
+01/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-19,Gujarat
+23/07/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-36,Maharashtra
+10/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-36,Maharashtra
+30/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-5,Maharashtra
+27/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-29,Delhi
+29/04/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-60,Maharashtra
+01/09/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-78,Delhi
+26/06/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-32,Gujarat
+14/05/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-30,Delhi
+23/04/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-24,Delhi
+06/09/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-56,Gujarat
+02/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-54,Maharashtra
+27/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-33,Gujarat
+06/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-3,Delhi
+25/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-42,Maharashtra
+30/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-14,Maharashtra
+04/08/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-21,Delhi
+17/08/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-13,Delhi
+13/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-61,Delhi
+03/10/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-67,Gujarat
+24/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-27,Delhi
+21/08/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-66,Maharashtra
+03/05/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-8,Gujarat
+29/07/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-52,Maharashtra
+04/10/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-54,Gujarat
+30/04/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-75,Gujarat
+10/09/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-39,Delhi
+27/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-51,Gujarat
+14/08/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-17,Maharashtra
+28/04/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-61,Delhi
+17/05/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-19,Gujarat
+27/04/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-60,Gujarat
+20/05/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-61,Gujarat
+10/08/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-49,Delhi
+04/08/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-24,Gujarat
+07/10/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-46,Maharashtra
+23/04/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-42,Gujarat
+05/06/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-80,Delhi
+16/09/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-20,Gujarat
+01/07/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-11,Delhi
+16/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-68,Gujarat
+28/04/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-2,Maharashtra
+19/09/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-33,Delhi
+12/09/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-30,Maharashtra
+14/06/2026,SKU-010,HDMI Cable 2m,3,₹299,Cust-20,Maharashtra
+26/06/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-79,Delhi
+05/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-71,Delhi
+23/07/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-64,Delhi
+14/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-57,Delhi
+08/09/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-34,Gujarat
+09/08/2026,SKU-010,HDMI Cable 2m,2,₹299,Cust-61,Gujarat
+18/05/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-62,Gujarat
+01/09/2026,SKU-010,HDMI Cable 2m,4,₹299,Cust-32,Gujarat
+26/08/2026,SKU-010,HDMI Cable 2m,1,₹299,Cust-21,Gujarat
+10/06/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-38,Gujarat
+04/07/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-54,Delhi
+18/09/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-47,Delhi
+25/04/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-3,Delhi
+26/09/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-13,Delhi
+06/06/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-19,Maharashtra
+14/08/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-17,Gujarat
+13/09/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-44,Gujarat
+26/05/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-37,Gujarat
+12/07/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-33,Delhi
+24/09/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-38,Gujarat
+03/06/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-43,Delhi
+30/07/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-27,Delhi
+03/06/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-43,Maharashtra
+18/07/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-17,Delhi
+28/04/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-6,Gujarat
+19/05/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-70,Delhi
+25/09/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-39,Maharashtra
+06/10/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-25,Gujarat
+05/05/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-65,Delhi
+04/05/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-79,Maharashtra
+30/04/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-28,Maharashtra
+28/04/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-23,Maharashtra
+21/04/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-5,Gujarat
+12/09/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-48,Maharashtra
+20/07/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-39,Maharashtra
+22/06/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-41,Maharashtra
+19/06/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-64,Delhi
+27/05/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-16,Gujarat
+13/05/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-58,Maharashtra
+04/10/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-77,Delhi
+22/04/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-61,Gujarat
+20/05/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-11,Delhi
+09/06/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-20,Delhi
+04/10/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-1,Maharashtra
+06/09/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-28,Maharashtra
+04/09/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-3,Gujarat
+15/05/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-58,Delhi
+21/08/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-47,Delhi
+31/08/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-38,Delhi
+18/05/2026,SKU-011,External SSD 1TB,4,"₹7,999",Cust-59,Delhi
+03/08/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-5,Maharashtra
+22/09/2026,SKU-011,External SSD 1TB,1,"₹7,999",Cust-80,Maharashtra
+30/06/2026,SKU-011,External SSD 1TB,3,"₹7,999",Cust-40,Delhi
+07/05/2026,SKU-011,External SSD 1TB,2,"₹7,999",Cust-63,Delhi
+23/07/2026,SKU-012,Mouse Pad XL,3,₹399,Cust-48,Delhi
+28/04/2026,SKU-012,Mouse Pad XL,4,₹399,Cust-61,Delhi
+09/07/2026,SKU-012,Mouse Pad XL,2,₹399,Cust-15,Gujarat
+09/05/2026,SKU-012,Mouse Pad XL,2,₹399,Cust-54,Gujarat
+11/06/2026,SKU-012,Mouse Pad XL,4,₹399,Cust-35,Delhi
+18/06/2026,SKU-012,Mouse Pad XL,3,₹399,Cust-36,Maharashtra
+12/05/2026,SKU-012,Mouse Pad XL,3,₹399,Cust-78,Delhi
+29/07/2026,SKU-012,Mouse Pad XL,2,₹399,Cust-77,Gujarat
+17/05/2026,SKU-012,Mouse Pad XL,4,₹399,Cust-32,Gujarat
+11/06/2026,SKU-012,Mouse Pad XL,4,₹399,Cust-78,Maharashtra
+03/06/2026,SKU-012,Mouse Pad XL,3,₹399,Cust-1,Gujarat
+27/06/2026,SKU-012,Mouse Pad XL,3,₹399,Cust-55,Maharashtra
+16/05/2026,SKU-012,Mouse Pad XL,1,₹399,Cust-37,Maharashtra
+18/05/2026,SKU-012,Mouse Pad XL,2,₹399,Cust-36,Delhi
+02/06/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-69,Maharashtra
+22/05/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-49,Maharashtra
+09/08/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-78,Maharashtra
+28/06/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-27,Gujarat
+10/05/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-50,Gujarat
+22/05/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-69,Gujarat
+21/09/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-51,Delhi
+27/05/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-67,Gujarat
+07/06/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-25,Maharashtra
+19/08/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-24,Delhi
+25/07/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-74,Delhi
+08/07/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-67,Maharashtra
+05/08/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-64,Gujarat
+10/09/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-60,Maharashtra
+29/08/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-77,Maharashtra
+11/07/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-67,Delhi
+02/10/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-5,Maharashtra
+16/05/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-76,Delhi
+14/08/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-36,Gujarat
+13/09/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-76,Delhi
+04/09/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-5,Gujarat
+17/08/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-49,Maharashtra
+30/09/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-5,Delhi
+05/07/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-63,Maharashtra
+07/05/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-16,Delhi
+14/09/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-41,Delhi
+09/08/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-65,Gujarat
+22/08/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-21,Gujarat
+08/08/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-23,Maharashtra
+03/08/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-8,Delhi
+30/09/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-34,Delhi
+25/04/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-8,Maharashtra
+31/08/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-1,Maharashtra
+23/07/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-14,Gujarat
+17/07/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-33,Gujarat
+06/09/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-62,Gujarat
+25/08/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-31,Maharashtra
+04/10/2026,SKU-013,LED Desk Lamp,4,₹799,Cust-25,Maharashtra
+28/08/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-10,Delhi
+04/07/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-58,Maharashtra
+01/07/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-10,Gujarat
+13/07/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-30,Gujarat
+08/09/2026,SKU-013,LED Desk Lamp,3,₹799,Cust-19,Gujarat
+12/08/2026,SKU-013,LED Desk Lamp,1,₹799,Cust-24,Delhi
+14/06/2026,SKU-013,LED Desk Lamp,2,₹799,Cust-57,Maharashtra
+31/07/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-53,Maharashtra
+29/08/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-35,Delhi
+24/07/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-22,Gujarat
+04/06/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-41,Gujarat
+06/06/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-20,Delhi
+23/09/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-72,Gujarat
+26/07/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-33,Maharashtra
+06/07/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-34,Maharashtra
+08/08/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-50,Gujarat
+23/06/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-8,Delhi
+24/07/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-3,Gujarat
+31/05/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-66,Maharashtra
+16/06/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-68,Gujarat
+21/08/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-56,Maharashtra
+25/06/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-36,Delhi
+22/08/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-24,Delhi
+10/08/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-26,Delhi
+17/09/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-78,Delhi
+03/06/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-23,Maharashtra
+02/09/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-75,Gujarat
+17/08/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-9,Delhi
+27/05/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-8,Delhi
+11/07/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-37,Delhi
+03/06/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-2,Gujarat
+07/06/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-35,Maharashtra
+21/08/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-5,Maharashtra
+04/07/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-46,Delhi
+15/06/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-16,Gujarat
+06/08/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-49,Delhi
+22/09/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-14,Delhi
+03/06/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-66,Maharashtra
+25/05/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-3,Maharashtra
+15/09/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-80,Maharashtra
+26/08/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-40,Gujarat
+18/05/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-3,Maharashtra
+19/08/2026,SKU-014,Ergonomic Chair,3,"₹10,999",Cust-3,Delhi
+27/04/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-67,Maharashtra
+16/06/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-45,Maharashtra
+23/08/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-35,Maharashtra
+10/06/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-75,Delhi
+28/07/2026,SKU-014,Ergonomic Chair,1,"₹10,999",Cust-16,Maharashtra
+26/06/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-70,Delhi
+10/08/2026,SKU-014,Ergonomic Chair,2,"₹10,999",Cust-19,Delhi
+14/05/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-51,Maharashtra
+03/10/2026,SKU-014,Ergonomic Chair,4,"₹10,999",Cust-54,Delhi
+06/05/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-51,Maharashtra
+07/07/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-52,Maharashtra
+14/07/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-73,Gujarat
+27/06/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-42,Delhi
+31/08/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-32,Gujarat
+21/04/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-47,Maharashtra
+25/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-9,Gujarat
+19/06/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-65,Delhi
+02/10/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-18,Gujarat
+28/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-6,Maharashtra
+29/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-80,Gujarat
+30/04/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-80,Maharashtra
+04/08/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-67,Maharashtra
+18/06/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-6,Gujarat
+09/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-45,Delhi
+26/08/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-8,Delhi
+29/05/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-11,Gujarat
+09/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-57,Maharashtra
+30/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-38,Gujarat
+13/05/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-36,Maharashtra
+15/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-59,Delhi
+15/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-50,Maharashtra
+20/05/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-59,Delhi
+22/07/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-61,Gujarat
+30/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-43,Maharashtra
+20/08/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-75,Gujarat
+04/10/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-21,Maharashtra
+17/07/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-63,Gujarat
+27/07/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-38,Maharashtra
+02/10/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-71,Maharashtra
+05/05/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-57,Delhi
+22/09/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-57,Gujarat
+10/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-20,Gujarat
+13/07/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-18,Delhi
+17/08/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-67,Maharashtra
+08/06/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-17,Gujarat
+11/09/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-53,Delhi
+11/05/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-64,Gujarat
+14/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-54,Gujarat
+01/05/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-49,Gujarat
+12/06/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-46,Gujarat
+09/07/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-68,Delhi
+08/05/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-42,Maharashtra
+02/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-57,Gujarat
+21/08/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-19,Gujarat
+13/05/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-75,Maharashtra
+15/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-42,Delhi
+06/08/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-27,Gujarat
+05/10/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-7,Gujarat
+16/05/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-39,Delhi
+20/07/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-67,Delhi
+19/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-60,Gujarat
+27/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-58,Maharashtra
+20/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-13,Gujarat
+04/07/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-72,Delhi
+29/08/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-54,Gujarat
+27/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-80,Delhi
+12/07/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-22,Gujarat
+18/07/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-10,Gujarat
+29/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-15,Delhi
+24/07/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-66,Gujarat
+29/04/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-68,Gujarat
+30/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-65,Maharashtra
+24/06/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-8,Delhi
+16/05/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-46,Delhi
+29/04/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-53,Maharashtra
+07/10/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-71,Maharashtra
+22/07/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-13,Delhi
+04/10/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-26,Maharashtra
+02/06/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-69,Delhi
+01/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-53,Delhi
+06/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-21,Delhi
+30/05/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-4,Maharashtra
+18/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-67,Gujarat
+10/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-8,Delhi
+04/10/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-19,Delhi
+08/08/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-36,Maharashtra
+29/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-13,Delhi
+21/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-25,Gujarat
+01/05/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-3,Maharashtra
+12/08/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-75,Maharashtra
+17/06/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-80,Maharashtra
+05/08/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-6,Maharashtra
+10/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-41,Maharashtra
+13/06/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-54,Delhi
+04/08/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-9,Maharashtra
+30/06/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-53,Gujarat
+27/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-3,Maharashtra
+15/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-22,Gujarat
+02/07/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-1,Gujarat
+28/06/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-15,Gujarat
+24/05/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-43,Gujarat
+24/04/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-16,Gujarat
+10/07/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-50,Maharashtra
+10/06/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-45,Maharashtra
+18/06/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-36,Delhi
+01/10/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-20,Maharashtra
+04/09/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-26,Gujarat
+21/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-72,Gujarat
+10/06/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-21,Gujarat
+09/07/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-52,Gujarat
+29/04/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-39,Gujarat
+31/05/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-30,Gujarat
+04/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-77,Gujarat
+10/05/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-69,Maharashtra
+26/06/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-17,Maharashtra
+29/05/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-70,Gujarat
+01/07/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-73,Maharashtra
+20/07/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-50,Delhi
+15/09/2026,SKU-015,Standing Desk Mat,2,"₹1,799",Cust-30,Gujarat
+20/08/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-9,Delhi
+07/07/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-25,Maharashtra
+20/07/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-29,Gujarat
+05/09/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-37,Gujarat
+26/06/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-17,Gujarat
+23/08/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-47,Delhi
+21/04/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-53,Maharashtra
+22/04/2026,SKU-015,Standing Desk Mat,4,"₹1,799",Cust-32,Gujarat
+09/07/2026,SKU-015,Standing Desk Mat,1,"₹1,799",Cust-24,Gujarat
+08/09/2026,SKU-015,Standing Desk Mat,3,"₹1,799",Cust-78,Delhi
+02/07/2026,SKU-016,Cable Organizer,1,₹199,Cust-52,Maharashtra
+14/05/2026,SKU-016,Cable Organizer,2,₹199,Cust-56,Maharashtra
+25/04/2026,SKU-016,Cable Organizer,3,₹199,Cust-20,Gujarat
+27/04/2026,SKU-016,Cable Organizer,1,₹199,Cust-71,Gujarat
+11/05/2026,SKU-016,Cable Organizer,2,₹199,Cust-73,Maharashtra
+19/05/2026,SKU-016,Cable Organizer,4,₹199,Cust-67,Gujarat
+05/06/2026,SKU-016,Cable Organizer,3,₹199,Cust-1,Maharashtra
+24/04/2026,SKU-016,Cable Organizer,3,₹199,Cust-6,Delhi
+14/05/2026,SKU-016,Cable Organizer,1,₹199,Cust-32,Delhi
+16/07/2026,SKU-016,Cable Organizer,1,₹199,Cust-41,Maharashtra
+22/04/2026,SKU-016,Cable Organizer,3,₹199,Cust-12,Gujarat
+03/05/2026,SKU-016,Cable Organizer,4,₹199,Cust-79,Maharashtra
+25/06/2026,SKU-016,Cable Organizer,1,₹199,Cust-45,Gujarat
+04/06/2026,SKU-016,Cable Organizer,3,₹199,Cust-65,Delhi
+30/04/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-66,Maharashtra
+16/08/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-66,Maharashtra
+04/06/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-6,Delhi
+17/05/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-23,Delhi
+27/08/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-70,Gujarat
+05/08/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-22,Gujarat
+11/07/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-12,Maharashtra
+28/04/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-18,Maharashtra
+05/06/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-31,Delhi
+07/08/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-66,Delhi
+16/06/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-45,Delhi
+23/07/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-19,Delhi
+16/05/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-43,Delhi
+07/09/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-22,Delhi
+29/08/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-52,Maharashtra
+08/09/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-2,Gujarat
+05/06/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-6,Maharashtra
+28/07/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-26,Maharashtra
+20/07/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-15,Maharashtra
+16/07/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-60,Delhi
+07/07/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-22,Delhi
+19/09/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-2,Gujarat
+05/06/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-43,Delhi
+16/05/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-14,Delhi
+04/06/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-63,Maharashtra
+21/05/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-2,Gujarat
+14/09/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-79,Delhi
+23/04/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-32,Maharashtra
+02/09/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-4,Gujarat
+31/08/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-48,Maharashtra
+27/04/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-14,Delhi
+20/07/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-49,Maharashtra
+25/04/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-41,Maharashtra
+05/07/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-71,Gujarat
+04/08/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-8,Maharashtra
+10/09/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-7,Maharashtra
+03/06/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-64,Delhi
+28/08/2026,SKU-017,Whiteboard 2x3,3,"₹1,299",Cust-78,Delhi
+30/04/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-19,Delhi
+10/08/2026,SKU-017,Whiteboard 2x3,2,"₹1,299",Cust-18,Gujarat
+27/04/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-12,Maharashtra
+17/06/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-25,Maharashtra
+04/07/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-5,Delhi
+30/05/2026,SKU-017,Whiteboard 2x3,4,"₹1,299",Cust-19,Gujarat
+19/09/2026,SKU-017,Whiteboard 2x3,1,"₹1,299",Cust-66,Delhi
+31/02/2026,SKU-001,Wireless Mouse,2,500,C,Delhi
+05/10/2026,SKU-001,Wireless Mouse,-3,500,C,Delhi
+31/02/2026,SKU-002,USB-C Hub,2,500,C,Delhi
+05/10/2026,SKU-002,USB-C Hub,-3,500,C,Delhi

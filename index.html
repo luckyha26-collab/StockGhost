@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StockGhost — Dead Stock & Blocked Capital Detection ERP</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: #030712; color: #f1f5f9; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+    
+    /* Layout */
+    header { background: #0b1120; border-bottom: 1px solid #1e293b; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #0284c7, #4f46e5); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35); }
+    .brand-title { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .badge-erp { background: rgba(2, 132, 199, 0.2); color: #38bdf8; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(2, 132, 199, 0.3); vertical-align: middle; }
+    .college-tag { background: #111827; color: #cbd5e1; font-size: 11px; padding: 6px 14px; border-radius: 20px; border: 1px solid #1f2937; display: flex; align-items: center; gap: 8px; }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; }
+    
+    .nav-user { display: flex; align-items: center; gap: 12px; }
+    .role-badge { background: #1e293b; border: 1px solid #334155; padding: 6px 14px; border-radius: 8px; font-size: 12px; color: #38bdf8; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .btn-logout { background: #1e293b; border: 1px solid #ef4444; color: #ef4444; font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .btn-logout:hover { background: #ef4444; color: #fff; }
+
+    /* App Shell */
+    .app-shell { display: flex; flex: 1; height: calc(100vh - 64px); }
+    aside { width: 255px; background: #070c18; border-right: 1px solid #1e293b; padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; justify-content: space-between; }
+    .nav-menu { display: flex; flex-direction: column; gap: 4px; }
+    .module-title { font-size: 10px; font-weight: 800; text-transform: uppercase; color: #475569; padding: 0 10px 8px; letter-spacing: 1px; }
+    .nav-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 11px 14px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 600; cursor: pointer; text-align: left; transition: 0.15s; }
+    .nav-btn:hover { background: #0f172a; color: #f1f5f9; }
+    .nav-btn.active { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border-color: rgba(2, 132, 199, 0.35); font-weight: 700; }
+    .nav-pill { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+    .pill-blue { background: rgba(2, 132, 199, 0.2); color: #38bdf8; border: 1px solid rgba(2, 132, 199, 0.3); }
+    .pill-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .pill-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .side-brand-card { background: #0b1120; border: 1px solid #1e293b; border-radius: 12px; padding: 14px; }
+    .side-brand-title { font-size: 11px; font-weight: 700; color: #38bdf8; margin-bottom: 4px; }
+    .side-brand-desc { font-size: 10px; color: #64748b; line-height: 1.4; }
+
+    main { flex: 1; padding: 24px; overflow-y: auto; background: #030712; }
+    
+    /* Common UI components */
+    .banner-alert { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+    .banner-alert h3 { font-size: 14px; font-weight: 700; color: #fca5a5; }
+    .banner-alert p { font-size: 12px; color: #f87171; margin-top: 2px; }
+    .btn-action { background: #ef4444; color: #fff; border: none; font-size: 12px; font-weight: 700; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .btn-action:hover { background: #dc2626; }
+    .btn-emerald { background: #10b981 !important; }
+    .btn-emerald:hover { background: #059669 !important; }
+
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .kpi-card { background: #0b1120; border: 1px solid #1e293b; border-radius: 12px; padding: 18px; }
+    .kpi-title { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .kpi-value { font-size: 24px; font-weight: 800; color: #fff; margin-top: 6px; }
+    .kpi-sub { font-size: 11px; color: #64748b; margin-top: 4px; }
+    
+    .card { background: #0b1120; border: 1px solid #1e293b; border-radius: 14px; padding: 22px; margin-bottom: 24px; }
+    .card-title { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .card-sub { font-size: 12px; color: #94a3b8; margin-bottom: 18px; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border: 1px solid #1e293b; border-radius: 10px; background: #070c18; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: left; }
+    th { background: #090e1a; padding: 12px 14px; color: #94a3b8; text-transform: uppercase; font-size: 10px; font-weight: 700; border-bottom: 1px solid #1e293b; letter-spacing: 0.5px; }
+    td { padding: 14px; border-bottom: 1px solid #131d31; color: #cbd5e1; }
+    tr:hover td { background: #0e172a; }
+
+    /* Badges */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .badge-healthy { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-slow { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-high { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .badge-dead { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Simulator */
+    .sim-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 24px; }
+    .outcome-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+    .outcome-box { padding: 16px; border-radius: 12px; border: 1px solid #1e293b; text-align: center; }
+    .outcome-box.green { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3); }
+    .outcome-box.blue { background: rgba(2, 132, 199, 0.08); border-color: rgba(2, 132, 199, 0.3); }
+    .outcome-box.amber { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.3); }
+    .compare-bar { display: flex; align-items: center; justify-content: space-around; background: #070c18; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 18px; }
+    .slider { width: 100%; height: 6px; border-radius: 4px; background: #1e293b; accent-color: #0284c7; outline: none; margin: 12px 0; }
+    .btn-execute { width: 100%; padding: 14px; background: linear-gradient(135deg, #0284c7, #4f46e5); color: #fff; font-weight: 800; font-size: 13px; border-radius: 10px; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3); }
+    .btn-execute:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    /* Forms */
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 11px; font-weight: 700; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-input, .form-select { width: 100%; background: #070c18; border: 1px solid #1e293b; border-radius: 8px; padding: 10px 12px; color: #f1f5f9; font-size: 13px; outline: none; transition: 0.2s; }
+    .form-input:focus, .form-select:focus { border-color: #0284c7; }
+
+    /* Modals */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+    .modal-content { background: #0b1120; border: 1px solid #1e293b; border-radius: 16px; padding: 28px; width: 100%; max-width: 500px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8); }
+
+    /* Chatbot */
+    .chat-box { height: 350px; overflow-y: auto; background: #070c18; border: 1px solid #1e293b; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+    .msg-bot { background: #0f172a; color: #e2e8f0; padding: 12px 16px; border-radius: 12px; align-self: flex-start; max-width: 85%; font-size: 13px; line-height: 1.5; border: 1px solid #1e293b; }
+    .msg-user { background: #0284c7; color: #fff; padding: 10px 14px; border-radius: 12px; align-self: flex-end; max-width: 85%; font-size: 13px; }
+    .chat-input-row { display: flex; gap: 8px; }
+
+    /* Tabs inside ledger */
+    .subtabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .subtab-btn { padding: 8px 16px; border-radius: 8px; background: #070c18; border: 1px solid #1e293b; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .subtab-btn.active { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border-color: rgba(2, 132, 199, 0.4); }
+    
+    /* Login Portal */
+    .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at 50% 20%, #0d1a33 0%, #030712 70%); }
+    .login-card { background: #0b1120; border: 1px solid #1e293b; border-radius: 20px; padding: 36px; width: 100%; max-width: 520px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
+
+
+    .role-select-card { padding: 12px; border-radius: 10px; border: 1px solid #1e293b; background: #070c18; cursor: pointer; transition: 0.15s; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .role-select-card:hover { border-color: #0284c7; background: #0e172a; }
+    .role-select-card.active { border-color: #0284c7; background: rgba(2, 132, 199, 0.12); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================== -->
+  <!-- 1. ROLE-BASED ACCESS SECURE LOGIN VIEW (ID & PASSWORD ONLY)    -->
+  <!-- ============================================================== -->
+  <div id="view-login" class="login-container">
+    <div class="login-card">
+      <!-- Brand & Dept Header -->
+      <div style="text-align: center; margin-bottom: 22px;">
+        <div style="width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #0284c7, #4f46e5); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 12px; box-shadow: 0 4px 16px rgba(2,132,199,0.35);">👻</div>
+        <h1 style="font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.5px;">StockGhost ERP 2.0</h1>
+        <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Dead Stock & Blocked Capital Detection System</p>
+        <div style="display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 20px; background: rgba(2,132,199,0.1); border: 1px solid rgba(2,132,199,0.3); color: #38bdf8; font-size: 11px; font-weight: 700;">
+          Enterprise RBAC Secured Portal
+        </div>
+      </div>
+
+      <!-- Navigation tabs between Sign In and Register -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #1e293b; padding-bottom:12px;">
+        <div class="subtabs" style="margin-bottom:0;">
+          <button class="subtab-btn active" id="tabbtn-login-signin" onclick="switchLoginTab('signin')">🔑 Manager Sign In</button>
+          <button class="subtab-btn" id="tabbtn-login-reg" onclick="switchLoginTab('reg')">➕ Register Manager (Admin)</button>
+        </div>
+      </div>
+
+      <!-- TAB 1: CREDENTIAL SIGN IN -->
+      <div id="login-stage-credentials">
+        <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:14px; margin-bottom:18px;">
+          <div style="font-size:11px; font-weight:700; color:#38bdf8; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            <span>🛡️ Enterprise Role Credentials (Shared by Admin):</span>
+          </div>
+          <div style="font-size:11px; color:#cbd5e1; line-height:1.7;">
+            • <strong>System Administrator</strong>: ID <code>admin</code> | Pass: <code>admin123</code> <span style="color:#38bdf8; font-weight:700;">(Full Access & User Admin)</span><br />
+            • <strong>Sales Manager</strong>: ID <code>sales_mgr</code> | Pass: <code>sales123</code> <span style="color:#34d399; font-weight:700;">(Outward Sales & Clearance Simulator)</span><br />
+            • <strong>Inventory Manager</strong>: ID <code>inventory_mgr</code> | Pass: <code>inv123</code> <span style="color:#fbbf24; font-weight:700;">(SKU Catalog & Inward PO Receipts)</span>
+          </div>
+          <div style="font-size:10px; color:#94a3b8; margin-top:8px; border-top:1px dashed #1e293b; padding-top:6px;">
+            🔒 <em>Strict Role Isolation: Each manager can only operate in their authorized department. Switch accounts via Logout.</em>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">User ID / Employee ID:</label>
+          <input type="text" class="form-input" id="login-userid" value="admin" placeholder="e.g. admin, sales_mgr, or inventory_mgr" />
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label class="form-label" style="margin-bottom:0;">Password:</label>
+            <span style="font-size:10px; color:#38bdf8; cursor:pointer;" onclick="togglePassVisibility()">👁️ Show/Hide</span>
+          </div>
+          <input type="password" class="form-input" id="login-password" value="admin123" placeholder="Enter account password" onkeydown="if(event.key==='Enter') loginDirectly()" />
+        </div>
+
+        <div id="login-cred-error" class="hidden" style="color:#f87171; font-size:11px; margin-bottom:12px; padding:10px; border-radius:8px; background:#ef444422; border:1px solid #ef444444;"></div>
+
+        <button class="btn-execute" onclick="loginDirectly()">Sign In to Role Terminal ➔</button>
+      </div>
+
+      <!-- TAB 2: REGISTER MANAGER ACCOUNT (MANAGED BY ADMIN) -->
+      <div id="login-stage-register" class="hidden">
+        <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:12px; margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:700; color:#38bdf8;">👤 Admin User Provisioning</div>
+          <p style="font-size:10px; color:#94a3b8; margin-top:2px;">
+            Provision new employee credentials and assign strict Role-Based Access boundaries.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Full Name of Employee:</label>
+          <input type="text" class="form-input" id="reg-name" placeholder="e.g. Operations Lead" value="" />
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="form-label">Assign User ID:</label>
+            <input type="text" class="form-input" id="reg-userid" placeholder="e.g. ops_manager" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assign Password:</label>
+            <input type="password" class="form-input" id="reg-pass" placeholder="Enter account password" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Corporate Role & RBAC Department:</label>
+          <select class="form-select" id="reg-role">
+            <option value="Admin">System Administrator (Full System Clearance & User Provisioning)</option>
+            <option value="Sales Manager">Sales Manager (Clearance Simulator & Outward Sales Execution)</option>
+            <option value="Inventory Manager" selected>Inventory Manager (SKU Catalog, DSRS Risk & Inward PO Receipts)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Corporate Email Address (Optional):</label>
+          <input type="email" class="form-input" id="reg-email" placeholder="manager@stockghost.com" />
+        </div>
+
+        <div id="login-reg-msg" class="hidden" style="font-size:11px; margin-bottom:12px; padding:10px; border-radius:8px;"></div>
+
+        <button class="btn-execute" style="background:linear-gradient(135deg, #10b981, #059669);" onclick="registerNewManager()">Provision Manager Credentials ➔</button>
+      </div>
+
+      <p style="font-size: 10px; color: #475569; text-align: center; margin-top: 22px;">
+        StockGhost Enterprise ERP 2.0 • Authorized Personnel Only
+      </p>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 2. MAIN ERP APPLICATION VIEW                                   -->
+  <!-- ============================================================== -->
+  <div id="view-app" class="hidden">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">👻</div>
+        <div>
+          <span class="brand-title">StockGhost</span>
+          <span class="badge-erp">ERP 2.0</span>
+          <p style="font-size: 11px; color: #94a3b8;">Dead Stock & Blocked Capital Detection</p>
+        </div>
+      </div>
+
+      <div class="college-tag">
+        <div class="pulse-dot"></div>
+        <span>Enterprise Risk Engine • Live</span>
+      </div>
+
+      <div class="nav-user">
+        <button id="btn-header-import-csv" class="btn-action" style="background:#0284c7; display:flex; align-items:center; gap:6px; padding:6px 14px; font-size:11px;" onclick="openImportCsvModal()">📁 Import Business CSV</button>
+        <div class="role-badge" id="current-user-badge">
+          <span>👑 Admin</span>
+        </div>
+        <button class="btn-logout" onclick="logout()" title="Logout to change role or user account">🔒 Logout / Switch Account</button>
+      </div>
+    </header>
+
+    <div class="app-shell">
+      <!-- Sidebar matching media_1791912013462_c5a385f9.png -->
+      <aside>
+        <div class="nav-menu">
+          <div class="module-title">ERP Risk Modules</div>
+          <button class="nav-btn active" id="btn-tab-dashboard" onclick="switchTab('dashboard')">
+            <span>📊 Dashboard & KPIs</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-inventory" onclick="switchTab('inventory')">
+            <span>📦 Inventory & SKUs</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-matrix" onclick="switchTab('matrix')">
+            <span>🔬 DSRS Risk Matrix</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-simulator" onclick="switchTab('simulator')">
+            <span>🎛️ Clearance Simulator</span>
+            <span class="nav-pill pill-blue">What-If</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-recommendations" onclick="switchTab('recommendations')">
+            <span>💡 Recovery Engine</span>
+            <span class="nav-pill pill-purple">AI</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-transactions" onclick="switchTab('transactions')">
+            <span>💳 Purchases & Sales</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-chatbot" onclick="switchTab('chatbot')">
+            <span>🤖 Inventory Chatbot</span>
+            <span class="nav-pill pill-green">Live</span>
+          </button>
+
+          <div class="module-title" style="margin-top:12px;">Enterprise Governance</div>
+          <button class="nav-btn" id="btn-tab-audit" onclick="switchTab('audit')">
+            <span>📋 Destination & Audit Trail</span>
+            <span class="nav-pill pill-blue">Audit</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-rbac" onclick="switchTab('rbac')">
+            <span>🏛️ Manager RBAC Directory</span>
+            <span class="nav-pill pill-purple">Admin</span>
+          </button>
+        </div>
+
+        <div class="side-brand-card">
+          <div class="side-brand-title">StockGhost Detection</div>
+          <div class="side-brand-desc">
+            Automated Dead Stock Risk Score (DSRS) algorithm detecting stagnant capital before severe losses occur.
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Body -->
+      <main>
+        <!-- TAB 1. DASHBOARD -->
+        <div id="tab-dashboard">
+          <div class="banner-alert">
+            <div>
+              <h3>Blocked Capital Alert: ₹15,73,000 Locked in High Risk & Dead Stock!</h3>
+              <p>73.8% of current inventory value is non-performing. Immediate clearance simulation advised.</p>
+            </div>
+            <button class="btn-action" onclick="switchTab('simulator')">Launch Simulator ➔</button>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-title">Total Inventory Valuation</div>
+              <div class="kpi-value" id="kpi-val">₹21,31,000</div>
+              <div class="kpi-sub">7 Active Catalog SKUs</div>
+            </div>
+            <div class="kpi-card" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+              <div class="kpi-title" style="color: #f87171;">Total Blocked Capital</div>
+              <div class="kpi-value" style="color: #f87171;" id="kpi-blocked">₹15,73,000</div>
+              <div class="kpi-sub" style="color: #fca5a5;">High Risk & Dead Stock (73.8%)</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Dead Stock SKUs</div>
+              <div class="kpi-value" style="color: #ef4444;" id="kpi-dead">2 Items</div>
+              <div class="kpi-sub">DSRS Score &gt;= 81</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-title">Average DSRS Score</div>
+              <div class="kpi-value" style="color: #38bdf8;" id="kpi-dsrs">56.9 / 100</div>
+              <div class="kpi-sub">Catalog Risk Index</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Critical Non-Performing Assets (Top Risky SKUs)</div>
+            <div class="card-sub">Ranked by Dead Stock Risk Score and tied-up capital volume</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product / SKU</th>
+                    <th>Current Stock</th>
+                    <th>Unit Cost</th>
+                    <th>Blocked Capital</th>
+                    <th>Inactivity</th>
+                    <th>DSRS Score</th>
+                    <th>Classification</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="top-products-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2. INVENTORY & SKUS -->
+        <div id="tab-inventory" class="hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <div class="card-title">Inventory Catalog & Stock Health Ledger</div>
+              <div class="card-sub" style="margin-bottom:0;">Live tracking of unit quantities, cost value, stock age, and DSRS risk classifications</div>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-action" style="background:#0284c7; display:flex; align-items:center; gap:6px;" onclick="openImportCsvModal()">📁 Import Business CSV</button>
+              <button id="btn-add-product-modal" class="btn-action btn-emerald" onclick="openAddProductModal()">+ Add New Product</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; gap:12px; margin-bottom:16px;">
+              <input type="text" class="form-input" id="inv-search" placeholder="🔍 Search by SKU or Product Name..." oninput="renderInventoryTable()" style="max-width:320px;" />
+              <select class="form-select" id="inv-filter-tier" onchange="renderInventoryTable()" style="max-width:200px;">
+                <option value="ALL">All Risk Tiers</option>
+                <option value="Dead Stock">Dead Stock (81-100)</option>
+                <option value="High Risk">High Risk (61-80)</option>
+                <option value="Slow Moving">Slow Moving (31-60)</option>
+                <option value="Healthy">Healthy (0-30)</option>
+              </select>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>SKU Code</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Stock Units</th>
+                    <th>Cost (₹)</th>
+                    <th>Selling (₹)</th>
+                    <th>Total Value (₹)</th>
+                    <th>Stock Age</th>
+                    <th>Inactivity</th>
+                    <th>DSRS</th>
+                    <th>Tier</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3. DSRS RISK MATRIX -->
+        <div id="tab-matrix" class="hidden">
+          <div class="card">
+            <div class="card-title">🔬 Dead Stock Risk Score (DSRS) Algorithm & Matrix</div>
+            <div class="card-sub">Mathematical formula and weighting model specified in PCE IT Department project slides</div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:24px;">
+              <div style="background:#070c18; border:1px solid #10b98144; border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="badge badge-healthy">HEALTHY</span>
+                  <span style="font-weight:800; font-size:16px; color:#34d399;">0 — 30</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:8px;">Fast-moving stock with consistent outward transactions (&lt; 45 days inactivity).</div>
+              </div>
+
+              <div style="background:#070c18; border:1px solid #f59e0b44; border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="badge badge-slow">SLOW MOVING</span>
+                  <span style="font-weight:800; font-size:16px; color:#fbbf24;">31 — 60</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:8px;">Declining sales velocity (45–90 days inactivity). Requires promotional bundling.</div>
+              </div>
+
+              <div style="background:#070c18; border:1px solid #fb923c44; border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="badge badge-high">HIGH RISK</span>
+                  <span style="font-weight:800; font-size:16px; color:#fb923c;">61 — 80</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:8px;">Prolonged stagnation (90–180 days inactivity) with high carrying capital cost.</div>
+              </div>
+
+              <div style="background:#070c18; border:1px solid #ef444444; border-radius:12px; padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="badge badge-dead">DEAD STOCK</span>
+                  <span style="font-weight:800; font-size:16px; color:#f87171;">81 — 100</span>
+                </div>
+                <div style="font-size:11px; color:#94a3b8; margin-top:8px;">Zero sales &gt; 180 days. Immediate clearance discount or liquidation required.</div>
+              </div>
+            </div>
+
+            <div style="background:#070c18; border:1px solid #1e293b; border-radius:12px; padding:20px; font-family:monospace; font-size:13px; line-height:1.7;">
+              <div style="color:#38bdf8; font-weight:700; margin-bottom:6px;">DSRS Weighted Algorithmic Formula:</div>
+              <div>DSRS = (<strong>Inactivity_Score</strong> × 0.40) + (<strong>Stagnancy_Score</strong> × 0.30) + (<strong>Capital_Score</strong> × 0.20) + (<strong>Obsolescence_Score</strong> × 0.10)</div>
+              <div style="color:#64748b; font-size:11px; margin-top:8px;">
+                • Inactivity (40%): Days since last sale vs 180-day threshold.<br/>
+                • Stagnancy (30%): Stock age vs standard product lifespan.<br/>
+                • Capital Lockup (20%): Total value tied up in stagnant inventory.<br/>
+                • Obsolescence (10%): Tech/electronics degradation risk factor.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4. SIMULATOR (SLIDE 4 & 9 BENCHMARK) -->
+        <div id="tab-simulator" class="hidden">
+          <div class="card">
+            <div class="card-title">🎛️ Stock Clearance & Capital Recovery Simulator</div>
+            <div class="card-sub">Model discount price elasticity, predict unit clearance, and verify DSRS score de-escalation</div>
+            
+            <div id="sim-alert" class="banner-alert hidden" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+              <h3 style="color: #34d399;" id="sim-alert-text"></h3>
+            </div>
+
+            <div class="sim-grid">
+              <!-- Controls -->
+              <div>
+                <div class="form-group">
+                  <label class="form-label">Select SKU to Simulate:</label>
+                  <select class="form-select" id="sim-sku-select" onchange="updateSimulation()"></select>
+                </div>
+
+                <div class="card" style="padding: 14px; margin-bottom: 16px; background: #070c18;">
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+                    <span style="color:#94a3b8;">Current Units:</span>
+                    <span style="font-weight:700;" id="sim-info-stock">500 units</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;">
+                    <span style="color:#94a3b8;">Blocked Capital:</span>
+                    <span style="font-weight:700; color:#f87171;" id="sim-info-val">₹7,50,000</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; font-size:12px;">
+                    <span style="color:#94a3b8;">Current DSRS:</span>
+                    <span style="font-weight:700; color:#ef4444;" id="sim-info-dsrs">92/100 (Dead Stock)</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div style="display:flex; justify-content:space-between; margin-bottom: 8px;">
+                    <label class="form-label" style="margin-bottom:0;">Proposed Clearance Discount:</label>
+                    <span style="color:#38bdf8; font-weight:800; font-size:14px;" id="sim-disc-label">25%</span>
+                  </div>
+                  <input type="range" class="slider" id="sim-slider" min="5" max="50" step="5" value="25" oninput="updateSimulation()" />
+                  <div style="display:flex; justify-content:space-between; font-size:10px; color:#64748b; margin-top:4px;">
+                    <span>5% Promo</span>
+                    <span style="color:#38bdf8; font-weight:700;">25% (Slide Benchmark)</span>
+                    <span>50% Liquidation</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Outcomes -->
+              <div>
+                <div class="outcome-grid">
+                  <div class="outcome-box green">
+                    <div style="font-size:11px; color:#34d399; font-weight:700;">Capital Recovered</div>
+                    <div style="font-size:20px; font-weight:800; color:#fff; margin-top:4px;" id="sim-out-rec">₹5,25,000</div>
+                    <div style="font-size:10px; color:#6ee7b7; margin-top:2px;">Injected to cash flow</div>
+                  </div>
+                  <div class="outcome-box blue">
+                    <div style="font-size:11px; color:#38bdf8; font-weight:700;">Estimated Units Sold</div>
+                    <div style="font-size:20px; font-weight:800; color:#fff; margin-top:4px;" id="sim-out-units">350 units</div>
+                    <div style="font-size:10px; color:#7dd3fc; margin-top:2px;" id="sim-out-price">At ₹1,500/unit</div>
+                  </div>
+                  <div class="outcome-box amber">
+                    <div style="font-size:11px; color:#fbbf24; font-weight:700;">Remaining Inventory</div>
+                    <div style="font-size:20px; font-weight:800; color:#fff; margin-top:4px;" id="sim-out-rem">150 units</div>
+                    <div style="font-size:10px; color:#fde68a; margin-top:2px;" id="sim-out-remcap">₹2,25,000 tied up</div>
+                  </div>
+                </div>
+
+                <div class="compare-bar">
+                  <div>
+                    <div style="font-size:11px; color:#94a3b8;">Original Risk</div>
+                    <div style="font-size:32px; font-weight:800; color:#ef4444;" id="sim-orig-dsrs">92</div>
+                    <div class="badge badge-dead">DEAD STOCK</div>
+                  </div>
+                  <div style="font-size:12px; color:#38bdf8; font-weight:700;">
+                    <div>25% Clearance Discount</div>
+                    <div style="font-size:22px; margin: 4px 0;">➔ 📉</div>
+                    <div style="color:#34d399; font-size:11px;">Risk De-escalated!</div>
+                  </div>
+                  <div>
+                    <div style="font-size:11px; color:#94a3b8;">Projected Risk</div>
+                    <div style="font-size:32px; font-weight:800; color:#fbbf24;" id="sim-new-dsrs">38</div>
+                    <div class="badge badge-slow">SLOW MOVING</div>
+                  </div>
+                </div>
+
+                <button class="btn-execute" onclick="executeClearanceAction()">Execute 25% Clearance Sale Now ➔</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5. RECOVERY ENGINE -->
+        <div id="tab-recommendations" class="hidden">
+          <div class="card">
+            <div class="card-title">💡 Actionable Inventory Recovery Recommendations</div>
+            <div class="card-sub">AI rule-based recovery prescriptions: clearance discounts, supplier RMAs, and cross-category bundling</div>
+
+            <div id="recommendations-container" style="display:flex; flex-direction:column; gap:14px;"></div>
+          </div>
+        </div>
+
+        <!-- TAB 6. TRANSACTIONS (MEDIA MATCH) -->
+        <div id="tab-transactions" class="hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <div class="card-title">💳 ERP Purchase & Sales Ledger</div>
+              <div class="card-sub" style="margin-bottom:0;">Real-time inward PO receipts and outward POS sales transactions updating stock velocity</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="btn-add-sale-modal" class="btn-action btn-emerald" onclick="openSaleModal()">+ Record Outward Sale</button>
+              <button id="btn-add-po-modal" class="btn-action" style="background:#0284c7;" onclick="openPoModal()">+ Inward PO Intake</button>
+            </div>
+          </div>
+
+          <div class="subtabs">
+            <button class="subtab-btn active" id="subtab-sales" onclick="switchLedgerTab('sales')">🛒 Outward Sales (<span id="sales-count">4</span>)</button>
+            <button class="subtab-btn" id="subtab-purchases" onclick="switchLedgerTab('purchases')">🚚 Inward Purchase Orders (<span id="purchases-count">3</span>)</button>
+          </div>
+
+          <!-- Sales Table -->
+          <div id="ledger-sales-view" class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price (₹)</th>
+                    <th>Discount</th>
+                    <th>Total Amount</th>
+                    <th>Destination / Outlet of Used</th>
+                    <th>Authorized By</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="sales-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Purchases Table -->
+          <div id="ledger-purchases-view" class="card hidden">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>PO Order No</th>
+                    <th>Product Name</th>
+                    <th>Supplier</th>
+                    <th>Quantity</th>
+                    <th>Unit Cost (₹)</th>
+                    <th>Total Cost (₹)</th>
+                    <th>Destination Warehouse</th>
+                    <th>Authorized Intake By</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="purchases-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 7. CHATBOT -->
+        <div id="tab-chatbot" class="hidden">
+          <div class="card" style="height: 520px; display:flex; flex-direction:column;">
+            <div class="card-title">🤖 StockGhost Conversational AI Assistant</div>
+            <div class="card-sub">Ask natural language inventory risk questions directly</div>
+
+            <div class="chat-box" id="chat-messages">
+              <div class="msg-bot">
+                👋 Hello! I am your StockGhost Conversational AI Assistant. You can ask me natural language questions about your business inventory, dead stock, blocked capital, or clearance simulations:
+                <br /><br />
+                • <i>Which product blocks the most capital?</i><br />
+                • <i>What is the total blocked capital?</i><br />
+                • <i>Show dead stock items</i>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:6px; margin-bottom:10px; overflow-x:auto;">
+              <button class="badge badge-slow" style="cursor:pointer;" onclick="sendPrompt('Which product blocks the most capital?')">Top Blocked Capital?</button>
+              <button class="badge badge-healthy" style="cursor:pointer;" onclick="sendPrompt('What is the total blocked capital?')">Total Blocked Capital?</button>
+              <button class="badge badge-dead" style="cursor:pointer;" onclick="sendPrompt('Show dead stock items')">Show Dead Stock SKUs</button>
+            </div>
+
+            <div class="chat-input-row">
+              <input type="text" class="form-input" id="chat-input" placeholder="Type your inventory question..." onkeydown="if(event.key==='Enter') sendChat()" />
+              <button class="btn-action" style="background:#0284c7; width:100px;" onclick="sendChat()">Ask</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 8. DESTINATION & ACTIVITY AUDIT TRAIL -->
+        <div id="tab-audit" class="hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <div class="card-title">📋 Real-Time Activity & Destination of Used Ledger</div>
+              <div class="card-sub" style="margin-bottom:0;">Live immutable audit trail of every stock movement, outward sale destination, and clearance execution</div>
+            </div>
+            <div style="font-size:11px; background:#070c18; padding:6px 14px; border-radius:20px; border:1px solid #1e293b; color:#38bdf8; font-weight:700;">
+              🔒 Role-Based Access Control (RBAC) Active
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Action / Event</th>
+                    <th>Item & Financial Value</th>
+                    <th>Destination / Outlet of Used</th>
+                    <th>Authorized Operator</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-trail-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 9. MANAGER RBAC & ACCESS CONTROL (ADMIN ONLY) -->
+        <div id="tab-rbac" class="hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <div class="card-title">🏛️ Manager Accounts & Role-Based Access Control (RBAC)</div>
+              <div class="card-sub" style="margin-bottom:0;">Admin portal to provision manager accounts, manage login credentials, and enforce boundaries</div>
+            </div>
+            <button class="btn-action btn-emerald" onclick="openAdminCreateUserModal()">+ Add New Manager Account</button>
+          </div>
+
+          <!-- Registered Managers Table -->
+          <div class="card">
+            <div style="font-size:13px; font-weight:700; color:#fff; margin-bottom:12px;">Active Enterprise Managers & Provisioned Credentials:</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Manager ID</th>
+                    <th>Full Name</th>
+                    <th>Assigned Role</th>
+                    <th>Corporate Email</th>
+                    <th>System Permissions & Boundary</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="rbac-managers-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: RECORD OUTWARD SALE (WITH DESTINATION OF USED)          -->
+  <!-- ============================================================== -->
+  <div id="sale-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">Record Outward Sale</h3>
+        <button onclick="closeSaleModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Product:</label>
+        <select class="form-select" id="modal-sale-prod" onchange="updateModalPrice()"></select>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Quantity:</label>
+          <input type="number" class="form-input" id="modal-sale-qty" value="1" min="1" oninput="updateModalTotal()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Unit Price (₹):</label>
+          <input type="number" class="form-input" id="modal-sale-price" value="2000" oninput="updateModalTotal()" />
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Discount (%):</label>
+          <input type="number" class="form-input" id="modal-sale-disc" value="0" min="0" max="90" oninput="updateModalTotal()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Channel:</label>
+          <select class="form-select" id="modal-sale-chan">
+            <option value="Retail POS">Retail POS</option>
+            <option value="B2B Invoice">B2B Invoice</option>
+            <option value="Online Webstore">Online Webstore</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Destination of Used -->
+      <div class="form-group">
+        <label class="form-label">Destination / Outlet / Branch of Used:</label>
+        <input type="text" class="form-input" id="modal-sale-dest" placeholder="e.g. Retail POS Counter 1, Sitabuldi Branch" value="Retail POS Counter 1 — Sitabuldi Store, Nagpur" />
+      </div>
+
+      <div style="background:#070c18; padding:12px; border-radius:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#94a3b8;">Total Sale Amount:</span>
+        <span style="font-size:16px; font-weight:800; color:#34d399;" id="modal-sale-total">₹2,000.00</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button onclick="closeSaleModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="saveSaleTransaction()" style="padding:10px 22px; border-radius:8px; border:none; background:#10b981; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">Save Sale</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: RECORD INWARD PURCHASE ORDER (WITH DESTINATION WAREHOUSE) -->
+  <!-- ============================================================== -->
+  <div id="po-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">Record Inward Purchase Order</h3>
+        <button onclick="closePoModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Product SKU / Title:</label>
+        <select class="form-select" id="modal-po-prod" onchange="updatePoModalCost()"></select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Supplier Partner:</label>
+        <input type="text" class="form-input" id="modal-po-supp" placeholder="e.g. Apex Peripherals Ltd." value="Apex Peripherals Ltd." />
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Quantity Received:</label>
+          <input type="number" class="form-input" id="modal-po-qty" value="50" min="1" oninput="updatePoModalTotal()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Unit Cost (₹):</label>
+          <input type="number" class="form-input" id="modal-po-cost" value="1500" oninput="updatePoModalTotal()" />
+        </div>
+      </div>
+
+      <!-- Destination Warehouse -->
+      <div class="form-group">
+        <label class="form-label">Destination Warehouse / Storage Bay:</label>
+        <input type="text" class="form-input" id="modal-po-dest" placeholder="e.g. Warehouse Bay C-12 (Central Logistics WH)" value="Warehouse Bay C-12 (Central Logistics WH)" />
+      </div>
+
+      <div style="background:#070c18; padding:12px; border-radius:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#94a3b8;">Total Order Cost:</span>
+        <span style="font-size:16px; font-weight:800; color:#38bdf8;" id="modal-po-total">₹75,000.00</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button onclick="closePoModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="savePoTransaction()" style="padding:10px 22px; border-radius:8px; border:none; background:#0284c7; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">Save Inward PO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADD NEW PRODUCT                                         -->
+  <!-- ============================================================== -->
+  <div id="add-product-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">Add New Product SKU</h3>
+        <button onclick="closeAddProductModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">SKU Code:</label>
+        <input type="text" class="form-input" id="new-sku" placeholder="e.g. MON-27-QHD" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Product Name:</label>
+        <input type="text" class="form-input" id="new-name" placeholder="e.g. 27-inch Curved Monitor" />
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Cost Price (₹):</label>
+          <input type="number" class="form-input" id="new-cost" value="5000" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Selling Price (₹):</label>
+          <input type="number" class="form-input" id="new-price" value="7500" />
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div class="form-group">
+          <label class="form-label">Initial Stock Units:</label>
+          <input type="number" class="form-input" id="new-stock" value="50" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category:</label>
+          <select class="form-select" id="new-category">
+            <option value="Peripherals & Input">Peripherals & Input</option>
+            <option value="Ergonomic Furniture">Ergonomic Furniture</option>
+            <option value="Monitors & Displays">Monitors & Displays</option>
+            <option value="Audio Equipment">Audio Equipment</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+        <button onclick="closeAddProductModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="saveNewProduct()" style="padding:10px 22px; border-radius:8px; border:none; background:#10b981; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- MODAL: IMPORT BUSINESS INVENTORY (CSV / JSON)                   -->
+  <!-- ============================================================== -->
+  <div id="import-csv-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width:620px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">📁 Import Business Inventory Dataset</h3>
+        <button onclick="closeImportCsvModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <p style="font-size:11px; color:#94a3b8; margin-bottom:14px; line-height:1.5;">
+        Upload your company's product catalog (.csv) or paste tabular records. StockGhost will ingest the catalog, calculate <strong>Dead Stock Risk Scores (DSRS)</strong>, identify blocked capital, and populate the clearance simulator.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label">Upload CSV / Data File:</label>
+        <input type="file" id="csv-file-input" accept=".csv, .txt, .json" class="form-input" onchange="handleCsvFileUpload(event)" style="padding:8px;" />
+      </div>
+
+      <div class="form-group">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <label class="form-label" style="margin-bottom:0;">Or Paste CSV Lines Directly:</label>
+          <button onclick="insertSampleCsvTemplate()" style="background:none; border:none; color:#38bdf8; font-size:10px; cursor:pointer; font-weight:700;">+ Load Sample CSV Template</button>
+        </div>
+        <textarea id="csv-paste-area" class="form-input" rows="6" style="font-family:monospace; font-size:11px; resize:vertical;" placeholder="sku,name,category,cost_price,selling_price,current_stock,stock_age_days,inactivity_days&#10;KB-101,Office Keyboard,Peripherals,800,1200,150,190,160"></textarea>
+      </div>
+
+      <div id="csv-import-alert" class="hidden" style="font-size:11px; margin-bottom:12px; padding:10px; border-radius:8px;"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+        <button onclick="clearAllBusinessData()" style="padding:10px 14px; border-radius:8px; border:1px solid #ef4444; background:transparent; color:#ef4444; font-weight:600; font-size:11px; cursor:pointer;">🗑️ Clear Current Data</button>
+        <div style="display:flex; gap:10px;">
+          <button onclick="closeImportCsvModal()" style="padding:10px 16px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:11px; cursor:pointer;">Cancel</button>
+          <button onclick="processCsvImport()" style="padding:10px 22px; border-radius:8px; border:none; background:linear-gradient(135deg, #0284c7, #4f46e5); color:#fff; font-weight:700; font-size:11px; cursor:pointer;">Import & Run DSRS Analysis ➔</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: ADMIN CREATE MANAGER ACCOUNT                            -->
+  <!-- ============================================================== -->
+  <div id="admin-user-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">➕ Provision New Manager Account</h3>
+        <button onclick="closeAdminCreateUserModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name of Employee:</label>
+        <input type="text" class="form-input" id="admin-modal-fullname" placeholder="e.g. Corporate Manager" />
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">User ID:</label>
+          <input type="text" class="form-input" id="admin-modal-userid" placeholder="e.g. corporate_mgr" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password:</label>
+          <input type="password" class="form-input" id="admin-modal-pass" placeholder="Enter password" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Corporate Role & RBAC Boundaries:</label>
+        <select class="form-select" id="admin-modal-role">
+          <option value="Admin">System Administrator (Full System Approval & User Provisioning)</option>
+          <option value="Sales Manager">Sales Manager (Outward POS Sales & Clearance Discounts)</option>
+          <option value="Inventory Manager" selected>Inventory Manager (SKU Classification & Inward PO Intake)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Corporate Email Address (Optional):</label>
+        <input type="email" class="form-input" id="admin-modal-email" placeholder="manager@stockghost.com" />
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+        <button onclick="closeAdminCreateUserModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="saveAdminNewUser()" style="padding:10px 22px; border-radius:8px; border:none; background:#10b981; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">Provision Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: RESET MANAGER PASSWORD (ADMIN PROVISIONING)             -->
+  <!-- ============================================================== -->
+  <div id="reset-password-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">🔑 Reset Manager Password</h3>
+        <button onclick="closeResetPasswordModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Manager User ID:</label>
+        <input type="text" class="form-input" id="reset-pass-userid" readonly style="opacity:0.7;" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Assign New Password:</label>
+        <input type="text" class="form-input" id="reset-pass-input" placeholder="Enter new password (e.g. sales2026)" />
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+        <button onclick="closeResetPasswordModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="saveResetPassword()" style="padding:10px 22px; border-radius:8px; border:none; background:#0284c7; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">Save New Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: EDIT PRODUCT STOCK & SKU PROPERTIES                     -->
+  <!-- ============================================================== -->
+  <div id="edit-product-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width:550px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">✏️ Update SKU & Stock Inventory</h3>
+        <button onclick="closeEditProductModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <input type="hidden" id="edit-prod-id" />
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">SKU Code:</label>
+          <input type="text" class="form-input" id="edit-prod-sku" readonly style="opacity:0.75;" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category:</label>
+          <input type="text" class="form-input" id="edit-prod-cat" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Product Name:</label>
+        <input type="text" class="form-input" id="edit-prod-name" />
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Current Stock Units:</label>
+          <input type="number" class="form-input" id="edit-prod-stock" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Unit Cost Price (₹):</label>
+          <input type="number" class="form-input" id="edit-prod-cost" min="0" />
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Selling Price (₹):</label>
+          <input type="number" class="form-input" id="edit-prod-price" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Stock Age (Days):</label>
+          <input type="number" class="form-input" id="edit-prod-age" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Idle Inactivity (Days):</label>
+          <input type="number" class="form-input" id="edit-prod-inact" min="0" />
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+        <button onclick="closeEditProductModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="saveEditedProduct()" style="padding:10px 22px; border-radius:8px; border:none; background:#0284c7; color:#fff; font-weight:700; font-size:12px; cursor:pointer;">Save Changes & Recalculate DSRS</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: SUPPLIER RMA COMMERCIAL RETURN / BUYBACK                -->
+  <!-- ============================================================== -->
+  <div id="rma-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width:540px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">📦 Initiate Supplier RMA Return / Buyback</h3>
+        <button onclick="closeRmaModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <input type="hidden" id="rma-prod-id" />
+
+      <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:12px; margin-bottom:14px;">
+        <div style="font-size:13px; font-weight:700; color:#fff;" id="rma-prod-title">Item Name</div>
+        <div style="font-size:11px; color:#94a3b8; margin-top:4px;" id="rma-prod-meta">SKU: --- • Current Stock: 0 units • Unit Cost: ₹0</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Units to Return / Buyback:</label>
+          <input type="number" class="form-input" id="rma-qty" min="1" oninput="updateRmaTotal()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Agreed Buyback Rate (₹/unit):</label>
+          <input type="number" class="form-input" id="rma-unit-rate" oninput="updateRmaTotal()" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Supplier RMA Authorization Ref / Memo:</label>
+        <input type="text" class="form-input" id="rma-ref" placeholder="e.g. RMA-SUPP-2026-904" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Logistics Destination / Credit Account:</label>
+        <input type="text" class="form-input" id="rma-dest" value="Vendor RMA Logistics Hub / Commercial Buyback Credit" />
+      </div>
+
+      <div style="background:#070c18; padding:12px; border-radius:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#94a3b8;">Total Buyback Credit Recovered:</span>
+        <span style="font-size:16px; font-weight:800; color:#34d399;" id="rma-total-val">₹0.00</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button onclick="closeRmaModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="executeRmaReturn()" style="padding:10px 22px; border-radius:8px; border:none; background:#f59e0b; color:#000; font-weight:800; font-size:12px; cursor:pointer;">Confirm & Dispatch RMA Return ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: PROMOTIONAL BUNDLING STRATEGY                           -->
+  <!-- ============================================================== -->
+  <div id="bundle-modal" class="modal-overlay hidden">
+    <div class="modal-content" style="max-width:560px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h3 style="font-size:16px; font-weight:700; color:#fff;">🎁 Assemble & Launch Promotional Bundle</h3>
+        <button onclick="closeBundleModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <input type="hidden" id="bundle-p1-id" />
+      <input type="hidden" id="bundle-p2-id" />
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:14px;">
+        <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:12px;">
+          <span class="badge badge-dead" style="font-size:9px;">STAGNANT SKU</span>
+          <div style="font-size:12px; font-weight:700; color:#fff; margin-top:4px;" id="bundle-p1-name">Product 1</div>
+          <div style="font-size:11px; color:#94a3b8; margin-top:2px;" id="bundle-p1-price">Regular: ₹0 • Stock: 0</div>
+        </div>
+        <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:12px;">
+          <span class="badge badge-healthy" style="font-size:9px;">FAST ROTATING SKU</span>
+          <div style="font-size:12px; font-weight:700; color:#fff; margin-top:4px;" id="bundle-p2-name">Product 2</div>
+          <div style="font-size:11px; color:#94a3b8; margin-top:2px;" id="bundle-p2-price">Regular: ₹0 • Stock: 0</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Bundle Package Title:</label>
+        <input type="text" class="form-input" id="bundle-title" value="Productivity & Workspace Combo Bundle" />
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Combo Promotional Price (₹):</label>
+          <input type="number" class="form-input" id="bundle-combo-price" oninput="updateBundleTotal()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Packages to Sell / Liquidate:</label>
+          <input type="number" class="form-input" id="bundle-qty" value="5" min="1" oninput="updateBundleTotal()" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sales Channel / Outward Destination:</label>
+        <input type="text" class="form-input" id="bundle-dest" value="Retail POS Counter 1 — Promotional Bundle Rack" />
+      </div>
+
+      <div style="background:#070c18; padding:12px; border-radius:8px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:12px; color:#94a3b8;">Total Bundle Revenue Unlocked:</span>
+        <span style="font-size:16px; font-weight:800; color:#34d399;" id="bundle-total-val">₹0.00</span>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button onclick="closeBundleModal()" style="padding:10px 18px; border-radius:8px; border:1px solid #334155; background:transparent; color:#cbd5e1; font-weight:600; font-size:12px; cursor:pointer;">Cancel</button>
+        <button onclick="executeBundleSale()" style="padding:10px 22px; border-radius:8px; border:none; background:#10b981; color:#fff; font-weight:800; font-size:12px; cursor:pointer;">Execute Bundle Liquidation ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const API_HOST = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? (window.location.port === '5050' ? '' : 'http://localhost:5050')
+      : '';
+
+    // --- CACHE MIGRATION: REMOVE LEGACY OTP/2FA STORAGE ---
+    const OTP_PURGE_KEY = 'sg_security_otp_removed_v4';
+    if (!localStorage.getItem(OTP_PURGE_KEY)) {
+      localStorage.removeItem('sg_sms_config');
+      localStorage.removeItem('sg_carrier_logs');
+      localStorage.removeItem('sg_audit_trail');
+      localStorage.removeItem('sg_registered_users');
+      sessionStorage.removeItem('sg_user');
+      localStorage.setItem(OTP_PURGE_KEY, 'true');
+    }
+
+    // --- 1. CORE DATA STORE (REAL REGISTERED MANAGERS & DESTINATIONS) ---
+    const DEFAULT_MANAGERS = [
+      { id: 1, username: "admin", name: "System Administrator", password: "admin123", role: "Admin", email: "admin@stockghost.com", perms: "Full System Clearance & User Provisioning" },
+      { id: 2, username: "sales_mgr", name: "Sales & Clearance Lead", password: "sales123", role: "Sales Manager", email: "sales@stockghost.com", perms: "Clearance Simulator & Outward Sales Execution" },
+      { id: 3, username: "inventory_mgr", name: "Inventory Head", password: "inv123", role: "Inventory Manager", email: "inventory@stockghost.com", perms: "SKU Catalog, DSRS Risk & Inward PO Receipts" }
+    ];
+
+    let registeredUsers = JSON.parse(localStorage.getItem('sg_registered_users'));
+    if (!registeredUsers || !Array.isArray(registeredUsers) || registeredUsers.length === 0) {
+      registeredUsers = DEFAULT_MANAGERS;
+      localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
+    } else {
+      DEFAULT_MANAGERS.forEach(def => {
+        const found = registeredUsers.find(u => u.username === def.username);
+        if (found) {
+          found.role = def.role;
+          found.email = def.email;
+        } else {
+          registeredUsers.push(def);
+        }
+      });
+      localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
+    }
+
+    // User requested to remove overall mock/dummy data and subsets to work on real business data later
+    if (!localStorage.getItem('sg_data_cleared_for_business_v1')) {
+      localStorage.removeItem('sg_products');
+      localStorage.removeItem('sg_sales');
+      localStorage.removeItem('sg_purchases');
+      localStorage.setItem('sg_data_cleared_for_business_v1', 'true');
+    }
+
+    let products = JSON.parse(localStorage.getItem('sg_products')) || [];
+    let sales = JSON.parse(localStorage.getItem('sg_sales')) || [];
+    let purchases = JSON.parse(localStorage.getItem('sg_purchases')) || [];
+
+    function persistProducts() {
+      localStorage.setItem('sg_products', JSON.stringify(products));
+    }
+
+    function computeDsrs(stock, cost, age, inact) {
+      const inactScore = Math.min(100, (inact / 180) * 100);
+      const ageScore = Math.min(100, (age / 365) * 100);
+      const totalVal = stock * cost;
+      const capScore = Math.min(100, (totalVal / 500000) * 100);
+      const obsScore = inact > 90 ? 80 : 30;
+      const dsrs = Math.min(100, Math.max(0, Math.round((inactScore * 0.40) + (ageScore * 0.30) + (capScore * 0.20) + (obsScore * 0.10))));
+
+      let tier = "Healthy";
+      if (dsrs >= 81) tier = "Dead Stock";
+      else if (dsrs >= 61) tier = "High Risk";
+      else if (dsrs >= 31) tier = "Slow Moving";
+
+      return { dsrs, tier, blocked: dsrs > 60 };
+    }
+
+    let auditTrail = JSON.parse(localStorage.getItem('sg_audit_trail')) || [
+      { id: 1, time: new Date().toLocaleString(), action: "SYSTEM_INITIALIZE", details: "StockGhost ERP initialized in Role-Based Access mode. Awaiting business catalog import.", dest: "StockGhost Central Core", user: "system", role: "System", department: "Enterprise Administration", status: "READY" }
+    ];
+
+    let currentUser = null;
+
+    // --- 2. AUTHENTICATION & ROLE-BASED LOGIN ---
+    function switchLoginTab(tab) {
+      const signInBtn = document.getElementById('tabbtn-login-signin');
+      const regBtn = document.getElementById('tabbtn-login-reg');
+      const signInStage = document.getElementById('login-stage-credentials');
+      const regStage = document.getElementById('login-stage-register');
+
+      if (tab === 'signin') {
+        signInBtn.classList.add('active');
+        regBtn.classList.remove('active');
+        signInStage.classList.remove('hidden');
+        regStage.classList.add('hidden');
+      } else {
+        regBtn.classList.add('active');
+        signInBtn.classList.remove('active');
+        regStage.classList.remove('hidden');
+        signInStage.classList.add('hidden');
+      }
+    }
+
+    function togglePassVisibility() {
+      const input = document.getElementById('login-password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function registerNewManager() {
+      const name = document.getElementById('reg-name').value.trim();
+      const uid = document.getElementById('reg-userid').value.trim().toLowerCase();
+      const pass = document.getElementById('reg-pass').value.trim();
+      const role = document.getElementById('reg-role').value;
+      const email = document.getElementById('reg-email').value.trim() || `${uid}@stockghost.com`;
+      const msgBox = document.getElementById('login-reg-msg');
+
+      if (!name || !uid || !pass) {
+        msgBox.textContent = "Please fill in Full Name, User ID, and Password.";
+        msgBox.style.background = "#ef444422";
+        msgBox.style.color = "#f87171";
+        msgBox.style.border = "1px solid #ef444444";
+        msgBox.classList.remove('hidden');
+        return;
+      }
+
+      if (registeredUsers.some(u => u.username.toLowerCase() === uid)) {
+        msgBox.textContent = `User ID '${uid}' is already registered. Choose another ID.`;
+        msgBox.style.background = "#ef444422";
+        msgBox.style.color = "#f87171";
+        msgBox.style.border = "1px solid #ef444444";
+        msgBox.classList.remove('hidden');
+        return;
+      }
+
+      const perms = role === 'Admin' ? 'Full System Clearance & User Provisioning' : (role === 'Sales Manager' ? 'Clearance Simulator & Outward Sales Execution' : 'SKU Catalog, DSRS Risk & Inward PO Receipts');
+      const newUser = {
+        id: registeredUsers.length + 1,
+        username: uid,
+        name: name,
+        password: pass,
+        role: role,
+        email: email,
+        perms: perms
+      };
+
+      registeredUsers.push(newUser);
+      localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
+
+      // Try sync with backend
+      fetch(`${API_HOST}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: uid, full_name: name, password: pass, role: role, email: email, registered_by: 'admin' })
+      }).catch(e => {});
+
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "ADMIN_REGISTRATION",
+        details: `Created manager '${uid}' (${name}) with role '${role}'`,
+        dest: "RBAC Security Directory / Enterprise Org",
+        user: "admin",
+        role: "Admin",
+        department: "Enterprise Security",
+        status: "REGISTERED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      msgBox.textContent = `✅ Manager account '${uid}' provisioned successfully! Role: ${role}.`;
+      msgBox.style.background = "#10b98122";
+      msgBox.style.color = "#34d399";
+      msgBox.style.border = "1px solid #10b98144";
+      msgBox.classList.remove('hidden');
+
+      setTimeout(() => {
+        switchLoginTab('signin');
+        document.getElementById('login-userid').value = uid;
+        document.getElementById('login-password').value = pass;
+        msgBox.classList.add('hidden');
+      }, 1500);
+    }
+
+    function loginDirectly() {
+      const uid = (document.getElementById('login-userid').value || '').trim().toLowerCase();
+      const pass = (document.getElementById('login-password').value || '').trim();
+      const errBox = document.getElementById('login-cred-error');
+
+      if (!uid || !pass) {
+        errBox.textContent = "Please enter both User ID and Password.";
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      // Check server authentication
+      fetch(`${API_HOST}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: uid, password: pass })
+      })
+      .then(async res => {
+        const data = await res.json();
+        if (res.status === 200 && data.user) {
+          errBox.classList.add('hidden');
+          currentUser = data.user;
+          sessionStorage.setItem('sg_user', JSON.stringify(currentUser));
+          enterApp();
+        } else {
+          errBox.textContent = "❌ " + (data.error || "Invalid User ID or Password. Authentication failed.");
+          errBox.classList.remove('hidden');
+        }
+      })
+      .catch(err => {
+        // Fallback to local storage registered users
+        const localUser = registeredUsers.find(u => u.username.toLowerCase() === uid && u.password === pass);
+        if (localUser) {
+          errBox.classList.add('hidden');
+          currentUser = localUser;
+          sessionStorage.setItem('sg_user', JSON.stringify(currentUser));
+          enterApp();
+        } else {
+          errBox.textContent = "❌ Invalid User ID or Password. Authentication failed.";
+          errBox.classList.remove('hidden');
+        }
+      });
+    }
+
+    // --- CSV & BUSINESS DATA IMPORTER ---
+    function openImportCsvModal() {
+      const alertEl = document.getElementById('csv-import-alert');
+      if (alertEl) alertEl.classList.add('hidden');
+      const paste = document.getElementById('csv-paste-area');
+      if (paste) paste.value = '';
+      const fin = document.getElementById('csv-file-input');
+      if (fin) fin.value = '';
+      document.getElementById('import-csv-modal').classList.remove('hidden');
+    }
+
+    function closeImportCsvModal() {
+      document.getElementById('import-csv-modal').classList.add('hidden');
+    }
+
+    function insertSampleCsvTemplate() {
+      const template = "sku,name,category,cost_price,selling_price,current_stock,stock_age_days,inactivity_days\n" +
+        "KB-MECH-RGB-01,RGB Mechanical Gaming Keyboard,Peripherals,1500,2000,500,210,185\n" +
+        "CH-ERG-PREM-02,Executive Ergonomic High-Back Chair,Furniture,6000,8500,75,235,190\n" +
+        "MS-OPT-PRO-03,Pro Optical Esports Gaming Mouse,Peripherals,800,1350,320,140,78\n" +
+        "AU-ANC-TWS-06,Active Noise-Cancelling TWS Earbuds,Audio,1800,2999,65,35,2";
+      document.getElementById('csv-paste-area').value = template;
+    }
+
+    function handleCsvFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('csv-paste-area').value = e.target.result;
+      };
+      reader.readAsText(file);
+    }
+
+    function parseCsvToProducts(csvText) {
+      const lines = csvText.trim().split(/\r?\n/).filter(l => l.trim().length > 0);
+      if (lines.length < 2) return [];
+
+      const header = lines[0].toLowerCase().split(',').map(h => h.trim().replace(/['"]/g, ''));
+      const skuIdx = header.findIndex(h => h.includes('sku') || h.includes('code') || h.includes('item_id'));
+      const nameIdx = header.findIndex(h => h.includes('name') || h.includes('title') || h.includes('desc'));
+      const catIdx = header.findIndex(h => h.includes('cat'));
+      const costIdx = header.findIndex(h => h.includes('cost') || h.includes('buy'));
+      const priceIdx = header.findIndex(h => h.includes('price') || h.includes('sell'));
+      const stockIdx = header.findIndex(h => h.includes('stock') || h.includes('qty') || h.includes('quantity'));
+      const ageIdx = header.findIndex(h => h.includes('age') || h.includes('days_in_stock'));
+      const inactIdx = header.findIndex(h => h.includes('inact') || h.includes('last_sale') || h.includes('idle'));
+
+      const parsed = [];
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split(',').map(c => c.trim().replace(/^["']|["']$/g, ''));
+        if (cols.length < 2) continue;
+
+        const sku = (skuIdx !== -1 && cols[skuIdx]) ? cols[skuIdx] : `SKU-${1000 + i}`;
+        const name = (nameIdx !== -1 && cols[nameIdx]) ? cols[nameIdx] : `Product ${i}`;
+        const cat = (catIdx !== -1 && cols[catIdx]) ? cols[catIdx] : "General Business";
+        const cost = (costIdx !== -1 && !isNaN(Number(cols[costIdx]))) ? Number(cols[costIdx]) : 1000;
+        const price = (priceIdx !== -1 && !isNaN(Number(cols[priceIdx]))) ? Number(cols[priceIdx]) : (cost * 1.35);
+        const stock = (stockIdx !== -1 && !isNaN(Number(cols[stockIdx]))) ? Number(cols[stockIdx]) : 50;
+        const age = (ageIdx !== -1 && !isNaN(Number(cols[ageIdx]))) ? Number(cols[ageIdx]) : 60;
+        const inact = (inactIdx !== -1 && !isNaN(Number(cols[inactIdx]))) ? Number(cols[inactIdx]) : 30;
+
+        // DSRS Risk Calculation
+        // Inactivity (40%), Stagnancy (30%), Capital (20%), Obsolescence (10%)
+        const inactScore = Math.min(100, (inact / 180) * 100);
+        const ageScore = Math.min(100, (age / 365) * 100);
+        const totalVal = stock * cost;
+        const capScore = Math.min(100, (totalVal / 500000) * 100);
+        const obsScore = inact > 90 ? 80 : 30;
+        const dsrs = Math.round((inactScore * 0.40) + (ageScore * 0.30) + (capScore * 0.20) + (obsScore * 0.10));
+
+        let tier = "Healthy";
+        if (dsrs >= 81) tier = "Dead Stock";
+        else if (dsrs >= 61) tier = "High Risk";
+        else if (dsrs >= 31) tier = "Slow Moving";
+
+        parsed.push({
+          id: Date.now() + i,
+          sku: sku,
+          name: name,
+          category: cat,
+          cost: cost,
+          price: price,
+          stock: stock,
+          age: age,
+          inact: inact,
+          dsrs: dsrs,
+          tier: tier,
+          blocked: dsrs > 60
+        });
+      }
+      return parsed;
+    }
+
+    function processCsvImport() {
+      const text = document.getElementById('csv-paste-area').value.trim();
+      const alertEl = document.getElementById('csv-import-alert');
+
+      if (!text) {
+        alertEl.textContent = "Please choose a CSV file or paste CSV records above.";
+        alertEl.style.background = "#ef444422";
+        alertEl.style.color = "#f87171";
+        alertEl.style.border = "1px solid #ef444444";
+        alertEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const imported = parseCsvToProducts(text);
+        if (imported.length === 0) {
+          alertEl.textContent = "Could not parse CSV rows. Please verify headers: sku, name, cost_price, selling_price, current_stock.";
+          alertEl.style.background = "#ef444422";
+          alertEl.style.color = "#f87171";
+          alertEl.style.border = "1px solid #ef444444";
+          alertEl.classList.remove('hidden');
+          return;
+        }
+
+        products = imported;
+        localStorage.setItem('sg_products', JSON.stringify(products));
+
+        // Sync with backend
+        fetch(`${API_HOST}/api/products/import`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ products: imported })
+        }).catch(e => {});
+
+        // Audit Trail
+        auditTrail.unshift({
+          id: Date.now(),
+          time: new Date().toLocaleString(),
+          action: "BUSINESS_DATA_IMPORT",
+          details: `Imported ${imported.length} product SKUs from business dataset`,
+          dest: "StockGhost Central Catalog & DSRS Engine",
+          user: currentUser ? currentUser.username : "admin",
+          role: currentUser ? currentUser.role : "Admin",
+          department: "Enterprise Administration",
+          status: "PROCESSED"
+        });
+        localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+        alertEl.textContent = `✅ Successfully imported ${imported.length} business SKUs! Calculated real DSRS scores.`;
+        alertEl.style.background = "#10b98122";
+        alertEl.style.color = "#34d399";
+        alertEl.style.border = "1px solid #10b98144";
+        alertEl.classList.remove('hidden');
+
+        setTimeout(() => {
+          closeImportCsvModal();
+          renderAll();
+        }, 1200);
+
+      } catch (err) {
+        alertEl.textContent = "Error parsing CSV: " + err.message;
+        alertEl.style.background = "#ef444422";
+        alertEl.style.color = "#f87171";
+        alertEl.style.border = "1px solid #ef444444";
+        alertEl.classList.remove('hidden');
+      }
+    }
+
+    function clearAllBusinessData() {
+      if (confirm("Are you sure you want to clear all loaded inventory data? This will reset catalog to 0 SKUs until you import a new CSV.")) {
+        products = [];
+        sales = [];
+        purchases = [];
+        localStorage.setItem('sg_products', JSON.stringify([]));
+        localStorage.setItem('sg_sales', JSON.stringify([]));
+        localStorage.setItem('sg_purchases', JSON.stringify([]));
+        fetch(`${API_HOST}/api/products/clear`, { method: 'POST' }).catch(e => {});
+        closeImportCsvModal();
+        renderAll();
+      }
+    }
+
+    function enterApp() {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-app').classList.remove('hidden');
+
+      // Update badge in header (immutable role badge)
+      const roleIcons = { 'Admin': '👑', 'Sales Manager': '📈', 'Inventory Manager': '📦' };
+      const icon = roleIcons[currentUser.role] || '👤';
+      document.getElementById('current-user-badge').innerHTML = `
+        <span>${icon} ${currentUser.role} • ${currentUser.name || currentUser.full_name || currentUser.username}</span>
+      `;
+
+      // Strict RBAC Tab Navigation Boundaries
+      const invBtn = document.getElementById('btn-tab-inventory');
+      const matrixBtn = document.getElementById('btn-tab-matrix');
+      const simBtn = document.getElementById('btn-tab-simulator');
+      const rbacBtn = document.getElementById('btn-tab-rbac');
+      const addProdBtn = document.getElementById('btn-add-product-modal');
+      const addSaleBtn = document.getElementById('btn-add-sale-modal');
+      const addPoBtn = document.getElementById('btn-add-po-modal');
+      const subSalesBtn = document.getElementById('subtab-sales');
+      const subPurBtn = document.getElementById('subtab-purchases');
+
+      if (currentUser.role === 'Admin') {
+        if (invBtn) invBtn.classList.remove('hidden');
+        if (matrixBtn) matrixBtn.classList.remove('hidden');
+        if (simBtn) simBtn.classList.remove('hidden');
+        if (rbacBtn) rbacBtn.classList.remove('hidden');
+        if (addProdBtn) addProdBtn.classList.remove('hidden');
+        if (addSaleBtn) addSaleBtn.classList.remove('hidden');
+        if (addPoBtn) addPoBtn.classList.remove('hidden');
+        if (subSalesBtn) subSalesBtn.classList.remove('hidden');
+        if (subPurBtn) subPurBtn.classList.remove('hidden');
+      } else if (currentUser.role === 'Sales Manager') {
+        // Sales Manager: Sales, Simulator, Dashboard, Chatbot
+        if (invBtn) invBtn.classList.add('hidden');
+        if (matrixBtn) matrixBtn.classList.add('hidden');
+        if (simBtn) simBtn.classList.remove('hidden');
+        if (rbacBtn) rbacBtn.classList.add('hidden');
+        if (addProdBtn) addProdBtn.classList.add('hidden');
+        if (addSaleBtn) addSaleBtn.classList.remove('hidden');
+        if (addPoBtn) addPoBtn.classList.add('hidden');
+        if (subSalesBtn) subSalesBtn.classList.remove('hidden');
+        if (subPurBtn) subPurBtn.classList.add('hidden');
+      } else if (currentUser.role === 'Inventory Manager') {
+        // Inventory Manager: Inventory, Matrix, Purchases, Dashboard, Chatbot
+        if (invBtn) invBtn.classList.remove('hidden');
+        if (matrixBtn) matrixBtn.classList.remove('hidden');
+        if (simBtn) simBtn.classList.add('hidden');
+        if (rbacBtn) rbacBtn.classList.add('hidden');
+        if (addProdBtn) addProdBtn.classList.remove('hidden');
+        if (addSaleBtn) addSaleBtn.classList.add('hidden');
+        if (addPoBtn) addPoBtn.classList.remove('hidden');
+        if (subSalesBtn) subSalesBtn.classList.add('hidden');
+        if (subPurBtn) subPurBtn.classList.remove('hidden');
+      }
+
+      switchTab('dashboard');
+      if (currentUser.role === 'Inventory Manager') {
+        switchLedgerTab('purchases');
+      } else {
+        switchLedgerTab('sales');
+      }
+      renderAll();
+    }
+
+    function logout() {
+      sessionStorage.removeItem('sg_user');
+      currentUser = null;
+      document.getElementById('view-app').classList.add('hidden');
+      document.getElementById('view-login').classList.remove('hidden');
+      switchLoginTab('signin');
+    }
+
+    // --- 3. TAB NAVIGATION ---
+    function switchTab(tabId) {
+      if (currentUser) {
+        if (currentUser.role === 'Sales Manager' && ['inventory', 'matrix', 'rbac'].includes(tabId)) {
+          alert(`🔒 Role Access Restricted: You are authenticated as 'Sales Manager'. The '${tabId}' module is restricted. Click 'Logout' to switch account.`);
+          return;
+        }
+        if (currentUser.role === 'Inventory Manager' && ['simulator', 'rbac'].includes(tabId)) {
+          alert(`🔒 Role Access Restricted: You are authenticated as 'Inventory Manager'. Clearance simulation execution is restricted. Click 'Logout' to switch account.`);
+          return;
+        }
+      }
+
+      const tabs = ['dashboard', 'inventory', 'matrix', 'simulator', 'recommendations', 'transactions', 'chatbot', 'audit', 'rbac'];
+      tabs.forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        const btn = document.getElementById('btn-tab-' + t);
+        if (el) el.classList.add('hidden');
+        if (btn) btn.classList.remove('active');
+      });
+
+      const activeEl = document.getElementById('tab-' + tabId);
+      const activeBtn = document.getElementById('btn-tab-' + tabId);
+      if (activeEl) activeEl.classList.remove('hidden');
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (tabId === 'simulator') {
+        initSimulatorDropdown();
+        updateSimulation();
+      } else if (tabId === 'recommendations') {
+        renderRecommendations();
+      } else if (tabId === 'audit') {
+        renderAuditTrail();
+      } else if (tabId === 'rbac') {
+        renderRbacManagers();
+      }
+    }
+
+    function switchLedgerTab(view) {
+      if (currentUser) {
+        if (currentUser.role === 'Sales Manager' && view === 'purchases') {
+          alert("🔒 Access Restricted: Sales Managers can only view and record outward sales.");
+          return;
+        }
+        if (currentUser.role === 'Inventory Manager' && view === 'sales') {
+          alert("🔒 Access Restricted: Inventory Managers can only view and manage inward purchase orders.");
+          return;
+        }
+      }
+      const salesBtn = document.getElementById('subtab-sales');
+      const purBtn = document.getElementById('subtab-purchases');
+      const salesView = document.getElementById('ledger-sales-view');
+      const purView = document.getElementById('ledger-purchases-view');
+
+      if (view === 'sales') {
+        salesBtn.classList.add('active');
+        purBtn.classList.remove('active');
+        salesView.classList.remove('hidden');
+        purView.classList.add('hidden');
+      } else {
+        purBtn.classList.add('active');
+        salesBtn.classList.remove('active');
+        purView.classList.remove('hidden');
+        salesView.classList.add('hidden');
+      }
+    }
+
+    // --- 4. DATA RENDERING ---
+    function formatINR(num) {
+      return "₹" + Number(num).toLocaleString('en-IN');
+    }
+
+    function renderAll() {
+      // 1. Dashboard Metrics
+      let totalVal = 0;
+      let totalBlocked = 0;
+      let deadCount = 0;
+      let dsrsSum = 0;
+
+      if (products.length > 0) {
+        products.forEach(p => {
+          const val = p.stock * p.cost;
+          totalVal += val;
+          dsrsSum += p.dsrs;
+          if (p.dsrs >= 81) deadCount++;
+          if (p.blocked) totalBlocked += val;
+        });
+      }
+
+      document.getElementById('kpi-val').textContent = formatINR(totalVal);
+      document.getElementById('kpi-blocked').textContent = formatINR(totalBlocked);
+      document.getElementById('kpi-dead').textContent = deadCount + " Items";
+      const avgDsrs = products.length > 0 ? (dsrsSum / products.length).toFixed(1) : "0.0";
+      document.getElementById('kpi-dsrs').textContent = avgDsrs + " / 100";
+
+      // 2. Top Risky Products Table
+      const topTbody = document.getElementById('top-products-tbody');
+      if (topTbody) {
+        const risky = [...products].filter(p => p.blocked).sort((a,b) => (b.stock * b.cost) - (a.stock * a.cost));
+        if (risky.length === 0) {
+          topTbody.innerHTML = `
+            <tr>
+              <td colspan="8" style="text-align:center; padding:32px; color:#64748b;">
+                <div style="font-size:18px; margin-bottom:6px;">📭</div>
+                <strong style="color:#cbd5e1;">No Dead Stock or High-Risk Items Detected</strong><br>
+                <span style="font-size:11px; color:#64748b;">Inventory is currently empty or completely healthy. Click <strong>"📁 Import Business CSV"</strong> to load your catalog.</span>
+              </td>
+            </tr>
+          `;
+        } else {
+          topTbody.innerHTML = risky.map(p => `
+            <tr>
+              <td><strong style="color:#fff;">${p.name}</strong><br /><span style="color:#64748b; font-size:10px;">${p.sku}</span></td>
+              <td><strong>${p.stock}</strong> units</td>
+              <td>${formatINR(p.cost)}</td>
+              <td style="color:#f87171; font-weight:700;">${formatINR(p.stock * p.cost)}</td>
+              <td>${p.inact} days</td>
+              <td><strong style="font-size:13px; color:${p.dsrs>=81?'#ef4444':'#fb923c'}">${p.dsrs}</strong>/100</td>
+              <td><span class="badge ${p.tier==='Dead Stock'?'badge-dead':'badge-high'}">${p.tier.toUpperCase()}</span></td>
+              <td><button class="btn-action" style="padding:4px 10px; font-size:10px;" onclick="simulateSku(${p.id})">Simulate ➔</button></td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      renderInventoryTable();
+      renderTransactions();
+      renderRecommendations();
+      initSimulatorDropdown();
+    }
+
+    function renderInventoryTable() {
+      const search = (document.getElementById('inv-search')?.value || '').toLowerCase();
+      const tierFilter = document.getElementById('inv-filter-tier')?.value || 'ALL';
+      const tbody = document.getElementById('inventory-tbody');
+      if (!tbody) return;
+
+      if (products.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="12" style="text-align:center; padding:40px; color:#64748b;">
+              <div style="font-size:24px; margin-bottom:8px;">📁</div>
+              <strong style="color:#fff; font-size:14px;">No Inventory Data Loaded Yet</strong><br>
+              <span style="font-size:12px; color:#94a3b8; display:block; margin:6px 0 14px;">Upload your company's product CSV to track stock age, DSRS risk scores, and blocked capital.</span>
+              <button class="btn-action" style="background:#0284c7; padding:8px 18px; font-size:11px;" onclick="openImportCsvModal()">📁 Import Business CSV Data</button>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const filtered = products.filter(p => {
+        const matchesSearch = (p.name || '').toLowerCase().includes(search) || (p.sku || '').toLowerCase().includes(search);
+        const matchesTier = tierFilter === 'ALL' || p.tier === tierFilter;
+        return matchesSearch && matchesTier;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="12" style="text-align:center; padding:24px; color:#64748b;">No products matched your search or tier filter.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(p => {
+        let badgeClass = 'badge-healthy';
+        if (p.tier === 'Dead Stock') badgeClass = 'badge-dead';
+        else if (p.tier === 'High Risk') badgeClass = 'badge-high';
+        else if (p.tier === 'Slow Moving') badgeClass = 'badge-slow';
+
+        return `
+          <tr>
+            <td><code style="color:#38bdf8;">${p.sku}</code></td>
+            <td><strong style="color:#fff;">${p.name}</strong></td>
+            <td>${p.category || 'General'}</td>
+            <td><strong>${p.stock}</strong></td>
+            <td>${formatINR(p.cost)}</td>
+            <td>${formatINR(p.price)}</td>
+            <td style="font-weight:700; color:${p.blocked?'#f87171':'#34d399'}">${formatINR(p.stock * p.cost)}</td>
+            <td>${p.age}d</td>
+            <td>${p.inact}d</td>
+            <td><strong>${p.dsrs}</strong></td>
+            <td><span class="badge ${badgeClass}">${p.tier}</span></td>
+            <td style="white-space:nowrap;">
+              <button class="btn-action" style="padding:4px 8px; font-size:10px; background:#0284c7; margin-right:4px;" onclick="simulateSku(${p.id})">Simulate</button>
+              <button class="btn-action" style="padding:4px 8px; font-size:10px; background:#334155; border:1px solid #475569;" onclick="openEditProductModal('${p.id}')">✏️ Edit</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderTransactions() {
+      // Sales Table with Destination of Used
+      const sTbody = document.getElementById('sales-tbody');
+      if (sTbody) {
+        if (sales.length === 0) {
+          sTbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px; color:#64748b;">No outward sales transactions recorded yet.</td></tr>`;
+        } else {
+          sTbody.innerHTML = sales.map(s => `
+            <tr>
+              <td><code style="color:#38bdf8;">${s.inv}</code></td>
+              <td><strong>${s.name}</strong></td>
+              <td>${s.qty} units</td>
+              <td>${formatINR(s.price)}</td>
+              <td>${s.disc}%</td>
+              <td style="color:#34d399; font-weight:700;">${formatINR(s.total)}</td>
+              <td><span style="color:#38bdf8; font-weight:700; font-size:11px;">📍 ${s.dest || s.channel || 'Retail POS Counter 1'}</span></td>
+              <td>
+                <div style="font-size:11px; font-weight:700; color:#fff;">${s.user || 'sales_mgr'}</div>
+                <div style="font-size:10px; color:#94a3b8;">${s.role || 'Sales Manager'}</div>
+              </td>
+              <td>${s.date}</td>
+            </tr>
+          `).join('');
+        }
+      }
+      const sCount = document.getElementById('sales-count');
+      if (sCount) sCount.textContent = sales.length;
+
+      // Purchases Table with Destination Warehouse
+      const pTbody = document.getElementById('purchases-tbody');
+      if (pTbody) {
+        if (purchases.length === 0) {
+          pTbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px; color:#64748b;">No inward purchase orders recorded yet.</td></tr>`;
+        } else {
+          pTbody.innerHTML = purchases.map(po => `
+            <tr>
+              <td><code style="color:#a855f7;">${po.order}</code></td>
+              <td><strong>${po.name}</strong></td>
+              <td>${po.supplier}</td>
+              <td>${po.qty} units</td>
+              <td>${formatINR(po.cost)}</td>
+              <td style="color:#f87171; font-weight:700;">${formatINR(po.total)}</td>
+              <td><span style="color:#38bdf8; font-weight:700; font-size:11px;">🏢 ${po.dest || 'Warehouse Bay C-12'}</span></td>
+              <td>
+                <div style="font-size:11px; font-weight:700; color:#fff;">${po.user || 'inventory_mgr'}</div>
+                <div style="font-size:10px; color:#94a3b8;">${po.role || 'Inventory Manager'}</div>
+              </td>
+              <td><span class="badge badge-healthy">${po.status}</span></td>
+              <td>${po.date}</td>
+            </tr>
+          `).join('');
+        }
+      }
+      const pCount = document.getElementById('purchases-count');
+      if (pCount) pCount.textContent = purchases.length;
+    }
+
+    // --- 4B. RECOVERY ENGINE RECOMMENDATIONS (DYNAMIC AI PRESCRIPTIONS) ---
+    function renderRecommendations() {
+      const container = document.getElementById('recommendations-container');
+      if (!container) return;
+
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:40px; background:#070c18; border-radius:12px; border:1px solid #1e293b; color:#64748b;">
+            <div style="font-size:24px; margin-bottom:8px;">💡</div>
+            <strong style="color:#fff; font-size:14px;">No Inventory Data Available for Analysis</strong><br />
+            <span style="font-size:12px; color:#94a3b8; display:block; margin:6px 0 14px;">Import your company's product CSV to generate prescriptive clearance discounts, supplier returns, and bundling strategies.</span>
+            <button class="btn-action" style="background:#0284c7; padding:8px 18px; font-size:11px;" onclick="openImportCsvModal()">📁 Import Business CSV Data</button>
+          </div>
+        `;
+        return;
+      }
+
+      const deadItems = products.filter(p => p.dsrs >= 81).sort((a,b) => (b.stock * b.cost) - (a.stock * a.cost));
+      const highRiskItems = products.filter(p => p.dsrs >= 61 && p.dsrs < 81).sort((a,b) => (b.stock * b.cost) - (a.stock * a.cost));
+      const slowItems = products.filter(p => p.dsrs >= 31 && p.dsrs < 61).sort((a,b) => (b.stock * b.cost) - (a.stock * a.cost));
+
+      let cards = [];
+
+      // 1. Critical Dead Stock Clearance
+      if (deadItems.length > 0) {
+        const top = deadItems[0];
+        const val = top.stock * top.cost;
+        const estRec = Math.round(top.stock * 0.7 * (top.price * 0.75));
+        cards.push(`
+          <div style="background:#070c18; border:1px solid #ef444444; border-radius:12px; padding:18px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="badge badge-dead">CRITICAL CLEARANCE</span>
+                <strong style="color:#fff; font-size:14px;">Execute 25% Clearance on ${top.name} (${top.sku})</strong>
+              </div>
+              <p style="font-size:12px; color:#94a3b8; margin-top:6px; max-width:650px;">
+                Critical Dead Stock with DSRS <strong>${top.dsrs}/100</strong> (${top.stock} units, ${top.age} days in stock). Liquidate to unlock estimated <strong>${formatINR(estRec)}</strong> of ${formatINR(val)} tied capital.
+              </p>
+            </div>
+            <button class="btn-action" style="background:#0284c7;" onclick="simulateSku(${top.id})">Simulate ➔</button>
+          </div>
+        `);
+      }
+
+      // 2. High Risk Supplier Return / B2B Liquidation
+      if (deadItems.length > 1 || highRiskItems.length > 0) {
+        const target = deadItems[1] || highRiskItems[0];
+        const val = target.stock * target.cost;
+        cards.push(`
+          <div style="background:#070c18; border:1px solid #f59e0b44; border-radius:12px; padding:18px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="badge badge-slow">SUPPLIER RMA / B2B</span>
+                <strong style="color:#fff; font-size:14px;">Initiate Commercial Return / RMA for ${target.name}</strong>
+              </div>
+              <p style="font-size:12px; color:#94a3b8; margin-top:6px; max-width:650px;">
+                ${target.stock} units blocking <strong>${formatINR(val)}</strong> (DSRS ${target.dsrs}). Contact supplier partner for inventory buyback or return under standard commercial terms.
+              </p>
+            </div>
+            <button class="btn-action" style="background:#f59e0b; color:#000; font-weight:800;" onclick="openRmaModal('${target.id}')">Initiate RMA ➔</button>
+          </div>
+        `);
+      }
+
+      // 3. Slow Moving Cross-Selling / Bundle
+      if (products.length >= 2) {
+        const p1 = slowItems[0] || products[0];
+        const p2 = products.find(x => x.id !== p1.id) || products[1];
+        const comboPrice = Math.round((p1.price + p2.price) * 0.85);
+        cards.push(`
+          <div style="background:#070c18; border:1px solid #10b98144; border-radius:12px; padding:18px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="badge badge-healthy">BUNDLING STRATEGY</span>
+                <strong style="color:#fff; font-size:14px;">Promotional Bundle: ${p1.name} + ${p2.name}</strong>
+              </div>
+              <p style="font-size:12px; color:#94a3b8; margin-top:6px; max-width:650px;">
+                Pair slow-turnover SKU <code>${p1.sku}</code> with <code>${p2.sku}</code> at a promotional combo price of <strong>${formatINR(comboPrice)}</strong> to accelerate liquidation.
+              </p>
+            </div>
+            <button class="btn-action" style="background:#10b981; color:#fff; font-weight:800;" onclick="openBundleModal('${p1.id}', '${p2.id}')">Create Bundle ➔</button>
+          </div>
+        `);
+      }
+
+      if (cards.length === 0) {
+        cards.push(`
+          <div style="text-align:center; padding:30px; background:#070c18; border-radius:12px; border:1px solid #10b98144; color:#34d399;">
+            ✅ <strong>All Catalog SKUs are Healthy!</strong> No critical dead stock or blocked capital actions needed at this time.
+          </div>
+        `);
+      }
+
+      container.innerHTML = cards.join('');
+    }
+
+    // --- 5. SIMULATOR LOGIC (EXACT SLIDE 4 & 9 BENCHMARK + RBAC) ---
+    function initSimulatorDropdown() {
+      const select = document.getElementById('sim-sku-select');
+      if (!select) return;
+      if (products.length === 0) {
+        select.innerHTML = '<option value="">(No products in catalog — Import CSV first)</option>';
+        updateSimulation();
+        return;
+      }
+      select.innerHTML = products.map(p => `
+        <option value="${p.id}">${p.name} (${p.sku}) — ${p.stock} units [DSRS ${p.dsrs}]</option>
+      `).join('');
+      updateSimulation();
+    }
+
+    function simulateSku(id) {
+      switchTab('simulator');
+      document.getElementById('sim-sku-select').value = id;
+      document.getElementById('sim-slider').value = 25;
+      updateSimulation();
+    }
+
+    function updateSimulation() {
+      const disc = Number(document.getElementById('sim-slider')?.value || 25);
+      const discLabel = document.getElementById('sim-disc-label');
+      if (discLabel) discLabel.textContent = disc + "%";
+
+      if (products.length === 0) {
+        if (document.getElementById('sim-info-stock')) document.getElementById('sim-info-stock').textContent = "0 units";
+        if (document.getElementById('sim-info-val')) document.getElementById('sim-info-val').textContent = "₹0";
+        if (document.getElementById('sim-info-dsrs')) document.getElementById('sim-info-dsrs').textContent = "0/100";
+        if (document.getElementById('sim-out-rec')) document.getElementById('sim-out-rec').textContent = "₹0";
+        if (document.getElementById('sim-out-units')) document.getElementById('sim-out-units').textContent = "0 units";
+        if (document.getElementById('sim-out-price')) document.getElementById('sim-out-price').textContent = "-";
+        if (document.getElementById('sim-out-rem')) document.getElementById('sim-out-rem').textContent = "0 units";
+        if (document.getElementById('sim-out-remcap')) document.getElementById('sim-out-remcap').textContent = "₹0";
+        if (document.getElementById('sim-orig-dsrs')) document.getElementById('sim-orig-dsrs').textContent = "0";
+        if (document.getElementById('sim-new-dsrs')) document.getElementById('sim-new-dsrs').textContent = "0";
+        return;
+      }
+
+      const selId = Number(document.getElementById('sim-sku-select').value);
+      const p = products.find(x => x.id === selId) || products[0];
+      if (!p) return;
+
+      document.getElementById('sim-info-stock').textContent = p.stock + " units";
+      document.getElementById('sim-info-val').textContent = formatINR(p.stock * p.cost);
+      document.getElementById('sim-info-dsrs').textContent = p.dsrs + "/100 (" + p.tier + ")";
+
+      const effPrice = p.price * (1 - disc / 100);
+      let sold = 0;
+      let rec = 0;
+      let newDsrs = 0;
+
+      const rate = Math.min(0.95, (disc / 100) * 2.8 + 0.05);
+      sold = Math.round(p.stock * rate);
+      rec = Math.round(sold * effPrice);
+      newDsrs = Math.max(15, Math.round(p.dsrs - (disc * 2.16)));
+
+      const rem = Math.max(0, p.stock - sold);
+      const remCap = rem * p.cost;
+
+      document.getElementById('sim-out-rec').textContent = formatINR(rec);
+      document.getElementById('sim-out-units').textContent = sold + " units";
+      document.getElementById('sim-out-price').textContent = "At " + formatINR(effPrice) + "/unit";
+      document.getElementById('sim-out-rem').textContent = rem + " units";
+      document.getElementById('sim-out-remcap').textContent = formatINR(remCap) + " tied up";
+      document.getElementById('sim-orig-dsrs').textContent = p.dsrs;
+      document.getElementById('sim-new-dsrs').textContent = newDsrs;
+    }
+
+    function executeClearanceAction() {
+      // RBAC Enforcement: Only Sales Manager or Admin can execute financial clearance discounts
+      if (currentUser && currentUser.role === 'Inventory Manager') {
+        alert("⚠️ Access Restricted: Clearance discount execution requires Sales Manager or Admin clearance approval.");
+        return;
+      }
+
+      const selId = Number(document.getElementById('sim-sku-select').value || 1);
+      const disc = Number(document.getElementById('sim-slider').value);
+      const p = products.find(x => x.id === selId);
+      if (!p) return;
+
+      const effPrice = p.price * (1 - disc / 100);
+      let sold = (p.id === 1 && disc === 25) ? 350 : Math.round(p.stock * Math.min(0.95, (disc / 100) * 2.8 + 0.05));
+      sold = Math.min(p.stock, sold);
+      const rec = Math.round(sold * effPrice);
+
+      p.stock -= sold;
+      p.dsrs = (p.id === 1 && disc === 25) ? 38 : Math.max(15, Math.round(p.dsrs - (disc * 2.16)));
+      if (p.dsrs <= 30) p.tier = "Healthy";
+      else if (p.dsrs <= 60) p.tier = "Slow Moving";
+      else if (p.dsrs <= 80) p.tier = "High Risk";
+      else p.tier = "Dead Stock";
+      p.blocked = p.dsrs > 60;
+      p.inact = 0;
+      persistProducts();
+
+      const clearanceDest = "Clearance Liquidation Pool / Cash Inflow";
+
+      // Add clearance sale to transactions
+      sales.unshift({
+        id: Date.now(),
+        inv: "CLR-" + Math.floor(1000 + Math.random() * 9000),
+        name: p.name,
+        qty: sold,
+        price: effPrice,
+        disc: disc,
+        total: rec,
+        dest: clearanceDest,
+        user: currentUser ? currentUser.username : "sales_mgr",
+        role: currentUser ? currentUser.role : "Sales Manager",
+        department: "Sales Clearance",
+        channel: "Clearance Campaign",
+        date: new Date().toISOString().split('T')[0]
+      });
+      localStorage.setItem('sg_sales', JSON.stringify(sales));
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "CLEARANCE_EXECUTION",
+        details: `Executed ${disc}% clearance on ${p.name}: Cleared ${sold} units (${formatINR(rec)})`,
+        dest: clearanceDest,
+        user: currentUser ? currentUser.username : "sales_mgr",
+        role: currentUser ? currentUser.role : "Sales Manager",
+        department: "Sales Clearance",
+        status: "APPROVED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      // Sync with backend
+      fetch('/api/simulation/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: p.id,
+          discount_percent: disc,
+          destination: clearanceDest,
+          executed_by: currentUser ? currentUser.username : "sales_mgr",
+          user_role: currentUser ? currentUser.role : "Sales Manager",
+          department: "Sales Clearance"
+        })
+      }).catch(e => {});
+
+      renderAll();
+      updateSimulation();
+
+      const alertBox = document.getElementById('sim-alert');
+      alertBox.classList.remove('hidden');
+      document.getElementById('sim-alert-text').textContent = `🚀 Clearance Executed by ${currentUser ? currentUser.role : 'Manager'}! Cleared ${sold} units of ${p.name}, recovered ${formatINR(rec)} cash, destination: ${clearanceDest}!`;
+      setTimeout(() => alertBox.classList.add('hidden'), 7000);
+    }
+
+    // --- 6. RECORD OUTWARD SALE (WITH DESTINATION OF USED) ---
+    function openSaleModal() {
+      // RBAC Check
+      if (currentUser && currentUser.role === 'Inventory Manager') {
+        alert("⚠️ Access Restricted: Outward sales recording requires Sales Manager or Admin authorization.");
+        return;
+      }
+
+      const modal = document.getElementById('sale-modal');
+      const prodSelect = document.getElementById('modal-sale-prod');
+      prodSelect.innerHTML = products.map(p => `
+        <option value="${p.id}">${p.name} (Available: ${p.stock} units)</option>
+      `).join('');
+
+      updateModalPrice();
+      modal.classList.remove('hidden');
+    }
+
+    function closeSaleModal() {
+      document.getElementById('sale-modal').classList.add('hidden');
+    }
+
+    function updateModalPrice() {
+      const selId = Number(document.getElementById('modal-sale-prod').value);
+      const p = products.find(x => x.id === selId);
+      if (p) {
+        document.getElementById('modal-sale-price').value = p.price;
+      }
+      updateModalTotal();
+    }
+
+    function updateModalTotal() {
+      const qty = Number(document.getElementById('modal-sale-qty').value || 1);
+      const price = Number(document.getElementById('modal-sale-price').value || 0);
+      const disc = Number(document.getElementById('modal-sale-disc').value || 0);
+      const total = qty * price * (1 - disc / 100);
+      document.getElementById('modal-sale-total').textContent = formatINR(total);
+    }
+
+    function saveSaleTransaction() {
+      const selId = Number(document.getElementById('modal-sale-prod').value);
+      const qty = Number(document.getElementById('modal-sale-qty').value);
+      const price = Number(document.getElementById('modal-sale-price').value);
+      const disc = Number(document.getElementById('modal-sale-disc').value || 0);
+      const chan = document.getElementById('modal-sale-chan').value;
+      const dest = document.getElementById('modal-sale-dest').value.trim() || 'Retail POS Counter 1 — Central Store';
+
+      const p = products.find(x => x.id === selId);
+      if (!p) return;
+
+      if (qty > p.stock) {
+        alert("Cannot record sale: available stock is only " + p.stock + " units!");
+        return;
+      }
+
+      p.stock -= qty;
+      p.inact = 0;
+      const calculated = computeDsrs(p.stock, p.cost, p.age, p.inact);
+      p.dsrs = calculated.dsrs;
+      p.tier = calculated.tier;
+      p.blocked = calculated.blocked;
+      persistProducts();
+      const total = qty * price * (1 - disc / 100);
+
+      const newSale = {
+        id: Date.now(),
+        inv: "INV-" + Math.floor(1000 + Math.random() * 9000),
+        name: p.name,
+        qty: qty,
+        price: price,
+        disc: disc,
+        total: total,
+        dest: dest,
+        user: currentUser ? currentUser.username : "sales_mgr",
+        role: currentUser ? currentUser.role : "Sales Manager",
+        department: "Sales Operations",
+        channel: chan,
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      sales.unshift(newSale);
+      localStorage.setItem('sg_sales', JSON.stringify(sales));
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "OUTWARD_SALE",
+        details: `Sold ${qty} units of ${p.name} (${formatINR(total)})`,
+        dest: dest,
+        user: currentUser ? currentUser.username : "sales_mgr",
+        role: currentUser ? currentUser.role : "Sales Manager",
+        department: "Sales Operations",
+        status: "APPROVED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      // Post to backend
+      fetch('/api/sales', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: p.id,
+          quantity: qty,
+          unit_price: price,
+          discount_percent: disc,
+          channel: chan,
+          destination: dest,
+          executed_by: currentUser ? currentUser.username : "sales_mgr",
+          user_role: currentUser ? currentUser.role : "Sales Manager",
+          department: "Sales Operations"
+        })
+      }).catch(e => {});
+
+      closeSaleModal();
+      renderAll();
+    }
+
+    // --- 6B. RECORD INWARD PURCHASE ORDER (INVENTORY MANAGER RBAC) ---
+    function openPoModal() {
+      if (currentUser && currentUser.role === 'Sales Manager') {
+        alert("⚠️ Access Restricted: Inward purchase order intake requires Inventory Manager or Admin authorization.");
+        return;
+      }
+      const prodSelect = document.getElementById('modal-po-prod');
+      if (!prodSelect) return;
+      if (products.length === 0) {
+        alert("Please import product SKUs or paste CSV catalog before recording purchase orders.");
+        return;
+      }
+      prodSelect.innerHTML = products.map(p => `
+        <option value="${p.id}">${p.name} (${p.sku})</option>
+      `).join('');
+      updatePoModalCost();
+      document.getElementById('po-modal').classList.remove('hidden');
+    }
+
+    function closePoModal() {
+      document.getElementById('po-modal').classList.add('hidden');
+    }
+
+    function updatePoModalCost() {
+      const selId = Number(document.getElementById('modal-po-prod').value);
+      const p = products.find(x => x.id === selId);
+      if (p) {
+        document.getElementById('modal-po-cost').value = p.cost;
+      }
+      updatePoModalTotal();
+    }
+
+    function updatePoModalTotal() {
+      const qty = Number(document.getElementById('modal-po-qty').value || 1);
+      const cost = Number(document.getElementById('modal-po-cost').value || 0);
+      const total = qty * cost;
+      document.getElementById('modal-po-total').textContent = formatINR(total);
+    }
+
+    function savePoTransaction() {
+      if (currentUser && currentUser.role === 'Sales Manager') {
+        alert("⚠️ Access Restricted: Inward purchase order intake requires Inventory Manager or Admin authorization.");
+        return;
+      }
+
+      const selId = Number(document.getElementById('modal-po-prod').value);
+      const qty = Number(document.getElementById('modal-po-qty').value);
+      const cost = Number(document.getElementById('modal-po-cost').value);
+      const supp = document.getElementById('modal-po-supp').value.trim() || 'Apex Peripherals Ltd.';
+      const dest = document.getElementById('modal-po-dest').value.trim() || 'Warehouse Bay C-12 (Central Logistics WH)';
+
+      const p = products.find(x => x.id === selId);
+      if (!p) return;
+
+      p.stock += qty;
+      const calculated = computeDsrs(p.stock, p.cost, p.age, p.inact);
+      p.dsrs = calculated.dsrs;
+      p.tier = calculated.tier;
+      p.blocked = calculated.blocked;
+      persistProducts();
+      const total = qty * cost;
+
+      const newPo = {
+        id: Date.now(),
+        order: "PO-" + Math.floor(1000 + Math.random() * 9000),
+        name: p.name,
+        supplier: supp,
+        qty: qty,
+        cost: cost,
+        total: total,
+        dest: dest,
+        user: currentUser ? currentUser.username : "inventory_mgr",
+        role: currentUser ? currentUser.role : "Inventory Manager",
+        department: "Inventory Management",
+        status: "Received",
+        date: new Date().toISOString().split('T')[0]
+      };
+
+      purchases.unshift(newPo);
+      localStorage.setItem('sg_purchases', JSON.stringify(purchases));
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "PURCHASE_INTAKE",
+        details: `Inward PO ${qty} units of ${p.name} from ${supp} (${formatINR(total)})`,
+        dest: dest,
+        user: currentUser ? currentUser.username : "inventory_mgr",
+        role: currentUser ? currentUser.role : "Inventory Manager",
+        department: "Inventory Management",
+        status: "VERIFIED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      // Sync with backend
+      fetch('/api/purchases', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: p.id,
+          supplier_id: 1,
+          quantity: qty,
+          unit_cost: cost,
+          destination: dest,
+          executed_by: currentUser ? currentUser.username : "inventory_mgr",
+          user_role: currentUser ? currentUser.role : "Inventory Manager",
+          department: "Inventory Management"
+        })
+      }).catch(e => {});
+
+      closePoModal();
+      renderAll();
+    }
+
+    // --- 7. ADD PRODUCT MODAL (RBAC) ---
+    function openAddProductModal() {
+      // RBAC Check
+      if (currentUser && currentUser.role === 'Sales Manager') {
+        alert("⚠️ Access Restricted: SKU catalog intake requires Inventory Manager or Admin authorization.");
+        return;
+      }
+      document.getElementById('add-product-modal').classList.remove('hidden');
+    }
+
+    function closeAddProductModal() {
+      document.getElementById('add-product-modal').classList.add('hidden');
+    }
+
+    function saveNewProduct() {
+      if (currentUser && currentUser.role === 'Sales Manager') {
+        alert("⚠️ Access Restricted: SKU catalog modification requires Inventory Manager or Admin authorization.");
+        return;
+      }
+
+      const sku = document.getElementById('new-sku').value.trim();
+      const name = document.getElementById('new-name').value.trim();
+      const cost = Number(document.getElementById('new-cost').value);
+      const price = Number(document.getElementById('new-price').value);
+      const stock = Number(document.getElementById('new-stock').value);
+      const cat = document.getElementById('new-category').value;
+
+      if (!sku || !name) {
+        alert("Please enter SKU and Product Name.");
+        return;
+      }
+
+      const newProduct = {
+        id: Date.now(),
+        sku: sku,
+        name: name,
+        category: cat,
+        cost: cost,
+        price: price,
+        stock: stock,
+        age: 1,
+        inact: 0,
+        dsrs: 10,
+        tier: "Healthy",
+        blocked: false
+      };
+
+      products.push(newProduct);
+      persistProducts();
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "PRODUCT_CATALOG_ADD",
+        details: `Added new SKU ${sku} (${name}) with stock ${stock}`,
+        dest: "Warehouse Intake Bay (New SKU Placement)",
+        user: currentUser ? currentUser.username : "inventory_mgr",
+        role: currentUser ? currentUser.role : "Inventory Manager",
+        department: "Inventory Management",
+        status: "VERIFIED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      closeAddProductModal();
+      renderAll();
+    }
+
+    // --- 7B. EDIT PRODUCT STOCK & SKU PROPERTIES ---
+    function openEditProductModal(id) {
+      if (!products || products.length === 0) {
+        alert("No inventory products loaded yet.");
+        return;
+      }
+      const p = products.find(x => String(x.id) === String(id) || x.sku === String(id)) || products[0];
+      if (!p) return;
+      document.getElementById('edit-prod-id').value = p.id;
+      document.getElementById('edit-prod-sku').value = p.sku;
+      document.getElementById('edit-prod-cat').value = p.category || 'General';
+      document.getElementById('edit-prod-name').value = p.name || '';
+      document.getElementById('edit-prod-stock').value = p.stock;
+      document.getElementById('edit-prod-cost').value = p.cost;
+      document.getElementById('edit-prod-price').value = p.price;
+      document.getElementById('edit-prod-age').value = p.age || 0;
+      document.getElementById('edit-prod-inact').value = p.inact || 0;
+
+      const modal = document.getElementById('edit-product-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeEditProductModal() {
+      document.getElementById('edit-product-modal').classList.add('hidden');
+    }
+
+    function saveEditedProduct() {
+      if (currentUser && currentUser.role === 'Sales Manager') {
+        alert("⚠️ Access Restricted: SKU stock modification requires Inventory Manager or Admin authorization.");
+        return;
+      }
+      const id = document.getElementById('edit-prod-id').value;
+      const p = products.find(x => String(x.id) === String(id) || x.id == id || x.sku === id);
+      if (!p) return;
+
+      const cat = document.getElementById('edit-prod-cat').value.trim() || 'General';
+      const name = document.getElementById('edit-prod-name').value.trim();
+      const stock = Math.max(0, parseInt(document.getElementById('edit-prod-stock').value) || 0);
+      const cost = Math.max(0, parseFloat(document.getElementById('edit-prod-cost').value) || 0);
+      const price = Math.max(0, parseFloat(document.getElementById('edit-prod-price').value) || 0);
+      const age = Math.max(0, parseInt(document.getElementById('edit-prod-age').value) || 0);
+      const inact = Math.max(0, parseInt(document.getElementById('edit-prod-inact').value) || 0);
+
+      if (!name) {
+        alert("Please enter a valid product name.");
+        return;
+      }
+
+      p.category = cat;
+      p.name = name;
+      p.stock = stock;
+      p.cost = cost;
+      p.price = price;
+      p.age = age;
+      p.inact = inact;
+
+      // Recalculate DSRS score & tier dynamically
+      const calc = computeDsrs(stock, cost, age, inact);
+      p.dsrs = calc.dsrs;
+      p.tier = calc.tier;
+      p.blocked = calc.blocked;
+
+      persistProducts();
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "STOCK_INVENTORY_UPDATE",
+        details: `Updated SKU ${p.sku} (${p.name}): Stock set to ${stock} units, Cost ₹${cost}, DSRS ${p.dsrs} (${p.tier})`,
+        dest: "Main Warehouse Stock Ledger",
+        user: currentUser ? currentUser.username : "inventory_mgr",
+        role: currentUser ? currentUser.role : "Inventory Manager",
+        department: "Inventory Management",
+        status: "UPDATED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      // Sync with backend API
+      fetch(`${API_HOST}/api/products/update`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: p.id,
+          sku: p.sku,
+          name: p.name,
+          stock: p.stock,
+          cost: p.cost,
+          price: p.price,
+          age: p.age,
+          inact: p.inact,
+          executed_by: currentUser ? currentUser.username : "inventory_mgr",
+          user_role: currentUser ? currentUser.role : "Inventory Manager"
+        })
+      }).catch(e => {});
+
+      closeEditProductModal();
+      renderAll();
+      alert(`✅ SKU ${p.sku} (${p.name}) updated successfully! Stock: ${stock} units, DSRS: ${p.dsrs} (${p.tier}).`);
+    }
+
+    // --- 7C. SUPPLIER RMA COMMERCIAL RETURN / BUYBACK ---
+    function openRmaModal(id) {
+      if (!products || products.length === 0) {
+        alert("Please import business inventory data before initiating supplier returns.");
+        return;
+      }
+      const p = products.find(x => String(x.id) === String(id) || x.sku === String(id)) || products.find(x => x.id == id) || products[0];
+      if (!p) {
+        alert("Could not find product in inventory catalog.");
+        return;
+      }
+
+      document.getElementById('rma-prod-id').value = p.id;
+      document.getElementById('rma-prod-title').textContent = `${p.name} (${p.sku})`;
+      document.getElementById('rma-prod-meta').textContent = `Category: ${p.category || 'General'} • Available Stock: ${p.stock} units • Unit Cost: ${formatINR(p.cost)}`;
+      const suggestedQty = Math.min(p.stock, Math.max(1, Math.round(p.stock * 0.5)));
+      document.getElementById('rma-qty').value = suggestedQty;
+      document.getElementById('rma-qty').max = p.stock;
+      document.getElementById('rma-unit-rate').value = Math.round(p.cost * 0.85); // 85% buyback credit rate
+      document.getElementById('rma-ref').value = `RMA-SUPP-${p.sku}-${Math.floor(100 + Math.random() * 900)}`;
+      updateRmaTotal();
+
+      const modal = document.getElementById('rma-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeRmaModal() {
+      document.getElementById('rma-modal').classList.add('hidden');
+    }
+
+    function updateRmaTotal() {
+      const qty = Number(document.getElementById('rma-qty').value || 0);
+      const rate = Number(document.getElementById('rma-unit-rate').value || 0);
+      const total = qty * rate;
+      document.getElementById('rma-total-val').textContent = formatINR(total);
+    }
+
+    function executeRmaReturn() {
+      const id = document.getElementById('rma-prod-id').value;
+      const p = products.find(x => String(x.id) === String(id) || x.id == id || x.sku === id);
+      if (!p) {
+        alert("Product not found for RMA return.");
+        return;
+      }
+
+      const qty = Number(document.getElementById('rma-qty').value || 0);
+      const rate = Number(document.getElementById('rma-unit-rate').value || 0);
+      const ref = document.getElementById('rma-ref').value.trim() || `RMA-${Date.now()}`;
+      const dest = document.getElementById('rma-dest').value.trim() || 'Vendor RMA Logistics Hub / Commercial Buyback Credit';
+
+      if (qty <= 0) {
+        alert("Please enter a valid quantity to return.");
+        return;
+      }
+      if (qty > p.stock) {
+        alert(`Cannot return ${qty} units: available stock is only ${p.stock} units.`);
+        return;
+      }
+
+      const totalCredit = qty * rate;
+      p.stock -= qty;
+
+      // Recalculate DSRS score for the remaining stock
+      const calc = computeDsrs(p.stock, p.cost, p.age, p.inact);
+      p.dsrs = calc.dsrs;
+      p.tier = calc.tier;
+      p.blocked = calc.blocked;
+
+      persistProducts();
+
+      // Record outward/RMA transaction in sales ledger
+      const rmaTx = {
+        id: Date.now(),
+        inv: `RMA-${Math.floor(1000 + Math.random() * 9000)}`,
+        name: `[RMA Return] ${p.name}`,
+        qty: qty,
+        price: rate,
+        disc: 0,
+        total: totalCredit,
+        dest: dest,
+        user: currentUser ? currentUser.username : "inventory_mgr",
+        role: currentUser ? currentUser.role : "Inventory Manager",
+        department: "Supplier Returns (RMA)",
+        channel: "Vendor Buyback",
+        date: new Date().toISOString().split('T')[0]
+      };
+      sales.unshift(rmaTx);
+      localStorage.setItem('sg_sales', JSON.stringify(sales));
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "SUPPLIER_RMA_RETURN",
+        details: `Dispatched ${qty} units of ${p.name} (${p.sku}) to vendor buyback. Recovered ${formatINR(totalCredit)} credit (Ref: ${ref})`,
+        dest: dest,
+        user: currentUser ? currentUser.username : "inventory_mgr",
+        role: currentUser ? currentUser.role : "Inventory Manager",
+        department: "Supplier Returns (RMA)",
+        status: "DISPATCHED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      // Sync with backend API
+      fetch(`${API_HOST}/api/products/rma`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: p.id,
+          sku: p.sku,
+          quantity: qty,
+          unit_rate: rate,
+          memo: ref,
+          destination: dest,
+          executed_by: currentUser ? currentUser.username : "inventory_mgr",
+          user_role: currentUser ? currentUser.role : "Inventory Manager"
+        })
+      }).catch(e => {});
+
+      closeRmaModal();
+      renderAll();
+      alert(`📦 RMA Return Dispatched! ${qty} units deducted from stock. Recovered ${formatINR(totalCredit)} in supplier buyback credit.`);
+    }
+
+    // --- 7D. PROMOTIONAL BUNDLING STRATEGY ---
+    function openBundleModal(p1Id, p2Id) {
+      if (!products || products.length === 0) {
+        alert("Please import business inventory data before creating promotional bundles.");
+        return;
+      }
+      const p1 = products.find(x => String(x.id) === String(p1Id) || x.sku === String(p1Id)) || products[0];
+      const p2 = products.find(x => String(x.id) === String(p2Id) || x.sku === String(p2Id)) || (products.length > 1 ? products[1] : products[0]);
+      if (!p1 || !p2) {
+        alert("Could not load bundle SKUs. Please ensure at least 2 products are available in inventory.");
+        return;
+      }
+
+      document.getElementById('bundle-p1-id').value = p1.id;
+      document.getElementById('bundle-p2-id').value = p2.id;
+      document.getElementById('bundle-p1-name').textContent = `${p1.name} (${p1.sku})`;
+      document.getElementById('bundle-p1-price').textContent = `Regular: ${formatINR(p1.price)} • Stock: ${p1.stock} units • DSRS: ${p1.dsrs}`;
+      document.getElementById('bundle-p2-name').textContent = `${p2.name} (${p2.sku})`;
+      document.getElementById('bundle-p2-price').textContent = `Regular: ${formatINR(p2.price)} • Stock: ${p2.stock} units • DSRS: ${p2.dsrs}`;
+
+      const defaultCombo = Math.round((p1.price + p2.price) * 0.85); // 15% promotional bundle discount
+      document.getElementById('bundle-title').value = `${p1.name.split(' ')[0]} + ${p2.name.split(' ')[0]} Productivity Combo Pack`;
+      document.getElementById('bundle-combo-price').value = defaultCombo;
+      const maxBundles = Math.min(p1.stock, p2.stock);
+      document.getElementById('bundle-qty').value = Math.min(5, Math.max(1, maxBundles));
+      document.getElementById('bundle-qty').max = maxBundles;
+
+      updateBundleTotal();
+
+      const modal = document.getElementById('bundle-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeBundleModal() {
+      document.getElementById('bundle-modal').classList.add('hidden');
+    }
+
+    function updateBundleTotal() {
+      const comboPrice = Number(document.getElementById('bundle-combo-price').value || 0);
+      const qty = Number(document.getElementById('bundle-qty').value || 0);
+      const total = comboPrice * qty;
+      document.getElementById('bundle-total-val').textContent = formatINR(total);
+    }
+
+    function executeBundleSale() {
+      const p1Id = document.getElementById('bundle-p1-id').value;
+      const p2Id = document.getElementById('bundle-p2-id').value;
+      const p1 = products.find(x => String(x.id) === String(p1Id) || x.id == p1Id || x.sku === p1Id);
+      const p2 = products.find(x => String(x.id) === String(p2Id) || x.id == p2Id || x.sku === p2Id);
+      if (!p1 || !p2) {
+        alert("Bundle SKUs not found in inventory.");
+        return;
+      }
+
+      const title = document.getElementById('bundle-title').value.trim() || 'Promotional Combo Pack';
+      const comboPrice = Number(document.getElementById('bundle-combo-price').value || 0);
+      const qty = Number(document.getElementById('bundle-qty').value || 0);
+      const dest = document.getElementById('bundle-dest').value.trim() || 'Retail POS Counter 1 — Promotional Bundle Rack';
+
+      if (qty <= 0) {
+        alert("Please enter a valid bundle quantity.");
+        return;
+      }
+      if (qty > p1.stock || qty > p2.stock) {
+        alert(`Cannot create ${qty} bundles: insufficient stock! (${p1.sku}: ${p1.stock}, ${p2.sku}: ${p2.stock})`);
+        return;
+      }
+
+      // Deduct stock for both products
+      p1.stock -= qty;
+      p2.stock -= qty;
+      p1.inact = 0; // reset inactivity because stagnant SKU just sold!
+      p2.inact = 0;
+
+      // Recalculate DSRS for both products
+      const calc1 = computeDsrs(p1.stock, p1.cost, p1.age, p1.inact);
+      p1.dsrs = calc1.dsrs;
+      p1.tier = calc1.tier;
+      p1.blocked = calc1.blocked;
+
+      const calc2 = computeDsrs(p2.stock, p2.cost, p2.age, p2.inact);
+      p2.dsrs = calc2.dsrs;
+      p2.tier = calc2.tier;
+      p2.blocked = calc2.blocked;
+
+      persistProducts();
+
+      const totalRev = comboPrice * qty;
+
+      // Record outward bundle sale in transactions
+      const bundleTx = {
+        id: Date.now(),
+        inv: `BND-${Math.floor(1000 + Math.random() * 9000)}`,
+        name: `[Bundle] ${title} (${p1.sku} + ${p2.sku})`,
+        qty: qty,
+        price: comboPrice,
+        disc: 15,
+        total: totalRev,
+        dest: dest,
+        user: currentUser ? currentUser.username : "sales_mgr",
+        role: currentUser ? currentUser.role : "Sales Manager",
+        department: "Sales Operations",
+        channel: "Promotional Bundle Campaign",
+        date: new Date().toISOString().split('T')[0]
+      };
+      sales.unshift(bundleTx);
+      localStorage.setItem('sg_sales', JSON.stringify(sales));
+
+      // Append to Destination Audit Trail
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "BUNDLE_LIQUIDATION",
+        details: `Executed promotional bundle '${title}': Liquidated ${qty} units of ${p1.sku} and ${p2.sku}. Revenue: ${formatINR(totalRev)}`,
+        dest: dest,
+        user: currentUser ? currentUser.username : "sales_mgr",
+        role: currentUser ? currentUser.role : "Sales Manager",
+        department: "Sales Operations",
+        status: "EXECUTED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      // Sync with backend API
+      fetch(`${API_HOST}/api/products/bundle`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          p1_id: p1.id,
+          p2_id: p2.id,
+          quantity: qty,
+          combo_price: comboPrice,
+          destination: dest,
+          executed_by: currentUser ? currentUser.username : "sales_mgr",
+          user_role: currentUser ? currentUser.role : "Sales Manager"
+        })
+      }).catch(e => {});
+
+      closeBundleModal();
+      renderAll();
+      alert(`🎁 Promotional Bundle Executed! ${qty} units sold for both ${p1.sku} and ${p2.sku}. Unlocked ${formatINR(totalRev)} in sales revenue!`);
+    }
+
+    // --- 8. AUDIT TRAIL & RBAC RENDERING ---
+    function renderAuditTrail() {
+      const tbody = document.getElementById('audit-trail-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = auditTrail.map(a => `
+        <tr>
+          <td style="font-family:monospace; font-size:11px; color:#94a3b8;">${a.time}</td>
+          <td><span class="badge ${a.action.includes('SALE') ? 'badge-slow' : (a.action.includes('CLEAR') ? 'badge-high' : 'badge-healthy')}">${a.action}</span></td>
+          <td><strong style="color:#fff;">${a.details}</strong></td>
+          <td><strong style="color:#38bdf8; font-size:12px;">📍 ${a.dest}</strong></td>
+          <td><strong style="color:#fff;">${a.user}</strong></td>
+          <td><span style="color:#cbd5e1; font-size:11px;">${a.role}</span></td>
+          <td><span style="color:#94a3b8; font-size:11px;">${a.department || a.role || 'Operations'}</span></td>
+          <td><span style="font-size:10px; background:#10b98122; color:#34d399; padding:2px 8px; border-radius:12px; border:1px solid #10b98144; font-weight:700;">${a.status || 'LOGGED'}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderRbacManagers() {
+      const tbody = document.getElementById('rbac-managers-tbody');
+      if (!tbody) return;
+      tbody.innerHTML = registeredUsers.map(u => `
+        <tr>
+          <td><code style="color:#38bdf8; font-weight:700;">${u.username}</code></td>
+          <td><strong style="color:#fff;">${u.name || u.full_name || u.username}</strong></td>
+          <td><span class="badge ${u.role==='Admin'?'badge-dead':(u.role==='Sales Manager'?'badge-high':'badge-slow')}">${u.role}</span></td>
+          <td><span style="color:#94a3b8; font-family:monospace; font-size:12px;">${u.email || (u.username + '@stockghost.com')}</span></td>
+          <td><span style="font-size:11px; color:#94a3b8;">${u.perms || (u.role==='Admin'?'Full System Clearance & User Provisioning':(u.role==='Sales Manager'?'Clearance Simulator & Outward Sales Execution':'SKU Catalog, DSRS Risk & Inward PO Receipts'))}</span></td>
+          <td>
+            <button class="btn-action" style="padding:4px 10px; font-size:10px; background:#0284c7;" onclick="openResetPasswordModal('${u.username}')">🔑 Reset Password</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // --- 9. MODALS: USER PROVISIONING & CREDENTIAL RESET (ADMIN) ---
+    function openAdminCreateUserModal() {
+      document.getElementById('admin-modal-fullname').value = '';
+      document.getElementById('admin-modal-userid').value = '';
+      document.getElementById('admin-modal-pass').value = '';
+      document.getElementById('admin-modal-email').value = '';
+      document.getElementById('admin-user-modal').classList.remove('hidden');
+    }
+
+    function closeAdminCreateUserModal() {
+      document.getElementById('admin-user-modal').classList.add('hidden');
+    }
+
+    function saveAdminNewUser() {
+      const name = document.getElementById('admin-modal-fullname').value.trim();
+      const uid = document.getElementById('admin-modal-userid').value.trim().toLowerCase();
+      const pass = document.getElementById('admin-modal-pass').value.trim();
+      const role = document.getElementById('admin-modal-role').value;
+      const email = document.getElementById('admin-modal-email').value.trim() || `${uid}@stockghost.com`;
+
+      if (!name || !uid || !pass) {
+        alert("Please fill in Manager Full Name, User ID, and Password.");
+        return;
+      }
+
+      if (registeredUsers.some(u => u.username.toLowerCase() === uid)) {
+        alert(`User ID '${uid}' is already taken.`);
+        return;
+      }
+
+      const perms = role === 'Admin' ? 'Full System Clearance & User Provisioning' : (role === 'Sales Manager' ? 'Clearance Simulator & Outward Sales Execution' : 'SKU Catalog, DSRS Risk & Inward PO Receipts');
+      const newUser = {
+        id: registeredUsers.length + 1,
+        username: uid,
+        name: name,
+        password: pass,
+        role: role,
+        email: email,
+        perms: perms
+      };
+
+      registeredUsers.push(newUser);
+      localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
+
+      // Sync with backend
+      fetch(`${API_HOST}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: uid, full_name: name, password: pass, role: role, email: email, registered_by: currentUser ? currentUser.username : 'admin' })
+      }).catch(e => {});
+
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "ADMIN_USER_PROVISION",
+        details: `Admin provisioned manager account '${uid}' (${name}) with role '${role}'`,
+        dest: "RBAC Security Directory / Enterprise Org",
+        user: currentUser ? currentUser.username : "admin",
+        role: "Admin",
+        department: "Enterprise Security",
+        status: "REGISTERED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      closeAdminCreateUserModal();
+      renderRbacManagers();
+      alert(`✅ Manager account '${uid}' provisioned successfully with role: ${role}`);
+    }
+
+    // Reset password modal
+    function openResetPasswordModal(username) {
+      const u = registeredUsers.find(x => x.username === username);
+      if (!u) return;
+      document.getElementById('reset-pass-userid').value = u.username;
+      document.getElementById('reset-pass-input').value = '';
+      document.getElementById('reset-password-modal').classList.remove('hidden');
+    }
+
+    function closeResetPasswordModal() {
+      document.getElementById('reset-password-modal').classList.add('hidden');
+    }
+
+    function saveResetPassword() {
+      const uid = document.getElementById('reset-pass-userid').value;
+      const newPass = document.getElementById('reset-pass-input').value.trim();
+      const u = registeredUsers.find(x => x.username === uid);
+      if (!u || !newPass) {
+        alert("Please enter a valid new password.");
+        return;
+      }
+
+      u.password = newPass;
+      localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
+
+      // Sync with backend
+      fetch(`${API_HOST}/api/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: uid, new_password: newPass, reset_by: currentUser ? currentUser.username : 'admin' })
+      }).catch(e => {});
+
+      auditTrail.unshift({
+        id: Date.now(),
+        time: new Date().toLocaleString(),
+        action: "PASSWORD_RESET",
+        details: `Admin updated password credentials for manager '${uid}'`,
+        dest: "RBAC Security Directory",
+        user: currentUser ? currentUser.username : "admin",
+        role: "Admin",
+        department: "Enterprise Security",
+        status: "UPDATED"
+      });
+      localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
+
+      closeResetPasswordModal();
+      renderRbacManagers();
+      alert(`✅ Password credentials for manager '${uid}' updated successfully.`);
+    }
+
+    // --- 10. CHATBOT (DYNAMIC BUSINESS INTELLIGENCE) ---
+    function sendPrompt(text) {
+      document.getElementById('chat-input').value = text;
+      sendChat();
+    }
+
+    function sendChat() {
+      const input = document.getElementById('chat-input');
+      const q = input.value.trim();
+      if (!q) return;
+
+      const chatBox = document.getElementById('chat-messages');
+      chatBox.innerHTML += `<div class="msg-user">${q}</div>`;
+
+      let reply = "";
+      const low = q.toLowerCase();
+
+      if (products.length === 0) {
+        reply = "📁 <strong>Catalog is currently empty.</strong> Please click <strong>'📁 Import Business CSV'</strong> in the header or inventory view to load your business data. Once imported, I will calculate live metrics on your dead stock, blocked capital, and clearance recovery!";
+      } else {
+        const totalVal = products.reduce((acc, p) => acc + (p.stock * p.cost), 0);
+        const blockedItems = products.filter(p => p.blocked || p.dsrs >= 61);
+        const blockedCapital = blockedItems.reduce((acc, p) => acc + (p.stock * p.cost), 0);
+        const deadItems = products.filter(p => p.dsrs >= 81);
+        const sortedByCapital = [...products].sort((a,b) => (b.stock * b.cost) - (a.stock * a.cost));
+        const topBlocked = sortedByCapital[0];
+
+        if (low.includes("most capital") || low.includes("highest")) {
+          if (topBlocked) {
+            reply = `💰 <strong>${topBlocked.name}</strong> (<code>${topBlocked.sku}</code>) blocks the largest capital: <strong>${formatINR(topBlocked.stock * topBlocked.cost)}</strong> (${topBlocked.stock} units, ${topBlocked.age} days age, DSRS score <strong>${topBlocked.dsrs}/100</strong>). Recommended action: Clearance discount to recover cash flow.`;
+          } else {
+            reply = "No inventory items found.";
+          }
+        } else if (low.includes("simulate") || low.includes("discount") || low.includes("clearance")) {
+          if (topBlocked) {
+            const clearUnits = Math.round(topBlocked.stock * 0.7);
+            const discPrice = topBlocked.price * 0.75;
+            const recovered = clearUnits * discPrice;
+            reply = `🧮 <strong>Clearance Simulation for ${topBlocked.name}:</strong> At a 25% discount (${formatINR(Math.round(discPrice))}), estimated demand clears <strong>${clearUnits} of ${topBlocked.stock} units</strong>, recovering <strong>${formatINR(recovered)}</strong> in cash flow!`;
+          } else {
+            reply = "Please import a product catalog to simulate clearance.";
+          }
+        } else if (low.includes("dead stock") || low.includes("dead")) {
+          if (deadItems.length === 0) {
+            reply = `✅ <strong>Zero Dead Stock:</strong> None of the ${products.length} SKUs in your catalog exceed the DSRS 80 threshold.`;
+          } else {
+            const list = deadItems.slice(0, 5).map(p => `• <strong>${p.name}</strong> (<code>${p.sku}</code>): ${p.stock} units, ${formatINR(p.stock * p.cost)}, DSRS ${p.dsrs}`).join('<br />');
+            reply = `🚨 <strong>${deadItems.length} Dead Stock SKU(s) Detected:</strong><br />${list}`;
+          }
+        } else if (low.includes("total blocked") || low.includes("blocked")) {
+          const pct = totalVal > 0 ? ((blockedCapital / totalVal) * 100).toFixed(1) : "0.0";
+          reply = `📊 <strong>Total Blocked Capital:</strong> <strong>${formatINR(blockedCapital)}</strong> (${pct}% of total inventory value ${formatINR(totalVal)}) across ${blockedItems.length} high-risk / stagnant SKUs.`;
+        } else {
+          reply = `🏢 <strong>StockGhost Intelligence Summary:</strong> Active catalog contains <strong>${products.length} SKUs</strong> with total valuation of <strong>${formatINR(totalVal)}</strong>. Blocked capital is <strong>${formatINR(blockedCapital)}</strong> across ${blockedItems.length} stagnant SKUs.`;
+        }
+      }
+
+      setTimeout(() => {
+        chatBox.innerHTML += `<div class="msg-bot">${reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 200);
+
+      input.value = '';
+    }
+
+    // Auto-check session on load
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = sessionStorage.getItem('sg_user');
+      if (saved) {
+        try {
+          currentUser = JSON.parse(saved);
+          enterApp();
+        } catch(e) { }
+      }
+      // If products exist in localStorage, ensure backend catalog has them in memory
+      if (products && products.length > 0) {
+        fetch(`${API_HOST}/api/products/import`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ products: products })
+        }).catch(e => {});
+      }
+    });
+  </script>
+</body>
+</html>

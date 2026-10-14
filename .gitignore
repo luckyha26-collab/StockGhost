@@ -1,0 +1,12 @@
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+database/*.db
+database/*.db-*
+database/.dev_jwt_secret
+uploads/

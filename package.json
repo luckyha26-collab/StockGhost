@@ -1,0 +1,14 @@
+{
+  "name": "stockghost",
+  "private": true,
+  "description": "Convenience scripts. The backend is Python/Flask, the frontend is React/Vite.",
+  "scripts": {
+    "install:all": "pip install -r backend/requirements.txt && npm --prefix frontend install",
+    "seed": "cd backend && python seed.py",
+    "seed:reset": "cd backend && python seed.py --reset",
+    "backend": "cd backend && python app.py",
+    "frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "test": "cd backend && python -m pytest tests -q"
+  }
+}

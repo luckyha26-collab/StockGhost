@@ -1,0 +1,21 @@
+Item Code,Product Name,Category,Cost Price,MRP,Stock On Hand,Reorder Level,Vendor,Location
+SKU-001,Wireless Mouse,Mobile Accessories,300,599,81,10,Prime Gadgets Pvt Ltd,Main Warehouse
+SKU-002,USB-C Hub,Mobile Accessories,650,1199,77,10,OfficeHub Supplies,Main Warehouse
+SKU-003,Phone Case,Mobile Accessories,90,299,66,10,TechNova Distributors,Main Warehouse
+SKU-004,Screen Guard,Mobile Accessories,40,149,190,10,Prime Gadgets Pvt Ltd,Main Warehouse
+SKU-005,Fast Charger 30W,Mobile Accessories,420,799,28,25,OfficeHub Supplies,Main Warehouse
+SKU-006,Bluetooth Earbuds,Mobile Accessories,900,1799,48,20,TechNova Distributors,Nagpur Store
+SKU-007,Gaming Keyboard,Computer Peripherals,1200,2400,336,20,Prime Gadgets Pvt Ltd,Main Warehouse
+SKU-008,Webcam HD,Computer Peripherals,800,1599,194,15,OfficeHub Supplies,Nagpur Store
+SKU-009,Laptop Stand,Computer Peripherals,350,699,324,10,TechNova Distributors,Main Warehouse
+SKU-010,HDMI Cable 2m,Computer Peripherals,120,299,27,20,Prime Gadgets Pvt Ltd,Nagpur Store
+SKU-011,External SSD 1TB,Computer Peripherals,5200,7999,59,15,OfficeHub Supplies,Main Warehouse
+SKU-012,Mouse Pad XL,Computer Peripherals,150,399,219,20,TechNova Distributors,Nagpur Store
+SKU-013,LED Desk Lamp,Home Office,380,799,58,10,Prime Gadgets Pvt Ltd,Main Warehouse
+SKU-014,Ergonomic Chair,Home Office,6200,10999,88,20,OfficeHub Supplies,Main Warehouse
+SKU-015,Standing Desk Mat,Home Office,900,1799,11,10,TechNova Distributors,Nagpur Store
+SKU-016,Cable Organizer,Home Office,60,199,208,25,Prime Gadgets Pvt Ltd,Nagpur Store
+SKU-017,Whiteboard 2x3,Home Office,700,1299,70,10,OfficeHub Supplies,Main Warehouse
+SKU-018,Footrest,Home Office,450,899,487,25,TechNova Distributors,Nagpur Store
+SKU-099,Broken Row,Mobile Accessories,abc,100,5,5,X,Main Warehouse
+SKU-001,Wireless Mouse,Mobile Accessories,300,599,95,10,TechNova Distributors,Main Warehouse

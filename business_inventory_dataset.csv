@@ -1,0 +1,26 @@
+sku,name,category,cost_price,selling_price,current_stock,stock_age_days,inactivity_days
+SKU-EL-1001,Kingston 8GB DDR3 1600MHz RAM,PC Components,1500,2200,500,420,195
+SKU-EL-1002,Logitech C270 720p HD Webcam,Peripherals,1800,2500,320,380,185
+SKU-EL-1003,D-Link 100Mbps 8-Port Fast Switch,Networking,1100,1650,210,310,160
+SKU-EL-1004,Seagate 500GB Internal SATA Hard Drive,Storage,2200,3100,175,290,145
+SKU-EL-1005,Zebronics Micro-USB 4-Port Hub,Accessories,350,599,650,365,190
+SKU-EL-1006,HP Internal DVD-RW 24x Optical Drive,PC Components,950,1499,140,410,210
+SKU-EL-1007,Frontech Gold 1.5m VGA Monitor Cable,Cables & Adapters,180,350,850,390,180
+SKU-EL-1008,Crucial 120GB 2.5-inch SATA SSD,Storage,1250,1850,260,240,115
+SKU-EL-1009,Redragon K552 RGB Mechanical Keyboard,Gaming Gear,2600,3800,130,210,95
+SKU-EL-1010,TP-Link 300Mbps Wi-Fi Range Extender,Networking,1350,1999,180,195,85
+SKU-EL-1011,Ant Esports ICE-200TG Mid Tower Case,PC Components,2800,3999,90,170,75
+SKU-EL-1012,Corsair VS450 450W Power Supply Unit,Power Units,2400,3350,110,160,70
+SKU-EL-1013,Logitech M221 Silent Wireless Mouse,Peripherals,750,1199,220,130,55
+SKU-EL-1014,Portronics 65W GaN Dual-Port Fast Charger,Charging Tech,1600,2499,160,110,48
+SKU-EL-1015,SanDisk 64GB Ultra Dual USB Drive Go,Storage,520,799,340,95,40
+SKU-EL-1016,Samsung 980 1TB NVMe M.2 PCIe Gen 3 SSD,Storage,6200,8500,140,65,22
+SKU-EL-1017,boAt BassHeads 100 Wired Earphones,Audio,320,499,480,45,12
+SKU-EL-1018,Anker PowerLine III USB-C to USB-C Cable,Cables & Adapters,650,999,390,30,8
+SKU-EL-1019,Sony WH-CH520 Wireless Bluetooth Headphones,Audio,3400,4490,95,35,10
+SKU-EL-1020,TP-Link UB500 Bluetooth 5.3 Nano USB Adapter,Peripherals,450,699,310,25,6
+SKU-EL-1021,Belkin 2m Ultra High Speed HDMI 2.1 Cable,Cables & Adapters,1100,1699,180,40,9
+SKU-EL-1022,Dell Premier Multi-Device Wireless Keyboard,Peripherals,3800,5200,60,80,32
+SKU-EL-1023,Quantum 4-Port USB 2.0 Desktop Splitter,Accessories,210,399,420,330,175
+SKU-EL-1024,Intex 600VA Line Interactive UPS,Power Units,1950,2850,85,220,105
+SKU-EL-1025,Logitech C922 Pro Stream 1080p 60fps Webcam,Peripherals,7800,10499,45,50,14
