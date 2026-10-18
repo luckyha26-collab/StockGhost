@@ -1,209 +1,226 @@
-# StockGhost — Dead Stock & Blocked Capital Detection ERP
+# StockGhost — multi-tenant inventory intelligence
 
----
+StockGhost finds **dead stock, blocked capital and stock-out risk** from a business's *own* sales, purchase and
+inventory files. A company registers, uploads CSV/Excel data, StockGhost validates and cleans it, then calculates
+risk scores, forecasts and recommendations. Everything shown comes from database records belonging to the
+signed-in user's workspace — there is no hard-coded business data in the application.
 
-## 📌 Executive Summary & Problem Statement
-
-Traditional ERP and inventory systems show stock quantities on hand but fail to systematically identify the financial drag caused by slow-moving and dead stock. Non-performing inventory quietly blocks operating capital and inflates storage/holding costs.
-
-**Real-World Scenario (from Project Spec):**
-A business has an inventory of **500 units of a Gaming Keyboard** with no recorded sales in **180+ days** and a stock age of **210 days**. At a cost price of ₹1,500/unit, an inventory value of **₹7,50,000** shows up as normal inventory on hand rather than as **blocked capital**.
-
-**StockGhost** solves this by:
-1. Computing a **Dead Stock Risk Score (DSRS)** from `0 to 100` for every SKU.
-2. Classifying items into 4 tiers: **Healthy**, **Slow Moving**, **High Risk**, and **Dead Stock**.
-3. Accurately quantifying **Blocked Capital** tied up in non-performing assets.
-4. Providing a **Clearance Simulator** to test price elasticity and discount scenarios (e.g. 25% clearance discount recovering ₹5,25,000 and dropping DSRS from 92 to 38).
-5. Generating **Rule-Based Recovery Recommendations** (Discounts, Bundling, Liquidation, RMA Supplier Return).
-6. Offering an **Intent-Based Conversational Chatbot** for natural-language queries.
-7. Providing a **Role-Based Web Dashboard** for Admins, Inventory Managers, and Sales Managers.
-
----
-
-## 🛠️ Technology Stack (As Per Slide 7)
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | React.js (Vite), Tailwind CSS, Axios, Chart.js (`react-chartjs-2`), Lucide Icons |
-| **Backend** | Python (Flask, Flask-CORS, Flask-JWT-Extended, Flask-SQLAlchemy) |
-| **Database** | SQLite (zero-config local default) / MySQL (via SQLAlchemy connection string) |
-| **Risk Algorithm** | Python (**DSRS Algorithm** with 4-factor weighted scoring) |
-| **Recommendation Engine** | Python (**Rule-Based Engine** for clearance, bundling, and returns) |
-| **Chatbot** | Python (**Intent-Based Natural Language Query Engine**) |
-| **Authentication** | JWT + Role-Based Access Control (**Admin**, **Inventory Manager**, **Sales Manager**) |
-| **Version Control** | Git & GitHub |
-
----
-
-## 📐 Mathematical Formulation: Dead Stock Risk Score (DSRS)
-
-The DSRS engine evaluates inventory health across 4 normalized dimensions:
-
-$$\text{DSRS} = (S_{\text{inactivity}} \times 0.40) + (S_{\text{stagnancy}} \times 0.30) + (S_{\text{capital}} \times 0.20) + (S_{\text{obsolescence}} \times 0.10)$$
-
-### 1. Inactivity Score ($S_{\text{inactivity}}$) — Weight: 40%
-Evaluates days elapsed since the last customer purchase ($D_{\text{last}}$):
-- $D_{\text{last}} \ge 180\text{ days}$: $\min(100, 90 + (D_{\text{last}} - 180) \times 0.33)$
-- $90 \le D_{\text{last}} < 180\text{ days}$: $65 + (D_{\text{last}} - 90) \times \frac{25}{90}$
-- $45 \le D_{\text{last}} < 90\text{ days}$: $35 + (D_{\text{last}} - 45) \times \frac{30}{45}$
-- $D_{\text{last}} < 45\text{ days}$: $\frac{D_{\text{last}}}{45} \times 35$
-
-### 2. Turnover Stagnancy Score ($S_{\text{stagnancy}}$) — Weight: 30%
-Evaluates inventory velocity and months of supply remaining relative to 90-day moving sales. If zero sales occur in 90+ days, score escalates to 80–95.
-
-### 3. Capital Exposure Score ($S_{\text{capital}}$) — Weight: 20%
-Quantifies financial strain based on total rupee capital tied up in the SKU ($V = Q \times C$):
-- $V \ge ₹7,50,000$: Score 80 – 100
-- $V \ge ₹3,00,000$: Score 60 – 80
-- $V < ₹3,00,000$: Pro-rated up to 60
-
-### 4. Category Obsolescence Factor ($S_{\text{obsolescence}}$) — Weight: 10%
-Category-specific multiplier accounting for technological depreciation (e.g. computer peripherals = 1.1x, monitors = 1.2x).
-
-### 🏷️ Classification Tiers
-
-| Score Range | Tier Classification | Capital Status | Prescriptive Action |
-|---|---|---|---|
-| **0 – 30** | **Healthy** | Active Capital | Normal replenishment cycle |
-| **31 – 60** | **Slow Moving** | Watchlist | Halt reorders, apply homepage promo |
-| **61 – 80** | **High Risk** | Blocked Capital | Bundle with best sellers, 15-20% weekend promo |
-| **81 – 100** | **Dead Stock** | Blocked Capital | 25-35% Clearance sale, Supplier RMA, or Liquidation |
-
----
-
-## 🎯 Verification of Slide 4 & 9 Benchmark Example
-
-| Metric | Slide Specification | StockGhost Implementation | Verification Status |
-|---|---|---|---|
-| **Product** | Gaming Keyboard | RGB Mechanical Gaming Keyboard (`KB-MECH-RGB-01`) | ✅ Exact Match |
-| **Stock on Hand** | 500 units | 500 units | ✅ Exact Match |
-| **Stock Age** | 210 days | 210 days | ✅ Exact Match |
-| **Last Sale Inactivity** | No sale in 180+ days | 185 days since last sale | ✅ Exact Match |
-| **Cost Price / Value** | ₹1,500 / ₹7,50,000 | ₹1,500 cost / ₹7,50,000 inventory value | ✅ Exact Match |
-| **Original DSRS** | **92 (Dead Stock)** | **92 (Dead Stock)** | ✅ Exact Match |
-| **Clearance Discount** | 25% discount | 25% discount applied | ✅ Exact Match |
-| **Units Cleared** | ~350 of 500 units | **350 units sold** | ✅ Exact Match |
-| **Capital Recovered** | ₹5,25,000 | **₹5,25,000** ($350 \times ₹1,500$) | ✅ Exact Match |
-| **Projected DSRS** | **Drops from 92 to 38** | **38 (Slow Moving tier)** | ✅ Exact Match |
-
----
-
-## 🚀 How to Run the Project
-
-### Prerequisites
-- **Python 3.9+**
-- **Node.js 18+** and **npm**
-
-### Option A: 1-Click Launch (Windows)
-Double-click `start_all.bat` in the project root:
-- Automatically installs python packages & node dependencies if needed.
-- Starts the Flask API on `http://127.0.0.1:5000`.
-- Starts the React Vite dashboard on `http://localhost:5173`.
-
-### Option B: Manual Terminal Execution
-
-#### 1. Start Flask Backend:
-```bash
-cd backend
-pip install -r requirements.txt
-python app.py
 ```
-*API will start on `http://127.0.0.1:5000` with pre-seeded database.*
+Landing → Register → Onboarding → Upload → Map columns → Validate & clean → Import → Analyse → Dashboard
+```
 
-#### 2. Start React Frontend:
+## Contents
+1. [Architecture](#architecture) · 2. [Tech stack](#tech-stack) · 3. [Install & run](#install--run) · 4. [Environment variables](#environment-variables)
+5. [Database](#database) · 6. [Demo data](#demo-data) · 7. [Registration & roles](#registration--roles) · 8. [Data import](#data-import)
+9. [Risk engine (DSRS)](#risk-engine-dsrs) · 10. [Forecasting](#forecasting) · 11. [Simulator](#what-if-simulator) · 12. [Reports](#reports)
+13. [Security](#security) · 14. [Testing](#testing) · 15. [Production deployment](#production-deployment) · 16. [Known limitations](#known-limitations-read-this)
+
+---
+
+## Architecture
+
+```
+frontend/ (React 18 + Vite + Tailwind)          backend/ (Flask 3 + SQLAlchemy)
+  pages/ components/ context/ api/                app.py          app factory, CORS, security headers, error handling
+        │  REST + JWT, {success,data|message}     config.py       env-driven configuration
+        ▼                                         models.py       multi-tenant schema
+  /api/*  ───────────────────────────────────►    utils.py        auth decorator, RBAC, tenant scoping, rate limit, audit
+                                                  routes/         auth, workspace(+users, audit, notifications), operations,
+                                                                  imports, analytics, reports
+                                                  services/       importer, import_fields, dsrs, forecast, simulator,
+                                                                  recommendations, analytics, reports, chatbot, demo_data
+```
+
+**Tenant isolation.** Every business table (`products`, `sales`, `purchases`, `suppliers`, `inventory_transactions`,
+`risk_analysis`, `import_jobs`, `notifications`, `audit_logs`, …) has a `workspace_id` foreign key. The `@require(permission)`
+decorator derives the user *and* workspace from the signed token + database (never from request parameters), and all reads go
+through `scoped(Model)` / `get_scoped(Model, id)`. A foreign id looks exactly like a missing id (HTTP 404). This is covered by
+`test_tenant_isolation`.
+
+**API contract.** Success: `{"success": true, "data": …}`. Failure: `{"success": false, "message": "Readable message"}`.
+Technical errors are logged on the server only; users see a plain message.
+
+### Tables
+`workspaces`, `users` (role per user), `invites`, `password_resets`, `token_blocklist`, `suppliers`, `products`, `purchases`, `sales`,
+`inventory_transactions` (stock ledger), `risk_analysis` (latest DSRS + movement + forecast per product), `import_jobs`
+(= uploaded datasets / import history), `notifications`, `audit_logs`. Workspace settings (business type, risk thresholds/weights)
+live in `workspaces.risk_config`. Recommendations and reports are computed on demand from `risk_analysis`, not stored.
+
+## Tech stack
+Python 3.10+, Flask 3, Flask-SQLAlchemy, Flask-JWT-Extended, Flask-CORS, openpyxl/xlrd (Excel), ReportLab (PDF), SQLite (default) or PostgreSQL ·
+React 18, React Router 6, Tailwind CSS, Chart.js, Vite 5 (IBM Plex Sans is bundled — no third-party font requests).
+
+## Install & run
+
+**Prerequisites:** Python 3.10+, Node.js 18+, npm.
+
 ```bash
+# 1. backend
+cd backend
+python3 -m venv .venv && source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp .env.example .env                                      # Windows: copy .env.example .env
+python seed.py                                            # optional: creates ONLY the shared Demo Workspace
+python app.py                                             # API on http://localhost:5000
+
+# 2. frontend (second terminal)
 cd frontend
 npm install
-npm run dev
+npm run dev                                               # UI on http://localhost:5173
 ```
-*Frontend will run on `http://localhost:5173`.*
+Shortcuts: `./start-backend.sh`, `./start-frontend.sh` (or the `.bat` files), and from the repo root `npm run seed`,
+`npm run backend`, `npm run frontend`, `npm run build`, `npm test`.
 
----
+Open http://localhost:5173 → **Get started** → register. Tables are created automatically on first start.
 
-## 🔑 Demo Access & Role-Based Access Control (RBAC)
+## Environment variables
+See `backend/.env.example` (copy to `backend/.env`; never commit it).
 
-The system includes pre-configured demo credentials and a **one-click Role Switcher** right in the top navigation bar:
+| Variable | Purpose |
+|---|---|
+| `APP_ENV` | `development` or `production`. Production **requires** `JWT_SECRET` (≥ 32 chars) and disables the debugger |
+| `DATABASE_URL` | Empty = SQLite at `database/stockghost.db`. PostgreSQL: `postgresql://user:pw@host/db` (+ `pip install psycopg2-binary`) |
+| `JWT_SECRET`, `JWT_EXPIRES_IN` | Token signing secret and lifetime (`30m`, `8h`, `7d`) |
+| `CLIENT_URL` | Allowed CORS origin(s), comma-separated |
+| `PORT` | API port (default 5000) |
+| `UPLOAD_LIMIT` (MB), `UPLOAD_DIR`, `MAX_IMPORT_ROWS`, `MAX_IMPORT_COLUMNS` | Upload limits |
+| `SMTP_*`, `EMAIL_FROM` | Password-reset e-mail. Without SMTP the link is written to the server log |
+| `TRUST_PROXY` | `1` only behind a trusted reverse proxy |
+| `VITE_API_URL` (frontend `.env`) | Only if the UI and API are on different origins |
 
-| Role | Username | Email | Password | Permissions |
-|---|---|---|---|---|
-| **Admin** | `admin` | `admin@stockghost.com` | `admin123` | Full access: View analytics, edit all products, re-evaluate recommendations, manage system users |
-| **Inventory Manager** | `inventory_mgr` | `inventory@stockghost.com` | `inv123` | Inward PO creation, catalog editing, stock adjustments, RMA initiation |
-| **Sales Manager** | `sales_mgr` | `sales@stockghost.com` | `sales123` | Sales ledger entry, clearance simulation execution, promotional discounts |
+## Database
+Schema is created with `db.create_all()` at start-up. **There is no migration tool yet:** the schema changed substantially from the
+original prototype, so the old `stockghost.db` was removed — start from a fresh database. For future schema changes add Alembic
+(`flask-migrate`) before storing production data. Indexes exist on `workspace_id`, sale/purchase dates and (workspace, product) pairs.
 
----
+## Demo data
+* `python seed.py` (or `npm run seed`) creates **one** workspace, *Demo Workspace (sample data)*, flagged `is_shared_demo`
+  (100 products, 10 suppliers, ≈4,500 sales). `python seed.py --reset` rebuilds only that workspace. It never touches real workspaces.
+* The login page has an **Explore the read-only demo workspace** button (read-only viewer access, no credentials shown). Everything in a demo workspace
+  shows a **DEMO DATA** badge.
+* During onboarding a new company can choose **Explore demo data**, which copies the sample catalogue into *their own* workspace
+  (writable, labelled DEMO DATA). Importing real data later asks for confirmation and **removes the sample data first**, so demo and real
+  numbers are never mixed.
+* For testing only, the seed also creates `admin@stockghost.com`, `inventory@stockghost.com`, `sales@stockghost.com`
+  (password `Demo@12345`) inside the demo workspace.
 
-## 🤖 Intent-Based Chatbot Queries
+## Registration & roles
+Public registration creates a **user + workspace + OWNER** role and signs the user in. Passwords: ≥ 8 characters with upper-case,
+lower-case and a digit, hashed with Werkzeug (scrypt). 5 failed logins lock the account for 15 minutes; login/registration/reset are
+rate-limited. Forgot/reset password uses one-time, 1-hour tokens (stored hashed). Teammates join via **Users → Invite** (7-day code) or
+are created directly by an owner/admin.
 
-The embedded AI assistant can be tested using queries such as:
-- *"Which product blocks the most capital?"*
-- *"What is the total blocked capital across inventory?"*
-- *"Show me all dead stock items"*
-- *"What corrective action to take for Gaming Keyboard?"*
-- *"Simulate 25% discount on Gaming Keyboard"*
-- *"Give me an inventory overview"*
+| Role | Can |
+|---|---|
+| OWNER | everything (incl. deleting all business data) |
+| ADMIN | everything except owner-only actions and creating/changing owners |
+| INVENTORY_MANAGER | products, inventory, suppliers, purchases, import data, run analysis, read sales/analytics/reports |
+| SALES_MANAGER | sales, import **sales** data, read products/inventory/analytics/reports |
+| ANALYST | read everything, run analysis, risk/forecasting/reports |
+| VIEWER | read-only dashboards, analytics, reports |
 
----
+Permissions are enforced by the API (`403`), not just by hiding buttons.
 
-## 📂 Project Directory Structure
+## Data import
+**Import Data** (`/data-import`) is a 4-step wizard (also used in onboarding): **Upload → Map columns → Validate & clean → Import**.
+History, details, *Reprocess*, *Delete import* and the error-report download are on **Import history** (`/data-sources`).
 
+**Accepted files:** `.csv` (UTF-8/Windows-1252, `, ; tab |` delimiters), `.xlsx`, `.xls` (first sheet with data). Defaults: 25 MB,
+200,000 rows, 60 columns. Uploads are checked for extension, MIME type, file signature, size, rows and columns, saved under a random name
+outside the web root, and never executed.
+
+**Dataset types and fields** (`*` required; download a header template from the wizard):
+
+| Type | Fields |
+|---|---|
+| Product master | `sku*`, `product_name*`, category, cost_price, selling_price, quantity, reorder_level, supplier, warehouse, expiry_date, status |
+| Inventory | `sku*`, `quantity*`, product_name, category, cost/selling price, reorder_level, warehouse, supplier, last_received_date, expiry_date |
+| Sales | `sale_date*`, `quantity*`, `sku` *or* `product_name`, selling_price, category, customer, region, order_id |
+| Purchases | `purchase_date*`, `quantity*`, `sku` *or* `product_name`, cost_price, supplier, order_id, received_date |
+| Suppliers | `supplier*`, contact, email, phone, lead_time_days |
+| Combined | sku/product_name, category, prices, current_stock, reorder_level, supplier, warehouse, region, customer, order_id, `transaction_type` (sale/purchase), `transaction_date`, `transaction_quantity` |
+
+**Column mapping.** Your headers need not match. Headers are matched by alias and fuzzy similarity (`Item Code→sku`, `Qty Sold→quantity`,
+`Sale Date→sale_date`, `Price→selling_price`, `MRP→selling_price`, `Vendor→supplier` …); you can correct any mapping and required fields are
+shown with ✓/✕.
+
+**Validation & cleaning.** Detected and reported with row numbers: missing required values, invalid/future dates, invalid numbers,
+negative or zero quantities, negative prices, missing SKU, unknown products, exact duplicate rows, duplicate SKUs, inconsistent names,
+decimal quantities, quantity outliers (IQR). Always-on, *logged* cleaning: trimming, SKU upper-casing, currency symbols/commas removed,
+date normalisation (day-first by default, auto-detects month-first). Optional: *Fix automatically*, *Remove duplicates*, *Exclude outliers*.
+Rejected rows are **never silently dropped** — they are counted and downloadable as an error report. The import is a single database
+transaction: if anything fails nothing is written.
+
+**How imported history affects stock.** *Product/Inventory* files set the current stock (a snapshot). *Sales/Purchases* files are treated as
+**history** and do **not** change a snapshot quantity (otherwise you would double count). If a product has no snapshot, its stock is derived as
+purchases − sales. Manual sales/purchases entered in the UI do change stock and write to the stock ledger.
+Stock age needs purchase or `last_received_date` data; when it is missing, that factor is excluded (shown as "no data") rather than guessed.
+
+## Risk engine (DSRS)
+Rule-based and transparent — **not machine learning**. Score 0–100 = weighted blend of normalised factors:
+stock age, days since last sale, sales velocity/cover, inventory value, quantity vs reorder level, demand trend (last 45 days vs prior 45),
+plus **seasonality** (Fashion) and **expiry** (Grocery, when expiry dates exist). Missing factors are dropped and the rest re-weighted.
+Levels: **LOW** 0–30, **MEDIUM** 31–60, **HIGH** 61–80, **CRITICAL** 81–100. *Blocked capital* = qty × cost for products above the threshold
+(default 60). Every product shows its score *and the reasons* (e.g. "No sale for 183 days · ₹7.50 L held · 500 units = 10× reorder level").
+
+Separately, each product gets a stock status: Dead Stock, Slow Moving, Healthy, Fast Moving, Overstock, Stockout Risk.
+Business-type profiles (Retail, E-commerce, Wholesale, Manufacturing, Electronics, Fashion, Grocery, Furniture, Other) set weights and time
+scales; thresholds and weights can be edited per workspace in **Settings**. *Analysis date* can be "today" or "latest date in the data"
+(useful when testing with old files).
+
+## Forecasting
+**Statistical forecasting, not ML.** Weekly demand per product is forecast with moving average, exponential smoothing or damped Holt trend;
+the method with the lowest error (WAPE) on a hold-out of the most recent weeks wins — the hold-out is excluded from fitting while scoring
+(no leakage) and the winner is then refitted on all data. The UI shows method, backtest accuracy and a range. With < 8 weeks of history or
+< 3 selling weeks it falls back to average daily velocity and says "limited data". Outputs: expected demand, expected stock, potential stock-out
+and overstock. No machine-learning model is trained; see [limitations](#known-limitations-read-this).
+
+## What-if simulator
+Single product or group (blocked products, top dead stock, a category, everything): discount %, demand change %, purchase quantity (single product),
+forecast period, price sensitivity. Shows current vs projected blocked capital, sales, units, capital recovered and DSRS plus a discount curve.
+The projection changes only the *stock position*; historical demand signals (days since last sale, 90-day units, trend) are held fixed, because a one-off discount is not evidence that demand recovered. All results are labelled **projections**; the assumption (sell-through lift = sensitivity × discount, default 2.8, from the original model) is shown
+and editable.
+
+## Reports
+Inventory, Dead stock, Risk, Sales, Purchases, Blocked capital, Recommendations, Executive summary — as on-screen preview, **CSV**, **Excel** or
+**PDF** (company, period, generated date, KPIs, chart, top-risk products, recommendations). PDFs use "Rs" because standard PDF fonts lack the ₹ glyph.
+CSV/Excel cells are neutralised against spreadsheet-formula injection.
+
+## Security
+Password hashing · JWT secret from env (required in production) · token revocation on logout and invalidation after password change ·
+workspace + role checks on every endpoint · restricted CORS · rate limiting and account lockout · upload validation · parameterised queries (SQLAlchemy) ·
+React auto-escaping (no `dangerouslySetInnerHTML`) · security headers · generic user-facing errors, details only in server logs · business data is never
+sent to third parties (no external fonts, analytics or AI services).
+
+## Testing
+```bash
+cd backend && pip install pytest && python -m pytest tests -q        # 16 end-to-end API tests, temporary database
 ```
-stockghost/
-├── README.md                  # Project documentation & thesis summary
-├── start_all.bat              # 1-Click concurrent launcher
-├── run_backend.bat            # Backend runner script
-├── run_frontend.bat           # Frontend runner script
-├── backend/
-│   ├── app.py                 # Flask server & CORS setup
-│   ├── config.py              # Configuration (SQLite / MySQL)
-│   ├── database.py            # SQLAlchemy initialization
-│   ├── models.py              # Products, Categories, Suppliers, POs, Sales, Recommendations
-│   ├── seed_data.py           # Pre-seeded sample dataset including Gaming Keyboard
-│   ├── requirements.txt       # Python dependencies
-│   ├── algorithms/
-│   │   ├── dsrs.py            # Dead Stock Risk Score mathematical algorithm
-│   │   ├── recommendation.py  # Rule-based prescriptive recovery engine
-│   │   └── simulator.py       # Clearance discount & capital recovery simulator
-│   ├── chatbot/
-│   │   └── intent_engine.py   # Intent-based conversational assistant
-│   └── routes/
-│       ├── auth_routes.py     # JWT login, registration & RBAC
-│       ├── inventory_routes.py# Product CRUD & stock tracking
-│       ├── analytics_routes.py# KPI aggregation & Chart.js data
-│       ├── simulation_routes.py# Simulator API
-│       ├── recommendation_routes.py # Recovery actions API
-│       └── chatbot_routes.py  # Conversational query endpoint
-└── frontend/
-    ├── package.json           # React dependencies
-    ├── vite.config.js         # Vite configuration with proxy
-    ├── tailwind.config.js     # Tailwind design system with risk color tiers
-    ├── index.html             # Entry HTML
-    └── src/
-        ├── App.jsx            # Main app router & tab layout
-        ├── main.jsx           # React DOM root
-        ├── api.js             # Axios client with JWT interceptor
-        ├── context/
-        │   └── AuthContext.jsx# RBAC authentication state & role switcher
-        ├── components/
-        │   ├── Navbar.jsx     # Header with role switcher & college branding
-        │   ├── Sidebar.jsx    # ERP module navigation
-        │   ├── StatCard.jsx   # KPI metric card
-        │   ├── RiskBadge.jsx  # Color-coded tier badges
-        │   └── AddProductModal.jsx # New SKU entry modal
-        └── pages/
-            ├── Dashboard.jsx  # Chart.js analytics & blocked capital alerts
-            ├── Inventory.jsx  # Catalog table, filters & CSV export
-            ├── DSRSMeta.jsx   # DSRS algorithm formulas & live sandbox
-            ├── Simulator.jsx  # Interactive Clearance What-If simulator
-            ├── Recommendations.jsx # Prescriptive recovery actions
-            ├── Transactions.jsx # Purchase orders & sales ledger
-            ├── ChatbotPage.jsx# Natural-language inventory assistant
-            └── Login.jsx      # Authentication & demo roles
+Covers registration/password rules, login/logout/lockout, reset flow, empty workspace, CSV + Excel import, mapping/validation/cleaning, malicious uploads,
+**tenant isolation (user A cannot read/modify user B's data)**, every role, product/inventory/sales/purchase CRUD, demo replace flow, simulator, all
+8 reports × CSV/XLSX/PDF, delete-import, read-only shared demo.
+`e2e/e2e_ui.py` is a Playwright browser script (`pip install playwright && playwright install chromium`) that registers a user and drives onboarding → import → dashboard → every route. Run it against the running app with a built UI: `SG_URL=http://localhost:5000 SG_EMAIL=new-user@example.test python e2e/e2e_ui.py` (use a new e-mail each run).
+start the app with the built UI first). `sample_data/` contains example files with non-standard headers for trying the mapping step.
+
+## Production deployment
+```bash
+npm --prefix frontend run build                       # creates frontend/dist, served by Flask automatically
+cd backend
+export APP_ENV=production JWT_SECRET="$(python -c 'import secrets;print(secrets.token_urlsafe(48))')"
+export DATABASE_URL=postgresql://user:pw@db/stockghost CLIENT_URL=https://app.example.com UPLOAD_DIR=/var/lib/stockghost/uploads
+pip install gunicorn psycopg2-binary
+gunicorn -w 2 --timeout 180 -b 127.0.0.1:8000 'app:create_app()'
 ```
+Put it behind HTTPS (nginx/Caddy), set `TRUST_PROXY=1` only if the proxy sets `X-Forwarded-For`, back up the database and `UPLOAD_DIR`, and use PostgreSQL for
+more than a handful of concurrent users. `--timeout 180` matters because imports run synchronously.
 
----
-
-## 📜 Department & University Reference
-- **Institution:** Lokmanya Tilak Jankalyan Shikshan Sanstha's Priyadarshini College of Engineering, Nagpur
-- **Affiliation:** Rashtrasant Tukadoji Maharaj Nagpur University (R.T.M.N.U.)
-- **Department:** Department of Information Technology
-- **Project Topic:** StockGhost — Dead Stock & Blocked Capital Detection
+## Known limitations (read this)
+* **No machine learning.** Forecasting is statistical and DSRS is rule-based, and both are labelled that way. An ML model was deliberately not added: per-product
+  histories in typical uploads are too short to train and validate one honestly.
+* **Forecasting has no seasonal model** (only the DSRS seasonality factor, which needs ≥ 12 months of sales). Confidence is a hold-out WAPE, not a prediction guarantee.
+* **Multiple warehouses are a label** (filter/grouping on `warehouse`), not separate stock per location; **stock transfers** are not implemented. No external integrations.
+* **Imports are synchronous** (fine to ~200k rows in seconds–tens of seconds); for larger volumes add a job queue.
+* **In-memory rate limiting** is per process; use a shared store (Redis) with several workers.
+* Auth token is kept in `localStorage` (XSS-safe rendering mitigates, but httpOnly cookies + CSRF protection would be stronger).
+* One workspace per user; no tenant-level billing or SSO. No Alembic migrations yet (see [Database](#database)).
+* Recommendation effects are *estimates* from a documented model, not measured outcomes.

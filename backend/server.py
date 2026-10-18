@@ -1,6 +1,12 @@
 import os
 import sys
 import json
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 from datetime import datetime, date, timedelta
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
@@ -90,6 +96,12 @@ SYSTEM_AUDIT_TRAIL = [
 ]
 
 class StockGhostHandler(BaseHTTPRequestHandler):
+    USERS = {
+        "admin@stockghost.com": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
+        "sales@stockghost.com": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Manager", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
+        "inventory@stockghost.com": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
+    }
+
     def _set_headers(self, status=200):
         self.send_response(status)
         self.send_header('Content-Type', 'application/json')
@@ -242,83 +254,97 @@ class StockGhostHandler(BaseHTTPRequestHandler):
         # User store for server.py
         if not hasattr(StockGhostHandler, 'USERS'):
             StockGhostHandler.USERS = {
-                "admin": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
-                "sales_mgr": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Manager", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
-                "inventory_mgr": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
+                "admin@stockghost.com": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
+                "sales@stockghost.com": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Manager", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
+                "inventory@stockghost.com": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
             }
 
         if path == '/api/auth/register':
-            u = (data.get('username') or '').strip().lower()
+            email = (data.get('email') or '').strip().lower()
             p = (data.get('password') or '').strip()
             role = data.get('role', 'Inventory Manager')
-            fn = data.get('full_name') or u
-            email = data.get('email') or f"{u}@stockghost.com"
-            if not u or not p:
+            fn = (data.get('full_name') or data.get('name') or '').strip()
+            u = (data.get('username') or (email.split('@')[0] if email else '')).strip().lower()
+
+            if not email or not p or not fn:
                 self._set_headers(400)
-                self.wfile.write(json.dumps({"error": "User ID and password are required for provisioning."}).encode('utf-8'))
+                self.wfile.write(json.dumps({"error": "Full Name, Email, and Password are required for registration."}).encode('utf-8'))
                 return
 
             if not hasattr(StockGhostHandler, 'USERS'):
-                StockGhostHandler.USERS = {
-                    "admin": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
-                    "sales_mgr": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Lead", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
-                    "inventory_mgr": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
-                }
+                StockGhostHandler.USERS = {}
 
-            StockGhostHandler.USERS[u] = {
+            # Check if email is already registered
+            for existing in StockGhostHandler.USERS.values():
+                if existing.get('email', '').lower() == email:
+                    self._set_headers(400)
+                    self.wfile.write(json.dumps({"error": f"An account with email '{email}' is already registered."}).encode('utf-8'))
+                    return
+
+            user_record = {
                 "id": len(StockGhostHandler.USERS) + 1,
-                "username": u,
+                "username": u or email,
                 "full_name": fn,
                 "password": p,
                 "role": role,
                 "email": email
             }
+            StockGhostHandler.USERS[email] = user_record
 
             SYSTEM_AUDIT_TRAIL.insert(0, {
                 "id": len(SYSTEM_AUDIT_TRAIL) + 1,
                 "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
-                "action": "ADMIN_REGISTRATION",
-                "details": f"Admin provisioned manager account '{u}' ({fn}) with role '{role}'",
+                "action": "USER_REGISTRATION",
+                "details": f"User '{fn}' ({email}) registered with role '{role}'",
                 "destination": "RBAC Security Directory / Enterprise Org",
-                "user_id": data.get("registered_by", "admin"),
-                "role": "Admin",
+                "user_id": email,
+                "role": role,
                 "department": "Enterprise Security",
                 "status": "REGISTERED"
             })
 
             self._set_headers(201)
+            user_out = {"email": email, "name": fn, "full_name": fn, "role": role}
             self.wfile.write(json.dumps({
-                "message": f"Account '{u}' provisioned successfully with role '{role}'.",
-                "user": {"username": u, "role": role, "email": email}
+                "success": True,
+                "data": {
+                    "access_token": f"jwt-token-{role.lower().replace(' ', '-')}",
+                    "user": user_out
+                },
+                "message": f"Account '{email}' registered successfully with role '{role}'.",
+                "user": user_out
             }).encode('utf-8'))
             return
 
         if path == '/api/auth/reset-password':
-            u = (data.get('username') or '').strip().lower()
+            ident = (data.get('email') or data.get('username') or '').strip().lower()
             new_pass = (data.get('new_password') or data.get('password') or '').strip()
             if not hasattr(StockGhostHandler, 'USERS'):
-                StockGhostHandler.USERS = {
-                    "admin": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
-                    "sales_mgr": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Lead", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
-                    "inventory_mgr": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
-                }
-            if u in StockGhostHandler.USERS and new_pass:
-                StockGhostHandler.USERS[u]["password"] = new_pass
+                StockGhostHandler.USERS = {}
+
+            target_user = None
+            for u_k, u_val in StockGhostHandler.USERS.items():
+                if u_val.get("email", "").lower() == ident or u_val.get("username", "").lower() == ident:
+                    target_user = u_val
+                    break
+
+            if target_user and new_pass:
+                target_user["password"] = new_pass
                 SYSTEM_AUDIT_TRAIL.insert(0, {
                     "id": len(SYSTEM_AUDIT_TRAIL) + 1,
                     "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
                     "action": "PASSWORD_RESET",
-                    "details": f"Admin updated password credentials for manager '{u}'",
+                    "details": f"Password updated for user '{ident}'",
                     "destination": "RBAC Security Directory",
-                    "user_id": data.get("reset_by", "admin"),
-                    "role": "Admin",
+                    "user_id": ident,
+                    "role": target_user.get("role", "User"),
                     "department": "Enterprise Security",
                     "status": "UPDATED"
                 })
                 self._set_headers(200)
                 self.wfile.write(json.dumps({
-                    "message": f"Password for manager '{u}' updated successfully.",
-                    "username": u
+                    "message": f"Password for '{ident}' updated successfully.",
+                    "email": target_user.get("email")
                 }).encode('utf-8'))
                 return
             else:
@@ -327,20 +353,25 @@ class StockGhostHandler(BaseHTTPRequestHandler):
                 return
 
         if path == '/api/auth/login':
-            ident = (data.get('username') or data.get('email', '')).strip().lower()
+            ident = (data.get('email') or data.get('username') or '').strip().lower()
             password = (data.get('password') or '').strip()
-            
+
             if not hasattr(StockGhostHandler, 'USERS'):
                 StockGhostHandler.USERS = {
-                    "admin": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
-                    "sales_mgr": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Lead", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
-                    "inventory_mgr": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
+                    "admin@stockghost.com": {"id": 1, "username": "admin", "full_name": "System Administrator", "password": "admin123", "role": "Admin", "email": "admin@stockghost.com"},
+                    "sales@stockghost.com": {"id": 2, "username": "sales_mgr", "full_name": "Sales & Clearance Manager", "password": "sales123", "role": "Sales Manager", "email": "sales@stockghost.com"},
+                    "inventory@stockghost.com": {"id": 3, "username": "inventory_mgr", "full_name": "Inventory Head", "password": "inv123", "role": "Inventory Manager", "email": "inventory@stockghost.com"},
                 }
 
-            user = StockGhostHandler.USERS.get(ident)
+            user = None
+            for u_k, u_val in StockGhostHandler.USERS.items():
+                if u_val.get("email", "").lower() == ident or u_val.get("username", "").lower() == ident:
+                    user = u_val
+                    break
+
             if not user or user.get("password") != password:
                 self._set_headers(401)
-                self.wfile.write(json.dumps({"error": "Invalid User ID or Password. Authentication failed."}).encode('utf-8'))
+                self.wfile.write(json.dumps({"error": "Invalid Email or Password. Authentication failed."}).encode('utf-8'))
                 return
 
             # Record login in System Audit Trail
@@ -348,26 +379,33 @@ class StockGhostHandler(BaseHTTPRequestHandler):
                 "id": len(SYSTEM_AUDIT_TRAIL) + 1,
                 "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
                 "action": "USER_LOGIN",
-                "details": f"Manager '{user['username']}' authenticated successfully with role '{user['role']}'",
+                "details": f"User '{user.get('email')}' ({user.get('full_name')}) authenticated successfully with role '{user.get('role')}'",
                 "destination": "StockGhost Enterprise Terminal",
-                "user_id": user['username'],
-                "role": user['role'],
+                "user_id": user.get('email'),
+                "role": user.get('role'),
                 "department": user.get('role', 'Operations'),
                 "status": "AUTHENTICATED"
             })
 
             self._set_headers(200)
+            user_data = {
+                "id": user["id"],
+                "username": user.get("username", user.get("email")),
+                "name": user["full_name"],
+                "full_name": user["full_name"],
+                "role": user["role"],
+                "email": user.get("email", "")
+            }
+            token_val = f"jwt-token-{user['role'].lower().replace(' ', '-')}"
             self.wfile.write(json.dumps({
+                "success": True,
+                "data": {
+                    "access_token": token_val,
+                    "user": user_data
+                },
                 "message": f"Welcome {user['full_name']}! Authenticated as {user['role']}.",
-                "token": f"jwt-token-{user['role'].lower().replace(' ', '-')}",
-                "user": {
-                    "id": user["id"],
-                    "username": user["username"],
-                    "name": user["full_name"],
-                    "full_name": user["full_name"],
-                    "role": user["role"],
-                    "email": user.get("email", "")
-                }
+                "token": token_val,
+                "user": user_data
             }).encode('utf-8'))
             return
 
@@ -738,7 +776,7 @@ def run_server():
     server_address = ('0.0.0.0', PORT)
     httpd = HTTPServer(server_address, StockGhostHandler)
     print("==================================================")
-    print(f"🚀 StockGhost Standalone Backend running on port {PORT}")
+    print(f"[StockGhost] Standalone Backend running on port {PORT}")
     print(f"   API Health Check: http://127.0.0.1:{PORT}/api/health")
     print(f"   Zero External Dependencies Required!")
     print("==================================================")

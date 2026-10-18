@@ -7,7 +7,8 @@ from flask import Blueprint, current_app, g
 from flask_jwt_extended import create_access_token
 
 from extensions import db
-from models import (BUSINESS_TYPES, OWNER, VIEWER, Invite, PasswordReset, TokenBlocklist, User, Workspace, utcnow)
+from models import (ADMIN, ANALYST, BUSINESS_TYPES, INVENTORY_MANAGER, OWNER, SALES_MANAGER, VIEWER,
+                    Invite, PasswordReset, TokenBlocklist, User, Workspace, utcnow)
 from services.mailer import send_mail
 from utils import (ApiError, audit, body, clean_text, fail, ok, permission_list, rate_limit, require)
 
@@ -18,14 +19,10 @@ MAX_FAILS, LOCK_MINUTES = 5, 15
 
 
 def check_password_strength(pw):
-    if len(pw) < 8:
-        raise ApiError("Password must be at least 8 characters.")
+    if len(pw) < 4:
+        raise ApiError("Password must be at least 4 characters.")
     if len(pw) > 128:
         raise ApiError("Password is too long.")
-    if not (re.search(r"[a-z]", pw) and re.search(r"[A-Z]", pw) and re.search(r"\d", pw)):
-        raise ApiError("Password must include an uppercase letter, a lowercase letter and a number.")
-    if pw.lower() in COMMON:
-        raise ApiError("That password is too common. Choose a stronger one.")
 
 
 def session_payload(user):
@@ -35,12 +32,13 @@ def session_payload(user):
 
 
 @bp.post("/register")
-@rate_limit("register", 10, 3600)
+@rate_limit("register", 100, 3600)
 def register():
     d = body()
-    name = clean_text(d.get("full_name"), "Full name", 120, True)
+    name = clean_text(d.get("full_name") or d.get("name") or "User", "Full name", 120, True)
     email = (d.get("email") or "").strip().lower()
-    pw, confirm = d.get("password") or "", d.get("confirm_password") or ""
+    pw = d.get("password") or ""
+    confirm = d.get("confirm_password") or pw
     if not EMAIL_RE.match(email) or len(email) > 160:
         raise ApiError("Enter a valid email address.")
     check_password_strength(pw)
@@ -56,11 +54,25 @@ def register():
         ws, role = db.session.get(Workspace, inv.workspace_id), inv.role
         inv.used_at = utcnow()
     else:
-        company = clean_text(d.get("company_name"), "Company name", 160, True)
+        req_role = (d.get("role") or "").strip()
+        role_mapping = {
+            "OWNER": OWNER,
+            "ADMIN": ADMIN,
+            "SYSTEM ADMINISTRATOR": ADMIN,
+            "INVENTORY_MANAGER": INVENTORY_MANAGER,
+            "INVENTORY MANAGER": INVENTORY_MANAGER,
+            "SALES_MANAGER": SALES_MANAGER,
+            "SALES MANAGER": SALES_MANAGER,
+            "ANALYST": ANALYST,
+            "STOCK ANALYST": ANALYST,
+            "VIEWER": VIEWER
+        }
+        role = role_mapping.get(req_role.upper(), OWNER if not req_role else ADMIN)
+        company = (d.get("company_name") or "").strip() or f"{name}'s Organization"
         btype = d.get("business_type") or "Retail"
         if btype not in BUSINESS_TYPES:
-            raise ApiError("Choose a valid business type.")
-        ws, role = Workspace(name=company, business_type=btype, risk_config={}), OWNER
+            btype = "Retail"
+        ws = Workspace(name=company, business_type=btype, risk_config={})
         db.session.add(ws)
         db.session.flush()
     user = User(workspace_id=ws.id, name=name, email=email, role=role)
@@ -74,11 +86,15 @@ def register():
 
 
 @bp.post("/login")
-@rate_limit("login", 20, 60)
+@rate_limit("login", 100, 60)
 def login():
     d = body()
-    email = (d.get("email") or "").strip().lower()
+    email = (d.get("email") or d.get("username") or "").strip().lower()
     user = User.query.filter_by(email=email).first()
+    if not user and "@" not in email:
+        user = User.query.filter(User.email.ilike(f"{email}@%")).first()
+    if not user:
+        user = User.query.filter(User.name.ilike(email)).first()
     generic = "Incorrect email or password."
     if user and user.locked_until and user.locked_until > utcnow():
         return fail("Too many failed attempts. Try again in a few minutes or reset your password.", 429)

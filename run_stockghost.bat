@@ -16,9 +16,9 @@ start http://localhost:5050/
 echo.
 echo ===================================================================
 echo  ✅ StockGhost ERP is LIVE at http://localhost:5050/
-echo  • System Administrator : admin / admin123 (Full Access & User Admin)
-echo  • Sales Manager        : sales_mgr / sales123 (Outward Sales & Clearance Simulator)
-echo  • Inventory Manager    : inventory_mgr / inv123 (SKU Catalog & Inward PO Intake)
+echo  • Sign In: Use your registered Email & Password
+echo  • Default Administrator : admin@stockghost.com / admin123
+echo  • Or click "Create Account" on the opening page to register!
 echo.
 echo  Keep this terminal window open while using the application.
 echo  Press Ctrl+C or close this window to stop the server.

@@ -1,104 +1,89 @@
-import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
-import Inventory from './pages/Inventory';
-import DSRSMeta from './pages/DSRSMeta';
-import Simulator from './pages/Simulator';
-import Recommendations from './pages/Recommendations';
-import Transactions from './pages/Transactions';
-import ChatbotPage from './pages/ChatbotPage';
-import Login from './pages/Login';
-import { BotMessageSquare } from 'lucide-react';
+import { lazy, Suspense } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import Layout from './components/Layout.jsx'
+import { Spinner } from './components/ui.jsx'
+import { useAuth } from './context/AuthContext.jsx'
 
-const MainLayout = () => {
-  const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [selectedProductForSimulation, setSelectedProductForSimulation] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-  const [key, setKey] = useState(0);
+const L = (f) => lazy(f)
+const Landing = L(() => import('./pages/Landing.jsx'))
+const Login = L(() => import('./pages/Login.jsx'))
+const Register = L(() => import('./pages/Register.jsx'))
+const ForgotPassword = L(() => import('./pages/ForgotPassword.jsx'))
+const ResetPassword = L(() => import('./pages/ResetPassword.jsx'))
+const Onboarding = L(() => import('./pages/Onboarding.jsx'))
+const Dashboard = L(() => import('./pages/Dashboard.jsx'))
+const Executive = L(() => import('./pages/Executive.jsx'))
+const DataImport = L(() => import('./pages/DataImport.jsx'))
+const DataSources = L(() => import('./pages/DataSources.jsx'))
+const Products = L(() => import('./pages/Products.jsx'))
+const Inventory = L(() => import('./pages/Inventory.jsx'))
+const Sales = L(() => import('./pages/Sales.jsx'))
+const Purchases = L(() => import('./pages/Purchases.jsx'))
+const Suppliers = L(() => import('./pages/Suppliers.jsx'))
+const DeadStock = L(() => import('./pages/DeadStock.jsx'))
+const RiskAnalysis = L(() => import('./pages/RiskAnalysis.jsx'))
+const Forecasting = L(() => import('./pages/Forecasting.jsx'))
+const Recommendations = L(() => import('./pages/Recommendations.jsx'))
+const Simulator = L(() => import('./pages/Simulator.jsx'))
+const Copilot = L(() => import('./pages/Copilot.jsx'))
+const Reports = L(() => import('./pages/Reports.jsx'))
+const Notifications = L(() => import('./pages/Notifications.jsx'))
+const Users = L(() => import('./pages/Users.jsx'))
+const SettingsPage = L(() => import('./pages/Settings.jsx'))
+const AuditLog = L(() => import('./pages/AuditLog.jsx'))
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    setKey(k => k + 1);
-    setTimeout(() => setRefreshing(false), 600);
-  };
+function Protected({ perm, children }) {
+  const { user, loading, can } = useAuth()
+  const loc = useLocation()
+  if (loading) return <Spinner label="Loading your workspace" />
+  if (!user) return <Navigate to="/login" replace state={{ from: loc.pathname }} />
+  if (perm && !can(perm)) return <Navigate to="/dashboard" replace />
+  return children
+}
 
-  const navigateToSimulator = (product = null) => {
-    if (product) setSelectedProductForSimulation(product);
-    setActiveTab('simulator');
-  };
+function PublicOnly({ children }) {
+  const { user, ws, loading } = useAuth()
+  if (loading) return <Spinner />
+  if (!user) return children
+  if (!ws) return <Spinner label="Opening your workspace" />       // workspace is still loading right after sign-in
+  return <Navigate to={user.role === 'OWNER' && !ws.onboarding_completed && !ws.has_data ? '/onboarding' : '/dashboard'} replace />
+}
 
-  const navigateToRecs = (product = null) => {
-    setActiveTab('recommendations');
-  };
-
-  if (!user) {
-    return <Login onLoginSuccess={() => setActiveTab('dashboard')} />;
-  }
-
+export default function App() {
+  const P = (perm, el) => <Protected perm={perm}>{el}</Protected>
   return (
-    <div className="flex h-screen flex-col bg-slate-950 text-slate-100 overflow-hidden font-sans">
-      {/* Top Navbar */}
-      <Navbar onRefresh={handleRefresh} refreshing={refreshing} />
-
-      {/* Main Body */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        {/* Content View */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-900/40">
-          <div className="max-w-7xl mx-auto space-y-6" key={key}>
-            {activeTab === 'dashboard' && (
-              <Dashboard onNavigateToSimulator={() => navigateToSimulator()} />
-            )}
-
-            {activeTab === 'inventory' && (
-              <Inventory 
-                onSelectProductForSimulation={navigateToSimulator}
-                onSelectProductForRecs={navigateToRecs}
-              />
-            )}
-
-            {activeTab === 'dsrs' && <DSRSMeta />}
-
-            {activeTab === 'simulator' && (
-              <Simulator initialProduct={selectedProductForSimulation} />
-            )}
-
-            {activeTab === 'recommendations' && (
-              <Recommendations onNavigateToSimulator={() => navigateToSimulator()} />
-            )}
-
-            {activeTab === 'transactions' && <Transactions />}
-
-            {activeTab === 'chatbot' && <ChatbotPage />}
-          </div>
-        </main>
-      </div>
-
-      {/* Floating Chatbot Bubble if not on chatbot tab */}
-      {activeTab !== 'chatbot' && (
-        <button
-          onClick={() => setActiveTab('chatbot')}
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-4 py-3 text-xs font-bold text-white shadow-xl shadow-sky-500/30 hover:scale-105 transition transform"
-        >
-          <BotMessageSquare className="w-5 h-5" />
-          <span>Ask StockGhost AI</span>
-        </button>
-      )}
-    </div>
-  );
-};
-
-export const App = () => {
-  return (
-    <AuthProvider>
-      <MainLayout />
-    </AuthProvider>
-  );
-};
-
-export default App;
+    <Suspense fallback={<Spinner />}>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<PublicOnly><Login /></PublicOnly>} />
+        <Route path="/register" element={<PublicOnly><Register /></PublicOnly>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/onboarding" element={P(null, <Onboarding />)} />
+        <Route element={P(null, <Layout />)}>
+          <Route path="/dashboard" element={P('dashboard.view', <Dashboard />)} />
+          <Route path="/executive" element={P('dashboard.view', <Executive />)} />
+          <Route path="/data-import" element={P('data.import', <DataImport />)} />
+          <Route path="/data-sources" element={P('data.import', <DataSources />)} />
+          <Route path="/products" element={P('products.read', <Products />)} />
+          <Route path="/inventory" element={P('inventory.read', <Inventory />)} />
+          <Route path="/sales" element={P('sales.read', <Sales />)} />
+          <Route path="/purchases" element={P('purchases.read', <Purchases />)} />
+          <Route path="/suppliers" element={P('suppliers.read', <Suppliers />)} />
+          <Route path="/dead-stock" element={P('analytics.view', <DeadStock />)} />
+          <Route path="/risk-analysis" element={P('analytics.view', <RiskAnalysis />)} />
+          <Route path="/forecasting" element={P('analytics.view', <Forecasting />)} />
+          <Route path="/recommendations" element={P('analytics.view', <Recommendations />)} />
+          <Route path="/simulator" element={P('analytics.view', <Simulator />)} />
+          <Route path="/copilot" element={P('analytics.view', <Copilot />)} />
+          <Route path="/reports" element={P('reports.view', <Reports />)} />
+          <Route path="/notifications" element={P('notifications.view', <Notifications />)} />
+          <Route path="/users" element={P('users.manage', <Users />)} />
+          <Route path="/audit-log" element={P('audit.view', <AuditLog />)} />
+          <Route path="/settings" element={P(null, <SettingsPage />)} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
+  )
+}

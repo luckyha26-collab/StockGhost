@@ -104,122 +104,144 @@
 
     /* Tabs inside ledger */
     .subtabs { display: flex; gap: 8px; margin-bottom: 16px; }
-    .subtab-btn { padding: 8px 16px; border-radius: 8px; background: #070c18; border: 1px solid #1e293b; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .subtab-btn { padding: 8px 16px; border-radius: 8px; background: #070c18; border: 1px solid #1e293b; color: #94a3b8; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.15s; }
+    .subtab-btn:hover { background: #0f172a; color: #f1f5f9; }
     .subtab-btn.active { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border-color: rgba(2, 132, 199, 0.4); }
     
     /* Login Portal */
     .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: radial-gradient(circle at 50% 20%, #0d1a33 0%, #030712 70%); }
     .login-card { background: #0b1120; border: 1px solid #1e293b; border-radius: 20px; padding: 36px; width: 100%; max-width: 520px; box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
 
-
     .role-select-card { padding: 12px; border-radius: 10px; border: 1px solid #1e293b; background: #070c18; cursor: pointer; transition: 0.15s; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
     .role-select-card:hover { border-color: #0284c7; background: #0e172a; }
     .role-select-card.active { border-color: #0284c7; background: rgba(2, 132, 199, 0.12); }
 
+    /* Visual Dashboard & Charts Styles */
+    .viz-grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
+    .viz-grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; }
+    .chart-box { background: #0b1120; border: 1px solid #1e293b; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; position: relative; transition: border-color 0.2s; }
+    .chart-box:hover { border-color: rgba(2, 132, 199, 0.45); }
+    .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+    .chart-title { font-size: 14px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .chart-sub { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+    .chart-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    .chart-canvas-wrap { position: relative; width: 100%; min-height: 270px; max-height: 330px; display: flex; align-items: center; justify-content: center; }
+    .chart-legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid #1e293b; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #cbd5e1; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .rank-bar-wrap { margin-bottom: 12px; }
+    .rank-bar-label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #e2e8f0; }
+    .rank-bar-track { height: 10px; border-radius: 6px; background: #070c18; border: 1px solid #1e293b; overflow: hidden; }
+    .rank-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .scatter-container { width: 100%; height: 320px; background: #070c18; border: 1px solid #1e293b; border-radius: 12px; position: relative; overflow: hidden; }
+
     .hidden { display: none !important; }
   </style>
+  <!-- Chart.js Engine for High-Performance Stock Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
   <!-- ============================================================== -->
-  <!-- 1. ROLE-BASED ACCESS SECURE LOGIN VIEW (ID & PASSWORD ONLY)    -->
+  <!-- 1. ROLE-BASED ACCESS SECURE OPENING AUTHENTICATION GATEWAY     -->
+  <!-- ONLY OPENS VIA REGISTERED EMAIL & PASSWORD AUTHENTICATION     -->
   <!-- ============================================================== -->
   <div id="view-login" class="login-container">
     <div class="login-card">
       <!-- Brand & Dept Header -->
       <div style="text-align: center; margin-bottom: 22px;">
-        <div style="width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #0284c7, #4f46e5); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 12px; box-shadow: 0 4px 16px rgba(2,132,199,0.35);">👻</div>
+        <div style="width: 58px; height: 58px; border-radius: 16px; background: linear-gradient(135deg, #0284c7, #4f46e5); display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 12px; box-shadow: 0 4px 18px rgba(2,132,199,0.4);">👻</div>
         <h1 style="font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.5px;">StockGhost ERP 2.0</h1>
         <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Dead Stock & Blocked Capital Detection System</p>
-        <div style="display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 20px; background: rgba(2,132,199,0.1); border: 1px solid rgba(2,132,199,0.3); color: #38bdf8; font-size: 11px; font-weight: 700;">
-          Enterprise RBAC Secured Portal
+        <div style="display: inline-block; margin-top: 8px; padding: 4px 14px; border-radius: 20px; background: rgba(2,132,199,0.1); border: 1px solid rgba(2,132,199,0.3); color: #38bdf8; font-size: 11px; font-weight: 700;">
+          🛡️ Verified Email Authentication Portal
         </div>
       </div>
 
       <!-- Navigation tabs between Sign In and Register -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #1e293b; padding-bottom:12px;">
-        <div class="subtabs" style="margin-bottom:0;">
-          <button class="subtab-btn active" id="tabbtn-login-signin" onclick="switchLoginTab('signin')">🔑 Manager Sign In</button>
-          <button class="subtab-btn" id="tabbtn-login-reg" onclick="switchLoginTab('reg')">➕ Register Manager (Admin)</button>
+      <div style="display:flex; justify-content:center; align-items:center; margin-bottom:18px; border-bottom:1px solid #1e293b; padding-bottom:12px;">
+        <div class="subtabs" style="margin-bottom:0; width:100%; display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <button class="subtab-btn active" id="tabbtn-login-signin" style="text-align:center; padding:10px 14px;" onclick="switchLoginTab('signin')">🔑 Sign In</button>
+          <button class="subtab-btn" id="tabbtn-login-reg" style="text-align:center; padding:10px 14px;" onclick="switchLoginTab('reg')">📝 Create Account</button>
         </div>
       </div>
 
-      <!-- TAB 1: CREDENTIAL SIGN IN -->
+      <!-- TAB 1: CREDENTIAL SIGN IN (BY REGISTERED EMAIL & PASSWORD ONLY) -->
       <div id="login-stage-credentials">
         <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:14px; margin-bottom:18px;">
-          <div style="font-size:11px; font-weight:700; color:#38bdf8; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-            <span>🛡️ Enterprise Role Credentials (Shared by Admin):</span>
+          <div style="font-size:11px; font-weight:700; color:#38bdf8; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+            <span>🔒 Strict Registered Account Authentication:</span>
           </div>
-          <div style="font-size:11px; color:#cbd5e1; line-height:1.7;">
-            • <strong>System Administrator</strong>: ID <code>admin</code> | Pass: <code>admin123</code> <span style="color:#38bdf8; font-weight:700;">(Full Access & User Admin)</span><br />
-            • <strong>Sales Manager</strong>: ID <code>sales_mgr</code> | Pass: <code>sales123</code> <span style="color:#34d399; font-weight:700;">(Outward Sales & Clearance Simulator)</span><br />
-            • <strong>Inventory Manager</strong>: ID <code>inventory_mgr</code> | Pass: <code>inv123</code> <span style="color:#fbbf24; font-weight:700;">(SKU Catalog & Inward PO Receipts)</span>
-          </div>
-          <div style="font-size:10px; color:#94a3b8; margin-top:8px; border-top:1px dashed #1e293b; padding-top:6px;">
-            🔒 <em>Strict Role Isolation: Each manager can only operate in their authorized department. Switch accounts via Logout.</em>
+          <div style="font-size:11px; color:#94a3b8; line-height:1.5;">
+            Access to StockGhost ERP is permitted <strong>only with a verified registered email and password</strong>. If you do not have an account yet, click <strong style="color:#38bdf8; cursor:pointer;" onclick="switchLoginTab('reg')">Create Account</strong> to register with your Name, Email, Password, and Role.
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">User ID / Employee ID:</label>
-          <input type="text" class="form-input" id="login-userid" value="admin" placeholder="e.g. admin, sales_mgr, or inventory_mgr" />
+          <label class="form-label">Registered Corporate Email Address:</label>
+          <input type="email" class="form-input" id="login-email" placeholder="e.g. manager@stockghost.com" autocomplete="email" onkeydown="if(event.key==='Enter') loginDirectly()" />
         </div>
 
         <div class="form-group">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <label class="form-label" style="margin-bottom:0;">Password:</label>
+            <label class="form-label" style="margin-bottom:0;">Account Password:</label>
             <span style="font-size:10px; color:#38bdf8; cursor:pointer;" onclick="togglePassVisibility()">👁️ Show/Hide</span>
           </div>
-          <input type="password" class="form-input" id="login-password" value="admin123" placeholder="Enter account password" onkeydown="if(event.key==='Enter') loginDirectly()" />
+          <input type="password" class="form-input" id="login-password" placeholder="Enter your registered account password" autocomplete="current-password" onkeydown="if(event.key==='Enter') loginDirectly()" />
         </div>
 
-        <div id="login-cred-error" class="hidden" style="color:#f87171; font-size:11px; margin-bottom:12px; padding:10px; border-radius:8px; background:#ef444422; border:1px solid #ef444444;"></div>
+        <div id="login-cred-error" class="hidden" style="color:#f87171; font-size:11px; margin-bottom:14px; padding:12px; border-radius:8px; background:#ef444422; border:1px solid #ef444444; line-height:1.5;"></div>
 
-        <button class="btn-execute" onclick="loginDirectly()">Sign In to Role Terminal ➔</button>
+        <button class="btn-execute" onclick="loginDirectly()">Sign In with Registered Email ➔</button>
+
+        <div style="text-align:center; margin-top:16px; font-size:11px; color:#64748b;">
+          New user without credentials? <span style="color:#38bdf8; cursor:pointer; font-weight:700; text-decoration:underline;" onclick="switchLoginTab('reg')">Create Account Here</span>
+        </div>
       </div>
 
-      <!-- TAB 2: REGISTER MANAGER ACCOUNT (MANAGED BY ADMIN) -->
+      <!-- TAB 2: REGISTER NEW ACCOUNT (NAME, EMAIL, PASSWORD, ROLE) -->
       <div id="login-stage-register" class="hidden">
-        <div style="background:#070c18; border:1px solid #1e293b; border-radius:10px; padding:12px; margin-bottom:14px;">
-          <div style="font-size:11px; font-weight:700; color:#38bdf8;">👤 Admin User Provisioning</div>
-          <p style="font-size:10px; color:#94a3b8; margin-top:2px;">
-            Provision new employee credentials and assign strict Role-Based Access boundaries.
+        <div style="background:#070c18; border:1px solid #10b98133; border-radius:10px; padding:12px 14px; margin-bottom:16px;">
+          <div style="font-size:11px; font-weight:700; color:#34d399; display:flex; align-items:center; gap:6px;">
+            <span>✨ Register New User Account</span>
+          </div>
+          <p style="font-size:11px; color:#94a3b8; margin-top:4px; line-height:1.4;">
+            Fill in your Name, Email, Password, and Corporate Role. Once registered, you will be able to log in exclusively using your registered email and password.
           </p>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Full Name of Employee:</label>
-          <input type="text" class="form-input" id="reg-name" placeholder="e.g. Operations Lead" value="" />
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-          <div class="form-group">
-            <label class="form-label">Assign User ID:</label>
-            <input type="text" class="form-input" id="reg-userid" placeholder="e.g. ops_manager" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Assign Password:</label>
-            <input type="password" class="form-input" id="reg-pass" placeholder="Enter account password" />
-          </div>
+          <label class="form-label">Full Name of User / Manager:</label>
+          <input type="text" class="form-input" id="reg-name" placeholder="e.g. Alex Sharma" />
         </div>
 
         <div class="form-group">
-          <label class="form-label">Corporate Role & RBAC Department:</label>
+          <label class="form-label">Corporate Email Address (Login Identifier):</label>
+          <input type="email" class="form-input" id="reg-email" placeholder="e.g. alex.sharma@stockghost.com" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Create Password:</label>
+          <input type="password" class="form-input" id="reg-pass" placeholder="Enter a secure password (min 4 characters)" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Assign Corporate Role & Department:</label>
           <select class="form-select" id="reg-role">
-            <option value="Admin">System Administrator (Full System Clearance & User Provisioning)</option>
+            <option value="Admin">System Administrator (Full Clearance, System Configuration & Governance)</option>
+            <option value="Inventory Manager" selected>Inventory Manager (SKU Catalog, Stock Risk Scoring & Inward PO Receipts)</option>
             <option value="Sales Manager">Sales Manager (Clearance Simulator & Outward Sales Execution)</option>
-            <option value="Inventory Manager" selected>Inventory Manager (SKU Catalog, DSRS Risk & Inward PO Receipts)</option>
+            <option value="Stock Analyst">Stock Analyst (Data Visualizations, Forecasting & Analytics Reports)</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Corporate Email Address (Optional):</label>
-          <input type="email" class="form-input" id="reg-email" placeholder="manager@stockghost.com" />
+        <div id="login-reg-msg" class="hidden" style="font-size:11px; margin-bottom:12px; padding:10px; border-radius:8px; line-height:1.4;"></div>
+
+        <button class="btn-execute" style="background:linear-gradient(135deg, #10b981, #059669);" onclick="registerNewManager()">Create Account & Register ➔</button>
+
+        <div style="text-align:center; margin-top:16px; font-size:11px; color:#64748b;">
+          Already have an account? <span style="color:#38bdf8; cursor:pointer; font-weight:700; text-decoration:underline;" onclick="switchLoginTab('signin')">Sign In with Registered Email</span>
         </div>
-
-        <div id="login-reg-msg" class="hidden" style="font-size:11px; margin-bottom:12px; padding:10px; border-radius:8px;"></div>
-
-        <button class="btn-execute" style="background:linear-gradient(135deg, #10b981, #059669);" onclick="registerNewManager()">Provision Manager Credentials ➔</button>
       </div>
 
       <p style="font-size: 10px; color: #475569; text-align: center; margin-top: 22px;">
@@ -264,6 +286,10 @@
           <div class="module-title">ERP Risk Modules</div>
           <button class="nav-btn active" id="btn-tab-dashboard" onclick="switchTab('dashboard')">
             <span>📊 Dashboard & KPIs</span>
+          </button>
+          <button class="nav-btn" id="btn-tab-analytics" onclick="switchTab('analytics')">
+            <span>📈 Stock Visualizer & Charts</span>
+            <span class="nav-pill pill-purple">Charts</span>
           </button>
           <button class="nav-btn" id="btn-tab-inventory" onclick="switchTab('inventory')">
             <span>📦 Inventory & SKUs</span>
@@ -338,6 +364,57 @@
               <div class="kpi-title">Average DSRS Score</div>
               <div class="kpi-value" style="color: #38bdf8;" id="kpi-dsrs">56.9 / 100</div>
               <div class="kpi-sub">Catalog Risk Index</div>
+            </div>
+          </div>
+
+          <!-- Stock Visualizer Quick Insights Grid -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+              <div>
+                <div class="card-title">📊 Visual Stock Intelligence & Risk Distribution</div>
+                <div class="card-sub" style="margin-bottom:0;">Live graphical breakdown of inventory health, capital lockup, and category risk</div>
+              </div>
+              <div style="display:flex; gap:10px;">
+                <button class="btn-action btn-emerald" style="padding:6px 14px; font-size:11px;" onclick="loadBenchmarkStockDataset()">⚡ Load Benchmark 24-SKU Dataset</button>
+                <button class="btn-action" style="background:#0284c7; padding:6px 14px; font-size:11px;" onclick="switchTab('analytics')">Open Full Analytics Studio ➔</button>
+              </div>
+            </div>
+            
+            <div class="viz-grid-2">
+              <!-- Mini Donut: Stock Health Breakdown -->
+              <div class="chart-box" style="background:#070c18;">
+                <div class="chart-header">
+                  <div>
+                    <div class="chart-title">🍩 Stock Risk Tier Allocation</div>
+                    <div class="chart-sub">Dead Stock vs High Risk vs Healthy Valuation</div>
+                  </div>
+                  <span class="chart-badge pill-purple" id="db-donut-badge">DSRS Matrix</span>
+                </div>
+                <div class="chart-canvas-wrap" id="wrap-db-donut">
+                  <canvas id="chart-db-donut"></canvas>
+                  <div id="fallback-db-donut" class="hidden" style="width:100%; height:100%;"></div>
+                </div>
+                <div class="chart-legend-grid" id="legend-db-donut"></div>
+              </div>
+
+              <!-- Mini Bar: Blocked Capital by Category -->
+              <div class="chart-box" style="background:#070c18;">
+                <div class="chart-header">
+                  <div>
+                    <div class="chart-title">📊 Category Capital Allocation</div>
+                    <div class="chart-sub">Total Invested vs Stagnant Blocked Capital (₹)</div>
+                  </div>
+                  <span class="chart-badge pill-blue">Liquidity Drain</span>
+                </div>
+                <div class="chart-canvas-wrap" id="wrap-db-cat">
+                  <canvas id="chart-db-cat"></canvas>
+                  <div id="fallback-db-cat" class="hidden" style="width:100%; height:100%;"></div>
+                </div>
+                <div class="chart-legend-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="legend-item"><span class="legend-dot" style="background:#0284c7;"></span> Total Valuation</div>
+                  <div class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span> Blocked Capital</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -719,6 +796,156 @@
                   </tr>
                 </thead>
                 <tbody id="rbac-managers-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 10. STOCK DATA VISUALIZATION DASHBOARD -->
+        <div id="tab-analytics" class="hidden">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div class="card-title">📈 Stock Data Visualization & Analytics Studio</div>
+              <div class="card-sub" style="margin-bottom:0;">Live graphical dashboard of inventory velocity, category capital lockup, and risk distribution</div>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-action btn-emerald" style="display:flex; align-items:center; gap:6px;" onclick="loadBenchmarkStockDataset()">⚡ Benchmark 24-SKU Dataset</button>
+              <button class="btn-action" style="background:#0284c7; display:flex; align-items:center; gap:6px;" onclick="openImportCsvModal()">📁 Import Business CSV</button>
+            </div>
+          </div>
+
+          <!-- Interactive Filters & Metrics Toolbar -->
+          <div class="card" style="padding:16px 20px; margin-bottom:20px; background:#070c18;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+              <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                <div>
+                  <label class="form-label" style="margin-bottom:4px; font-size:10px;">Filter Category:</label>
+                  <select class="form-select" id="viz-filter-cat" onchange="renderVisualDashboard()" style="min-width:180px; padding:6px 10px; font-size:12px;">
+                    <option value="ALL">All Categories</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" style="margin-bottom:4px; font-size:10px;">Filter Risk Tier:</label>
+                  <select class="form-select" id="viz-filter-tier" onchange="renderVisualDashboard()" style="min-width:160px; padding:6px 10px; font-size:12px;">
+                    <option value="ALL">All Risk Tiers</option>
+                    <option value="Dead Stock">Dead Stock (81-100)</option>
+                    <option value="High Risk">High Risk (61-80)</option>
+                    <option value="Slow Moving">Slow Moving (31-60)</option>
+                    <option value="Healthy">Healthy (0-30)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label" style="margin-bottom:4px; font-size:10px;">Chart Metric Mode:</label>
+                  <select class="form-select" id="viz-metric-mode" onchange="renderVisualDashboard()" style="min-width:160px; padding:6px 10px; font-size:12px;">
+                    <option value="capital">Capital Blocked (₹ INR)</option>
+                    <option value="units">Stock Units (Qty)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span style="font-size:11px; color:#94a3b8;" id="viz-filtered-count">Showing 24 SKUs</span>
+                <button class="btn-action" style="padding:6px 12px; font-size:11px; background:#1e293b; color:#cbd5e1;" onclick="resetVizFilters()">↺ Reset Filters</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Row Charts: Risk Distribution & Category Comparison -->
+          <div class="viz-grid-2" style="margin-bottom:20px;">
+            <!-- Chart 1: Stock Health & DSRS Risk Breakdown -->
+            <div class="chart-box">
+              <div class="chart-header">
+                <div>
+                  <div class="chart-title">🍩 Stock Health & DSRS Risk Allocation</div>
+                  <div class="chart-sub">Share of inventory units & capital trapped across 4 risk classifications</div>
+                </div>
+                <span class="chart-badge pill-purple" id="badge-viz-risk">Algorithmic</span>
+              </div>
+              <div class="chart-canvas-wrap" id="wrap-viz-donut">
+                <canvas id="chart-viz-donut"></canvas>
+                <div id="fallback-viz-donut" class="hidden" style="width:100%; height:100%;"></div>
+              </div>
+              <div class="chart-legend-grid" id="legend-viz-donut"></div>
+            </div>
+
+            <!-- Chart 2: Blocked Capital vs Total Investment by Category -->
+            <div class="chart-box">
+              <div class="chart-header">
+                <div>
+                  <div class="chart-title">📊 Category Capital Allocation & Lockup</div>
+                  <div class="chart-sub">Total inventory cost vs blocked stagnant capital across departments</div>
+                </div>
+                <span class="chart-badge pill-blue">Liquidity Exposure</span>
+              </div>
+              <div class="chart-canvas-wrap" id="wrap-viz-cat">
+                <canvas id="chart-viz-cat"></canvas>
+                <div id="fallback-viz-cat" class="hidden" style="width:100%; height:100%;"></div>
+              </div>
+              <div class="chart-legend-grid" style="grid-template-columns:1fr 1fr;">
+                <div class="legend-item"><span class="legend-dot" style="background:#0284c7;"></span> Total Invested Valuation</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span> Blocked / High Risk Capital</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row Charts: Top 5 Cash Drains & 2D Aging Scatter Matrix -->
+          <div class="viz-grid-2" style="margin-bottom:24px;">
+            <!-- Chart 3: Top 5 Capital Drain SKUs -->
+            <div class="chart-box">
+              <div class="chart-header">
+                <div>
+                  <div class="chart-title">🚨 Top 5 Stagnant Capital Drains</div>
+                  <div class="chart-sub">Individual SKUs trapping the largest monetary reserves</div>
+                </div>
+                <span class="chart-badge pill-purple">Liquidation Targets</span>
+              </div>
+              <div id="viz-top-drains" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
+            </div>
+
+            <!-- Chart 4: Stock Age vs Inactivity Scatter Matrix -->
+            <div class="chart-box">
+              <div class="chart-header">
+                <div>
+                  <div class="chart-title">🎯 Stock Age vs Inactivity Matrix (2D Risk Quadrant)</div>
+                  <div class="chart-sub">Bubble positioning by sales velocity (X: inactivity days) and warehouse age (Y: age days)</div>
+                </div>
+                <span class="chart-badge pill-green">Matrix Map</span>
+              </div>
+              <div class="chart-canvas-wrap" id="wrap-viz-scatter">
+                <canvas id="chart-viz-scatter"></canvas>
+                <div id="fallback-viz-scatter" class="hidden" style="width:100%; height:100%;"></div>
+              </div>
+              <div class="chart-legend-grid" style="grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));">
+                <div class="legend-item"><span class="legend-dot" style="background:#10b981;"></span> Healthy Flow (&lt;45d inact)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#fbbf24;"></span> Slow Velocity (45–90d)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#fb923c;"></span> High Risk Warning (90–180d)</div>
+                <div class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span> Dead Stock (&gt;180d)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filtered Stock Catalog Quick Table -->
+          <div class="card">
+            <div class="card-title">📦 Active Stock Portfolio (Filtered View)</div>
+            <div class="card-sub">SKUs currently reflected in the visualizations above</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>SKU Code</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Stock Units</th>
+                    <th>Cost Price</th>
+                    <th>Inventory Value</th>
+                    <th>Stock Age</th>
+                    <th>Inactivity</th>
+                    <th>DSRS Score</th>
+                    <th>Classification</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="viz-table-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -1172,9 +1399,27 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    const API_HOST = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-      ? (window.location.port === '5050' ? '' : 'http://localhost:5050')
-      : '';
+    let API_HOST = (window.location.protocol.startsWith('http') && (window.location.port === '5000' || window.location.port === '5050'))
+      ? ''
+      : 'http://127.0.0.1:5000';
+
+    async function callBackendApi(path, options = {}) {
+      const candidates = [API_HOST, 'http://127.0.0.1:5000', 'http://127.0.0.1:5050', ''];
+      let lastErr = null;
+      for (const host of candidates) {
+        try {
+          const url = host ? `${host}${path}` : path;
+          const res = await fetch(url, options);
+          if (res) {
+            API_HOST = host; // remember working backend host
+            return res;
+          }
+        } catch(err) {
+          lastErr = err;
+        }
+      }
+      throw lastErr || new Error("Failed to connect to backend server.");
+    }
 
     // --- CACHE MIGRATION: REMOVE LEGACY OTP/2FA STORAGE ---
     const OTP_PURGE_KEY = 'sg_security_otp_removed_v4';
@@ -1211,21 +1456,34 @@
       localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
     }
 
-    // User requested to remove overall mock/dummy data and subsets to work on real business data later
-    if (!localStorage.getItem('sg_data_cleared_for_business_v1')) {
-      localStorage.removeItem('sg_products');
-      localStorage.removeItem('sg_sales');
-      localStorage.removeItem('sg_purchases');
-      localStorage.setItem('sg_data_cleared_for_business_v1', 'true');
-    }
-
-    let products = JSON.parse(localStorage.getItem('sg_products')) || [];
-    let sales = JSON.parse(localStorage.getItem('sg_sales')) || [];
-    let purchases = JSON.parse(localStorage.getItem('sg_purchases')) || [];
-
-    function persistProducts() {
-      localStorage.setItem('sg_products', JSON.stringify(products));
-    }
+    // 24-SKU Real-World Business Inventory Benchmark Dataset (from business_inventory_dataset.csv)
+    const BENCHMARK_DATASET = [
+      { sku: "SKU-EL-1001", name: "Kingston 8GB DDR3 1600MHz RAM", category: "PC Components", cost: 1500, price: 2200, stock: 500, age: 420, inact: 195 },
+      { sku: "SKU-EL-1002", name: "Logitech C270 720p HD Webcam", category: "Peripherals", cost: 1800, price: 2500, stock: 320, age: 380, inact: 185 },
+      { sku: "SKU-EL-1003", name: "D-Link 100Mbps 8-Port Fast Switch", category: "Networking", cost: 1100, price: 1650, stock: 210, age: 310, inact: 160 },
+      { sku: "SKU-EL-1004", name: "Seagate 500GB Internal SATA Hard Drive", category: "Storage", cost: 2200, price: 3100, stock: 175, age: 290, inact: 145 },
+      { sku: "SKU-EL-1005", name: "Zebronics Micro-USB 4-Port Hub", category: "Accessories", cost: 350, price: 599, stock: 650, age: 365, inact: 190 },
+      { sku: "SKU-EL-1006", name: "HP Internal DVD-RW 24x Optical Drive", category: "PC Components", cost: 950, price: 1499, stock: 140, age: 410, inact: 210 },
+      { sku: "SKU-EL-1007", name: "Frontech Gold 1.5m VGA Monitor Cable", category: "Cables & Adapters", cost: 180, price: 350, stock: 850, age: 390, inact: 180 },
+      { sku: "SKU-EL-1008", name: "Crucial 120GB 2.5-inch SATA SSD", category: "Storage", cost: 1250, price: 1850, stock: 260, age: 240, inact: 115 },
+      { sku: "SKU-EL-1009", name: "Redragon K552 RGB Mechanical Keyboard", category: "Gaming Gear", cost: 2600, price: 3800, stock: 130, age: 210, inact: 95 },
+      { sku: "SKU-EL-1010", name: "TP-Link 300Mbps Wi-Fi Range Extender", category: "Networking", cost: 1350, price: 1999, stock: 180, age: 195, inact: 85 },
+      { sku: "SKU-EL-1011", name: "Ant Esports ICE-200TG Mid Tower Case", category: "PC Components", cost: 2800, price: 3999, stock: 90, age: 170, inact: 75 },
+      { sku: "SKU-EL-1012", name: "Corsair VS450 450W Power Supply Unit", category: "Power Units", cost: 2400, price: 3350, stock: 110, age: 160, inact: 70 },
+      { sku: "SKU-EL-1013", name: "Logitech M221 Silent Wireless Mouse", category: "Peripherals", cost: 750, price: 1199, stock: 220, age: 130, inact: 55 },
+      { sku: "SKU-EL-1014", name: "Portronics 65W GaN Dual-Port Fast Charger", category: "Charging Tech", cost: 1600, price: 2499, stock: 160, age: 110, inact: 48 },
+      { sku: "SKU-EL-1015", name: "SanDisk 64GB Ultra Dual USB Drive Go", category: "Storage", cost: 520, price: 799, stock: 340, age: 95, inact: 40 },
+      { sku: "SKU-EL-1016", name: "Samsung 980 1TB NVMe M.2 PCIe Gen 3 SSD", category: "Storage", cost: 6200, price: 8500, stock: 140, age: 65, inact: 22 },
+      { sku: "SKU-EL-1017", name: "boAt BassHeads 100 Wired Earphones", category: "Audio", cost: 320, price: 499, stock: 480, age: 45, inact: 12 },
+      { sku: "SKU-EL-1018", name: "Anker PowerLine III USB-C to USB-C Cable", category: "Cables & Adapters", cost: 650, price: 999, stock: 390, age: 30, inact: 8 },
+      { sku: "SKU-EL-1019", name: "Sony WH-CH520 Wireless Bluetooth Headphones", category: "Audio", cost: 3400, price: 4490, stock: 95, age: 35, inact: 10 },
+      { sku: "SKU-EL-1020", name: "TP-Link UB500 Bluetooth 5.3 Nano USB Adapter", category: "Peripherals", cost: 450, price: 699, stock: 310, age: 25, inact: 6 },
+      { sku: "SKU-EL-1021", name: "Belkin 2m Ultra High Speed HDMI 2.1 Cable", category: "Cables & Adapters", cost: 1100, price: 1699, stock: 180, age: 40, inact: 9 },
+      { sku: "SKU-EL-1022", name: "Dell Premier Multi-Device Wireless Keyboard", category: "Peripherals", cost: 3800, price: 5200, stock: 60, age: 80, inact: 32 },
+      { sku: "SKU-EL-1023", name: "Quantum 4-Port USB 2.0 Desktop Splitter", category: "Accessories", cost: 210, price: 399, stock: 420, age: 330, inact: 175 },
+      { sku: "SKU-EL-1024", name: "Intex 600VA Line Interactive UPS", category: "Power Units", cost: 1950, price: 2850, stock: 85, age: 220, inact: 105 },
+      { sku: "SKU-EL-1025", name: "Logitech C922 Pro Stream 1080p 60fps Webcam", category: "Peripherals", cost: 7800, price: 10499, stock: 45, age: 50, inact: 14 }
+    ];
 
     function computeDsrs(stock, cost, age, inact) {
       const inactScore = Math.min(100, (inact / 180) * 100);
@@ -1243,11 +1501,57 @@
       return { dsrs, tier, blocked: dsrs > 60 };
     }
 
+    function loadBenchmarkStockDataset(silent = false) {
+      const loaded = BENCHMARK_DATASET.map((raw, idx) => {
+        const calc = computeDsrs(raw.stock, raw.cost, raw.age, raw.inact);
+        return {
+          id: idx + 1,
+          sku: raw.sku,
+          name: raw.name,
+          category: raw.category,
+          cost: raw.cost,
+          price: raw.price,
+          stock: raw.stock,
+          min: Math.round(raw.stock * 0.2),
+          age: raw.age,
+          inact: raw.inact,
+          dsrs: calc.dsrs,
+          tier: calc.tier,
+          blocked: calc.blocked,
+          warehouse: "Main Bay " + String.fromCharCode(65 + (idx % 6)) + "-0" + ((idx % 4) + 1)
+        };
+      });
+      products = loaded;
+      persistProducts();
+      renderAll();
+      if (!silent) {
+        alert("✅ Loaded 24 benchmark stock items with real-world inventory metrics, prices, and DSRS risk classifications!");
+      }
+    }
+
+    let products = JSON.parse(localStorage.getItem('sg_products')) || [];
+    let sales = JSON.parse(localStorage.getItem('sg_sales')) || [];
+    let purchases = JSON.parse(localStorage.getItem('sg_purchases')) || [];
+
+    // Automatically seed benchmark dataset if catalog is empty so visualizer immediately displays stock data
+    if (!products || products.length === 0) {
+      loadBenchmarkStockDataset(true);
+    }
+
+    function persistProducts() {
+      localStorage.setItem('sg_products', JSON.stringify(products));
+    }
+
     let auditTrail = JSON.parse(localStorage.getItem('sg_audit_trail')) || [
-      { id: 1, time: new Date().toLocaleString(), action: "SYSTEM_INITIALIZE", details: "StockGhost ERP initialized in Role-Based Access mode. Awaiting business catalog import.", dest: "StockGhost Central Core", user: "system", role: "System", department: "Enterprise Administration", status: "READY" }
+      { id: 1, time: new Date().toLocaleString(), action: "SYSTEM_INITIALIZE", details: "StockGhost ERP initialized in Role-Based Access mode. Email authentication enabled.", dest: "StockGhost Central Core", user: "system", role: "System", department: "Enterprise Administration", status: "READY" }
     ];
 
     let currentUser = null;
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
 
     // --- 2. AUTHENTICATION & ROLE-BASED LOGIN ---
     function switchLoginTab(tab) {
@@ -1271,19 +1575,19 @@
 
     function togglePassVisibility() {
       const input = document.getElementById('login-password');
-      input.type = input.type === 'password' ? 'text' : 'password';
+      if (input) input.type = input.type === 'password' ? 'text' : 'password';
     }
 
+    // REGISTRATION: USER ENTERS NAME, EMAIL, PASSWORD, AND ROLE
     function registerNewManager() {
-      const name = document.getElementById('reg-name').value.trim();
-      const uid = document.getElementById('reg-userid').value.trim().toLowerCase();
-      const pass = document.getElementById('reg-pass').value.trim();
+      const name = (document.getElementById('reg-name').value || '').trim();
+      const email = (document.getElementById('reg-email').value || '').trim().toLowerCase();
+      const pass = (document.getElementById('reg-pass').value || '').trim();
       const role = document.getElementById('reg-role').value;
-      const email = document.getElementById('reg-email').value.trim() || `${uid}@stockghost.com`;
       const msgBox = document.getElementById('login-reg-msg');
 
-      if (!name || !uid || !pass) {
-        msgBox.textContent = "Please fill in Full Name, User ID, and Password.";
+      if (!name || !email || !pass) {
+        msgBox.innerHTML = "⚠️ Please fill in all fields: <strong>Full Name</strong>, <strong>Corporate Email</strong>, and <strong>Password</strong>.";
         msgBox.style.background = "#ef444422";
         msgBox.style.color = "#f87171";
         msgBox.style.border = "1px solid #ef444444";
@@ -1291,8 +1595,9 @@
         return;
       }
 
-      if (registeredUsers.some(u => u.username.toLowerCase() === uid)) {
-        msgBox.textContent = `User ID '${uid}' is already registered. Choose another ID.`;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        msgBox.innerHTML = "⚠️ Please enter a valid corporate email address (e.g. <code>name@company.com</code>).";
         msgBox.style.background = "#ef444422";
         msgBox.style.color = "#f87171";
         msgBox.style.border = "1px solid #ef444444";
@@ -1300,41 +1605,74 @@
         return;
       }
 
-      const perms = role === 'Admin' ? 'Full System Clearance & User Provisioning' : (role === 'Sales Manager' ? 'Clearance Simulator & Outward Sales Execution' : 'SKU Catalog, DSRS Risk & Inward PO Receipts');
+      if (pass.length < 4) {
+        msgBox.innerHTML = "⚠️ Password must be at least 4 characters long.";
+        msgBox.style.background = "#ef444422";
+        msgBox.style.color = "#f87171";
+        msgBox.style.border = "1px solid #ef444444";
+        msgBox.classList.remove('hidden');
+        return;
+      }
+
+      // Check if email is already registered
+      if (registeredUsers.some(u => (u.email && u.email.toLowerCase() === email) || (u.username && u.username.toLowerCase() === email))) {
+        msgBox.innerHTML = `❌ An account with email <strong>${escapeHtml(email)}</strong> is already registered.<br/><span style="color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="switchLoginTab('signin'); document.getElementById('login-email').value='${email}';">Click here to Sign In</span>`;
+        msgBox.style.background = "#ef444422";
+        msgBox.style.color = "#f87171";
+        msgBox.style.border = "1px solid #ef444444";
+        msgBox.classList.remove('hidden');
+        return;
+      }
+
+      const perms = role === 'Admin' ? 'Full System Clearance & User Provisioning'
+        : (role === 'Sales Manager' ? 'Clearance Simulator & Outward Sales Execution'
+        : (role === 'Stock Analyst' ? 'Data Visualizations, Forecasting & Analytics Reports'
+        : 'SKU Catalog, DSRS Risk & Inward PO Receipts'));
+
       const newUser = {
         id: registeredUsers.length + 1,
-        username: uid,
+        username: email.split('@')[0],
         name: name,
+        full_name: name,
         password: pass,
         role: role,
         email: email,
-        perms: perms
+        perms: perms,
+        registered_at: new Date().toISOString()
       };
 
       registeredUsers.push(newUser);
       localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
 
-      // Try sync with backend
-      fetch(`${API_HOST}/api/auth/register`, {
+      // Sync with backend API (supports both Flask and standalone servers)
+      callBackendApi('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: uid, full_name: name, password: pass, role: role, email: email, registered_by: 'admin' })
+        body: JSON.stringify({
+          email: email,
+          full_name: name,
+          name: name,
+          password: pass,
+          confirm_password: pass,
+          role: role,
+          company_name: `${name}'s Organization`
+        })
       }).catch(e => {});
 
       auditTrail.unshift({
         id: Date.now(),
         time: new Date().toLocaleString(),
-        action: "ADMIN_REGISTRATION",
-        details: `Created manager '${uid}' (${name}) with role '${role}'`,
+        action: "USER_REGISTRATION",
+        details: `Account registered: '${name}' (${email}) with role '${role}'`,
         dest: "RBAC Security Directory / Enterprise Org",
-        user: "admin",
-        role: "Admin",
+        user: email,
+        role: role,
         department: "Enterprise Security",
         status: "REGISTERED"
       });
       localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
 
-      msgBox.textContent = `✅ Manager account '${uid}' provisioned successfully! Role: ${role}.`;
+      msgBox.innerHTML = `✅ Account created successfully for <strong>${escapeHtml(name)}</strong>!<br/>Role: <strong>${role}</strong>. Switching to Sign In...`;
       msgBox.style.background = "#10b98122";
       msgBox.style.color = "#34d399";
       msgBox.style.border = "1px solid #10b98144";
@@ -1342,54 +1680,83 @@
 
       setTimeout(() => {
         switchLoginTab('signin');
-        document.getElementById('login-userid').value = uid;
-        document.getElementById('login-password').value = pass;
+        const loginEmailEl = document.getElementById('login-email');
+        const loginPassEl = document.getElementById('login-password');
+        if (loginEmailEl) loginEmailEl.value = email;
+        if (loginPassEl) {
+          loginPassEl.value = '';
+          loginPassEl.focus();
+        }
         msgBox.classList.add('hidden');
-      }, 1500);
+      }, 1400);
     }
 
+    // SIGN IN: ONLY OPENS WITH REGISTERED EMAIL & PASSWORD
     function loginDirectly() {
-      const uid = (document.getElementById('login-userid').value || '').trim().toLowerCase();
+      const email = (document.getElementById('login-email').value || '').trim().toLowerCase();
       const pass = (document.getElementById('login-password').value || '').trim();
       const errBox = document.getElementById('login-cred-error');
 
-      if (!uid || !pass) {
-        errBox.textContent = "Please enter both User ID and Password.";
+      if (!email || !pass) {
+        errBox.innerHTML = "⚠️ Please enter both your <strong>Registered Email</strong> and <strong>Password</strong>.";
         errBox.classList.remove('hidden');
         return;
       }
 
-      // Check server authentication
-      fetch(`${API_HOST}/api/auth/login`, {
+      // 1. Try server authentication
+      callBackendApi('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: uid, password: pass })
+        body: JSON.stringify({ email: email, password: pass })
       })
       .then(async res => {
-        const data = await res.json();
-        if (res.status === 200 && data.user) {
+        let json = null;
+        try { json = await res.json(); } catch(e) {}
+        const userObj = json ? (json.user || (json.data && json.data.user)) : null;
+        const token = json ? (json.access_token || json.token || (json.data && json.data.access_token)) : null;
+
+        if (res.ok && userObj) {
           errBox.classList.add('hidden');
-          currentUser = data.user;
+          currentUser = userObj;
+          if (token) {
+            sessionStorage.setItem('sg_token', token);
+            localStorage.setItem('sg_token', token);
+          }
           sessionStorage.setItem('sg_user', JSON.stringify(currentUser));
           enterApp();
         } else {
-          errBox.textContent = "❌ " + (data.error || "Invalid User ID or Password. Authentication failed.");
-          errBox.classList.remove('hidden');
+          const errMsg = (json && (json.message || json.error)) || '';
+          checkLocalAuth(email, pass, errBox, errMsg);
         }
       })
       .catch(err => {
-        // Fallback to local storage registered users
-        const localUser = registeredUsers.find(u => u.username.toLowerCase() === uid && u.password === pass);
-        if (localUser) {
-          errBox.classList.add('hidden');
-          currentUser = localUser;
-          sessionStorage.setItem('sg_user', JSON.stringify(currentUser));
-          enterApp();
-        } else {
-          errBox.textContent = "❌ Invalid User ID or Password. Authentication failed.";
-          errBox.classList.remove('hidden');
-        }
+        checkLocalAuth(email, pass, errBox);
       });
+    }
+
+    function checkLocalAuth(email, pass, errBox, serverErr) {
+      // Find account matching the registered email (or username fallback)
+      const user = registeredUsers.find(u =>
+        (u.email && u.email.toLowerCase() === email) ||
+        (u.username && u.username.toLowerCase() === email)
+      );
+
+      if (!user) {
+        errBox.innerHTML = `❌ No registered account found with email <strong>${escapeHtml(email)}</strong>.<br/><span style="color:#38bdf8; cursor:pointer; text-decoration:underline;" onclick="switchLoginTab('reg')">Click here to Create Account</span>`;
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      if (user.password !== pass) {
+        errBox.innerHTML = `❌ Incorrect password for <strong>${escapeHtml(email)}</strong>. Authentication failed.`;
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      currentUser = user;
+      sessionStorage.setItem('sg_user', JSON.stringify(currentUser));
+      enterApp();
     }
 
     // --- CSV & BUSINESS DATA IMPORTER ---
@@ -1514,7 +1881,7 @@
         localStorage.setItem('sg_products', JSON.stringify(products));
 
         // Sync with backend
-        fetch(`${API_HOST}/api/products/import`, {
+        callBackendApi('/api/products/import', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ products: imported })
@@ -1562,7 +1929,7 @@
         localStorage.setItem('sg_products', JSON.stringify([]));
         localStorage.setItem('sg_sales', JSON.stringify([]));
         localStorage.setItem('sg_purchases', JSON.stringify([]));
-        fetch(`${API_HOST}/api/products/clear`, { method: 'POST' }).catch(e => {});
+        callBackendApi('/api/products/clear', { method: 'POST' }).catch(e => {});
         closeImportCsvModal();
         renderAll();
       }
@@ -1572,11 +1939,13 @@
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('view-app').classList.remove('hidden');
 
-      // Update badge in header (immutable role badge)
-      const roleIcons = { 'Admin': '👑', 'Sales Manager': '📈', 'Inventory Manager': '📦' };
+      // Update badge in header (immutable role badge with user name & email)
+      const roleIcons = { 'Admin': '👑', 'Sales Manager': '📈', 'Inventory Manager': '📦', 'Stock Analyst': '📊' };
       const icon = roleIcons[currentUser.role] || '👤';
+      const displayName = currentUser.name || currentUser.full_name || currentUser.username || 'User';
+      const displayEmail = currentUser.email ? ` (${currentUser.email})` : '';
       document.getElementById('current-user-badge').innerHTML = `
-        <span>${icon} ${currentUser.role} • ${currentUser.name || currentUser.full_name || currentUser.username}</span>
+        <span>${icon} ${currentUser.role} • ${escapeHtml(displayName)}${escapeHtml(displayEmail)}</span>
       `;
 
       // Strict RBAC Tab Navigation Boundaries
@@ -1598,6 +1967,17 @@
         if (addProdBtn) addProdBtn.classList.remove('hidden');
         if (addSaleBtn) addSaleBtn.classList.remove('hidden');
         if (addPoBtn) addPoBtn.classList.remove('hidden');
+        if (subSalesBtn) subSalesBtn.classList.remove('hidden');
+        if (subPurBtn) subPurBtn.classList.remove('hidden');
+      } else if (currentUser.role === 'Stock Analyst') {
+        // Stock Analyst: Full Analytics, Matrix, Catalog, Simulator Read
+        if (invBtn) invBtn.classList.remove('hidden');
+        if (matrixBtn) matrixBtn.classList.remove('hidden');
+        if (simBtn) simBtn.classList.remove('hidden');
+        if (rbacBtn) rbacBtn.classList.add('hidden');
+        if (addProdBtn) addProdBtn.classList.add('hidden');
+        if (addSaleBtn) addSaleBtn.classList.add('hidden');
+        if (addPoBtn) addPoBtn.classList.add('hidden');
         if (subSalesBtn) subSalesBtn.classList.remove('hidden');
         if (subPurBtn) subPurBtn.classList.remove('hidden');
       } else if (currentUser.role === 'Sales Manager') {
@@ -1638,6 +2018,18 @@
       currentUser = null;
       document.getElementById('view-app').classList.add('hidden');
       document.getElementById('view-login').classList.remove('hidden');
+
+      const loginEmailEl = document.getElementById('login-email');
+      const loginPassEl = document.getElementById('login-password');
+      if (loginEmailEl) loginEmailEl.value = '';
+      if (loginPassEl) loginPassEl.value = '';
+
+      const errBox = document.getElementById('login-cred-error');
+      if (errBox) errBox.classList.add('hidden');
+
+      const regMsg = document.getElementById('login-reg-msg');
+      if (regMsg) regMsg.classList.add('hidden');
+
       switchLoginTab('signin');
     }
 
@@ -1654,7 +2046,7 @@
         }
       }
 
-      const tabs = ['dashboard', 'inventory', 'matrix', 'simulator', 'recommendations', 'transactions', 'chatbot', 'audit', 'rbac'];
+      const tabs = ['dashboard', 'analytics', 'inventory', 'matrix', 'simulator', 'recommendations', 'transactions', 'chatbot', 'audit', 'rbac'];
       tabs.forEach(t => {
         const el = document.getElementById('tab-' + t);
         const btn = document.getElementById('btn-tab-' + t);
@@ -1667,7 +2059,9 @@
       if (activeEl) activeEl.classList.remove('hidden');
       if (activeBtn) activeBtn.classList.add('active');
 
-      if (tabId === 'simulator') {
+      if (tabId === 'analytics' || tabId === 'dashboard') {
+        setTimeout(renderVisualDashboard, 50);
+      } else if (tabId === 'simulator') {
         initSimulatorDropdown();
         updateSimulation();
       } else if (tabId === 'recommendations') {
@@ -1713,6 +2107,405 @@
       return "₹" + Number(num).toLocaleString('en-IN');
     }
 
+    // Chart.js instance registry for clean re-drawing
+    const chartInstances = {};
+    function destroyChart(id) {
+      if (chartInstances[id]) {
+        try { chartInstances[id].destroy(); } catch (e) {}
+        delete chartInstances[id];
+      }
+    }
+
+    function resetVizFilters() {
+      const catEl = document.getElementById('viz-filter-cat');
+      const tierEl = document.getElementById('viz-filter-tier');
+      const modeEl = document.getElementById('viz-metric-mode');
+      if (catEl) catEl.value = 'ALL';
+      if (tierEl) tierEl.value = 'ALL';
+      if (modeEl) modeEl.value = 'capital';
+      renderVisualDashboard();
+    }
+
+    // --- DATA VISUALIZATION DASHBOARD ENGINE ---
+    function renderVisualDashboard() {
+      if (!products || products.length === 0) return;
+
+      // Populate category filter dropdown
+      const catSelect = document.getElementById('viz-filter-cat');
+      if (catSelect) {
+        const currentCat = catSelect.value || 'ALL';
+        const uniqueCats = Array.from(new Set(products.map(p => p.category || 'General'))).sort();
+        let catOptions = '<option value="ALL">All Categories (' + products.length + ' SKUs)</option>';
+        uniqueCats.forEach(c => {
+          const count = products.filter(p => (p.category || 'General') === c).length;
+          catOptions += `<option value="${escapeHtml(c)}">${escapeHtml(c)} (${count})</option>`;
+        });
+        catSelect.innerHTML = catOptions;
+        if (currentCat && Array.from(catSelect.options).some(o => o.value === currentCat)) {
+          catSelect.value = currentCat;
+        }
+      }
+
+      const selCat = catSelect ? catSelect.value : 'ALL';
+      const tierSelect = document.getElementById('viz-filter-tier');
+      const selTier = tierSelect ? tierSelect.value : 'ALL';
+      const modeSelect = document.getElementById('viz-metric-mode');
+      const metricMode = modeSelect ? modeSelect.value : 'capital'; // 'capital' or 'units'
+
+      // Filter products based on selected criteria
+      const filtered = products.filter(p => {
+        const catMatch = (selCat === 'ALL') || ((p.category || 'General') === selCat);
+        const tierMatch = (selTier === 'ALL') || (p.tier === selTier);
+        return catMatch && tierMatch;
+      });
+
+      const countEl = document.getElementById('viz-filtered-count');
+      if (countEl) {
+        countEl.textContent = `Showing ${filtered.length} of ${products.length} catalog SKUs`;
+      }
+
+      // 1. Tally Risk Classifications (Dead, High Risk, Slow, Healthy)
+      const riskData = {
+        'Dead Stock': { count: 0, capital: 0, units: 0, color: '#ef4444' },
+        'High Risk': { count: 0, capital: 0, units: 0, color: '#fb923c' },
+        'Slow Moving': { count: 0, capital: 0, units: 0, color: '#fbbf24' },
+        'Healthy': { count: 0, capital: 0, units: 0, color: '#10b981' }
+      };
+
+      filtered.forEach(p => {
+        const t = p.tier || 'Healthy';
+        if (riskData[t]) {
+          riskData[t].count++;
+          riskData[t].units += (p.stock || 0);
+          riskData[t].capital += ((p.stock || 0) * (p.cost || 0));
+        }
+      });
+
+      const donutLabels = ['Dead Stock (81-100)', 'High Risk (61-80)', 'Slow Moving (31-60)', 'Healthy (0-30)'];
+      const donutValues = [
+        metricMode === 'units' ? riskData['Dead Stock'].units : riskData['Dead Stock'].capital,
+        metricMode === 'units' ? riskData['High Risk'].units : riskData['High Risk'].capital,
+        metricMode === 'units' ? riskData['Slow Moving'].units : riskData['Slow Moving'].capital,
+        metricMode === 'units' ? riskData['Healthy'].units : riskData['Healthy'].capital,
+      ];
+      const donutColors = ['#ef4444', '#fb923c', '#fbbf24', '#10b981'];
+
+      // Render Donut Legends
+      const renderLegends = (targetId) => {
+        const el = document.getElementById(targetId);
+        if (!el) return;
+        el.innerHTML = `
+          <div class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span> Dead: ${formatINR(riskData['Dead Stock'].capital)} (${riskData['Dead Stock'].count} SKUs)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#fb923c;"></span> High Risk: ${formatINR(riskData['High Risk'].capital)} (${riskData['High Risk'].count} SKUs)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#fbbf24;"></span> Slow: ${formatINR(riskData['Slow Moving'].capital)} (${riskData['Slow Moving'].count} SKUs)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#10b981;"></span> Healthy: ${formatINR(riskData['Healthy'].capital)} (${riskData['Healthy'].count} SKUs)</div>
+        `;
+      };
+      renderLegends('legend-db-donut');
+      renderLegends('legend-viz-donut');
+
+      // 2. Tally Category Capital (Total vs Blocked)
+      const catMap = {};
+      filtered.forEach(p => {
+        const c = p.category || 'General';
+        if (!catMap[c]) catMap[c] = { totalVal: 0, blockedVal: 0, totalUnits: 0, blockedUnits: 0 };
+        const val = (p.stock || 0) * (p.cost || 0);
+        catMap[c].totalVal += val;
+        catMap[c].totalUnits += (p.stock || 0);
+        if (p.blocked || p.dsrs >= 61) {
+          catMap[c].blockedVal += val;
+          catMap[c].blockedUnits += (p.stock || 0);
+        }
+      });
+
+      const catLabels = Object.keys(catMap).sort();
+      const catTotalVals = catLabels.map(c => metricMode === 'units' ? catMap[c].totalUnits : catMap[c].totalVal);
+      const catBlockedVals = catLabels.map(c => metricMode === 'units' ? catMap[c].blockedUnits : catMap[c].blockedVal);
+
+      // 3. Render Top 5 Capital Drains
+      const topDrainsContainer = document.getElementById('viz-top-drains');
+      if (topDrainsContainer) {
+        const riskySorted = [...filtered].sort((a,b) => ((b.stock * b.cost) - (a.stock * a.cost)));
+        const top5 = riskySorted.slice(0, 5);
+        if (top5.length === 0) {
+          topDrainsContainer.innerHTML = '<div style="color:#64748b; font-size:12px; padding:20px; text-align:center;">No items match selected filters.</div>';
+        } else {
+          const maxVal = Math.max(...top5.map(p => p.stock * p.cost), 1);
+          topDrainsContainer.innerHTML = top5.map(p => {
+            const val = p.stock * p.cost;
+            const pct = Math.round((val / maxVal) * 100);
+            const color = p.dsrs >= 81 ? '#ef4444' : (p.dsrs >= 61 ? '#fb923c' : (p.dsrs >= 31 ? '#fbbf24' : '#10b981'));
+            return `
+              <div class="rank-bar-wrap">
+                <div class="rank-bar-label">
+                  <span><strong style="color:#fff;">${escapeHtml(p.name)}</strong> <code style="color:#64748b; font-size:10px;">${p.sku}</code></span>
+                  <span style="color:${color}; font-weight:700;">${formatINR(val)} (${p.stock} units) • DSRS ${p.dsrs}</span>
+                </div>
+                <div class="rank-bar-track">
+                  <div class="rank-bar-fill" style="width:${pct}%; background:${color};"></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // 4. Render with Chart.js if loaded, otherwise fallback to SVG renderers
+      if (typeof Chart !== 'undefined') {
+        // Render Donut Chart (Dashboard & Visualizer)
+        ['chart-db-donut', 'chart-viz-donut'].forEach(canvasId => {
+          const canvas = document.getElementById(canvasId);
+          if (!canvas) return;
+          destroyChart(canvasId);
+          const ctx = canvas.getContext('2d');
+          chartInstances[canvasId] = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: donutLabels,
+              datasets: [{
+                data: donutValues,
+                backgroundColor: donutColors,
+                borderWidth: 2,
+                borderColor: '#0b1120',
+                hoverOffset: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: '68%',
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0f172a',
+                  titleColor: '#fff',
+                  bodyColor: '#cbd5e1',
+                  borderColor: '#1e293b',
+                  borderWidth: 1,
+                  callbacks: {
+                    label: function(item) {
+                      const v = item.raw || 0;
+                      return metricMode === 'units' ? ` ${v.toLocaleString()} units` : ` ${formatINR(v)}`;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        });
+
+        // Render Category Grouped Bar Chart (Dashboard & Visualizer)
+        ['chart-db-cat', 'chart-viz-cat'].forEach(canvasId => {
+          const canvas = document.getElementById(canvasId);
+          if (!canvas) return;
+          destroyChart(canvasId);
+          const ctx = canvas.getContext('2d');
+          chartInstances[canvasId] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: catLabels,
+              datasets: [
+                {
+                  label: metricMode === 'units' ? 'Total Stock Units' : 'Total Inventory Value (₹)',
+                  data: catTotalVals,
+                  backgroundColor: '#0284c7',
+                  borderRadius: 6
+                },
+                {
+                  label: metricMode === 'units' ? 'Blocked / Risk Units' : 'Blocked Capital (₹)',
+                  data: catBlockedVals,
+                  backgroundColor: '#ef4444',
+                  borderRadius: 6
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0f172a',
+                  titleColor: '#fff',
+                  bodyColor: '#cbd5e1',
+                  borderColor: '#1e293b',
+                  borderWidth: 1,
+                  callbacks: {
+                    label: function(item) {
+                      const v = item.raw || 0;
+                      return metricMode === 'units' ? ` ${item.dataset.label}: ${v.toLocaleString()} units` : ` ${item.dataset.label}: ${formatINR(v)}`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  ticks: { color: '#94a3b8', font: { size: 10 } },
+                  grid: { display: false }
+                },
+                y: {
+                  ticks: {
+                    color: '#94a3b8',
+                    font: { size: 10 },
+                    callback: function(v) {
+                      return metricMode === 'units' ? v : ('₹' + (v >= 100000 ? (v/100000).toFixed(1) + 'L' : (v >= 1000 ? (v/1000).toFixed(0) + 'k' : v)));
+                    }
+                  },
+                  grid: { color: '#1e293b' }
+                }
+              }
+            }
+          });
+        });
+
+        // Render 2D Aging vs Inactivity Scatter Matrix
+        const scatterCanvas = document.getElementById('chart-viz-scatter');
+        if (scatterCanvas) {
+          destroyChart('chart-viz-scatter');
+          const scatterData = filtered.map(p => {
+            const val = p.stock * p.cost;
+            const r = Math.min(18, Math.max(5, Math.round(Math.sqrt(val / 8000))));
+            const color = p.dsrs >= 81 ? '#ef4444' : (p.dsrs >= 61 ? '#fb923c' : (p.dsrs >= 31 ? '#fbbf24' : '#10b981'));
+            return {
+              x: p.inact,
+              y: p.age,
+              r: r,
+              name: p.name,
+              sku: p.sku,
+              val: val,
+              stock: p.stock,
+              dsrs: p.dsrs,
+              tier: p.tier,
+              backgroundColor: color,
+              borderColor: '#0b1120'
+            };
+          });
+
+          const ctx = scatterCanvas.getContext('2d');
+          chartInstances['chart-viz-scatter'] = new Chart(ctx, {
+            type: 'bubble',
+            data: {
+              datasets: [{
+                data: scatterData,
+                backgroundColor: scatterData.map(d => d.backgroundColor),
+                borderColor: scatterData.map(d => d.borderColor),
+                borderWidth: 1.5,
+                hoverBorderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  backgroundColor: '#0f172a',
+                  titleColor: '#fff',
+                  bodyColor: '#cbd5e1',
+                  borderColor: '#1e293b',
+                  borderWidth: 1,
+                  callbacks: {
+                    title: function(items) {
+                      const raw = items[0].raw;
+                      return `${raw.name} (${raw.sku})`;
+                    },
+                    label: function(item) {
+                      const r = item.raw;
+                      return [
+                        ` Inactivity: ${r.x} days since sale`,
+                        ` Stock Age: ${r.y} days in storage`,
+                        ` Blocked Capital: ${formatINR(r.val)} (${r.stock} units)`,
+                        ` DSRS Score: ${r.dsrs}/100 (${r.tier})`
+                      ];
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  title: { display: true, text: 'Days of Inactivity (Sales Velocity Drop)', color: '#94a3b8', font: { size: 10 } },
+                  ticks: { color: '#94a3b8', font: { size: 10 } },
+                  grid: { color: '#1e293b' }
+                },
+                y: {
+                  title: { display: true, text: 'Total Stock Age in Warehouse (Days)', color: '#94a3b8', font: { size: 10 } },
+                  ticks: { color: '#94a3b8', font: { size: 10 } },
+                  grid: { color: '#1e293b' }
+                }
+              }
+            }
+          });
+        }
+      } else {
+        // Fallback SVG rendering if Chart.js is not loaded
+        renderFallbackVisuals(donutLabels, donutValues, donutColors, catLabels, catTotalVals, catBlockedVals);
+      }
+
+      // 5. Update Visualizer Filtered Stock Ledger Table
+      const vizTableBody = document.getElementById('viz-table-tbody');
+      if (vizTableBody) {
+        if (filtered.length === 0) {
+          vizTableBody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:30px; color:#64748b;">No stock items match the active filters.</td></tr>`;
+        } else {
+          vizTableBody.innerHTML = filtered.map(p => {
+            const val = p.stock * p.cost;
+            const badgeClass = p.dsrs >= 81 ? 'badge-dead' : (p.dsrs >= 61 ? 'badge-high' : (p.dsrs >= 31 ? 'badge-slow' : 'badge-healthy'));
+            return `
+              <tr>
+                <td><code style="color:#38bdf8; font-weight:700;">${p.sku}</code></td>
+                <td><strong style="color:#fff;">${escapeHtml(p.name)}</strong></td>
+                <td><span style="color:#94a3b8;">${escapeHtml(p.category)}</span></td>
+                <td><strong>${p.stock}</strong> units</td>
+                <td>${formatINR(p.cost)}</td>
+                <td style="color:${p.blocked ? '#f87171' : '#34d399'}; font-weight:700;">${formatINR(val)}</td>
+                <td>${p.age} days</td>
+                <td>${p.inact} days</td>
+                <td><strong style="font-size:13px; color:${p.dsrs>=81?'#ef4444':'#fb923c'}">${p.dsrs}</strong>/100</td>
+                <td><span class="badge ${badgeClass}">${p.tier.toUpperCase()}</span></td>
+                <td><button class="btn-action" style="padding:4px 10px; font-size:10px;" onclick="simulateSku(${p.id})">Simulate ➔</button></td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+    }
+
+    // Fallback SVG renderer for offline environments
+    function renderFallbackVisuals(labels, values, colors, catLabels, catTotalVals, catBlockedVals) {
+      const sum = values.reduce((a, b) => a + b, 0) || 1;
+      let cum = 0;
+      const paths = values.map((v, i) => {
+        const startAngle = (cum / sum) * 2 * Math.PI;
+        cum += v;
+        const endAngle = (cum / sum) * 2 * Math.PI;
+        const x1 = 100 + 70 * Math.sin(startAngle);
+        const y1 = 100 - 70 * Math.cos(startAngle);
+        const x2 = 100 + 70 * Math.sin(endAngle);
+        const y2 = 100 - 70 * Math.cos(endAngle);
+        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
+        return `<path d="M 100 100 L ${x1} ${y1} A 70 70 0 ${largeArc} 1 ${x2} ${y2} Z" fill="${colors[i]}" opacity="0.85" />`;
+      }).join('');
+
+      const svgDonut = `
+        <svg viewBox="0 0 200 200" style="width:100%; height:260px;">
+          ${paths}
+          <circle cx="100" cy="100" r="48" fill="#0b1120" />
+          <text x="100" y="98" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold">STOCK</text>
+          <text x="100" y="112" text-anchor="middle" fill="#94a3b8" font-size="10">DSRS RISK</text>
+        </svg>
+      `;
+
+      ['fallback-db-donut', 'fallback-viz-donut'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.innerHTML = svgDonut;
+          el.classList.remove('hidden');
+          const canvas = document.getElementById(id.replace('fallback-', 'chart-'));
+          if (canvas) canvas.classList.add('hidden');
+        }
+      });
+    }
+
     function renderAll() {
       // 1. Dashboard Metrics
       let totalVal = 0;
@@ -1746,14 +2539,14 @@
               <td colspan="8" style="text-align:center; padding:32px; color:#64748b;">
                 <div style="font-size:18px; margin-bottom:6px;">📭</div>
                 <strong style="color:#cbd5e1;">No Dead Stock or High-Risk Items Detected</strong><br>
-                <span style="font-size:11px; color:#64748b;">Inventory is currently empty or completely healthy. Click <strong>"📁 Import Business CSV"</strong> to load your catalog.</span>
+                <span style="font-size:11px; color:#64748b;">Inventory is currently empty or completely healthy. Click <strong>"📁 Import Business CSV"</strong> or <strong>"⚡ Load Benchmark Dataset"</strong> to populate stock items.</span>
               </td>
             </tr>
           `;
         } else {
           topTbody.innerHTML = risky.map(p => `
             <tr>
-              <td><strong style="color:#fff;">${p.name}</strong><br /><span style="color:#64748b; font-size:10px;">${p.sku}</span></td>
+              <td><strong style="color:#fff;">${escapeHtml(p.name)}</strong><br /><span style="color:#64748b; font-size:10px;">${p.sku}</span></td>
               <td><strong>${p.stock}</strong> units</td>
               <td>${formatINR(p.cost)}</td>
               <td style="color:#f87171; font-weight:700;">${formatINR(p.stock * p.cost)}</td>
@@ -1770,6 +2563,7 @@
       renderTransactions();
       renderRecommendations();
       initSimulatorDropdown();
+      renderVisualDashboard();
     }
 
     function renderInventoryTable() {
@@ -2521,7 +3315,7 @@
       localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
 
       // Sync with backend API
-      fetch(`${API_HOST}/api/products/update`, {
+      callBackendApi('/api/products/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2649,7 +3443,7 @@
       localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
 
       // Sync with backend API
-      fetch(`${API_HOST}/api/products/rma`, {
+      callBackendApi('/api/products/rma', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2794,7 +3588,7 @@
       localStorage.setItem('sg_audit_trail', JSON.stringify(auditTrail));
 
       // Sync with backend API
-      fetch(`${API_HOST}/api/products/bundle`, {
+      callBackendApi('/api/products/bundle', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2893,10 +3687,20 @@
       localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
 
       // Sync with backend
-      fetch(`${API_HOST}/api/auth/register`, {
+      callBackendApi('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: uid, full_name: name, password: pass, role: role, email: email, registered_by: currentUser ? currentUser.username : 'admin' })
+        body: JSON.stringify({
+          username: uid,
+          full_name: name,
+          name: name,
+          password: pass,
+          confirm_password: pass,
+          role: role,
+          email: email,
+          company_name: `${name}'s Organization`,
+          registered_by: currentUser ? currentUser.username : 'admin'
+        })
       }).catch(e => {});
 
       auditTrail.unshift({
@@ -2943,7 +3747,7 @@
       localStorage.setItem('sg_registered_users', JSON.stringify(registeredUsers));
 
       // Sync with backend
-      fetch(`${API_HOST}/api/auth/reset-password`, {
+      callBackendApi('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: uid, new_password: newPass, reset_by: currentUser ? currentUser.username : 'admin' })
@@ -3043,7 +3847,7 @@
       }
       // If products exist in localStorage, ensure backend catalog has them in memory
       if (products && products.length > 0) {
-        fetch(`${API_HOST}/api/products/import`, {
+        callBackendApi('/api/products/import', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ products: products })

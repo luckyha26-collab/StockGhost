@@ -1,28 +1,23 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          500: '#0284c7',
-          600: '#0369a1',
-          700: '#075985',
-          800: '#0c4a6e',
-          900: '#082f49',
-        },
-        risk: {
-          healthy: '#10b981',     // Green
-          slow: '#f59e0b',        // Amber / Yellow
-          high: '#f97316',        // Orange
-          dead: '#ef4444',        // Red
-        }
-      }
+        ink: '#080d19',
+        panel: '#0f1626',
+        panel2: '#151f35',
+        line: '#212d49',
+        muted: '#8592ad',
+        brand: '#34d3c1',
+        violet: '#8b7cf6',
+      },
+      fontFamily: { sans: ['"IBM Plex Sans"', 'system-ui', '-apple-system', 'Segoe UI', 'sans-serif'] },
+      keyframes: {
+        rise: { from: { opacity: 0, transform: 'translateY(6px)' }, to: { opacity: 1, transform: 'none' } },
+        pop: { from: { opacity: 0, transform: 'scale(.97)' }, to: { opacity: 1, transform: 'none' } },
+      },
+      animation: { rise: 'rise .35s ease-out both', pop: 'pop .18s ease-out both' },
     },
   },
   plugins: [],

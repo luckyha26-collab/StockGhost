@@ -1,230 +1,52 @@
-import React, { useState, useEffect } from 'react';
-import { recommendationAPI } from '../api';
-import { 
-  Lightbulb, 
-  RotateCw, 
-  CheckCircle2, 
-  Tag, 
-  Boxes, 
-  Truck, 
-  Gavel, 
-  ArrowUpRight,
-  Filter
-} from 'lucide-react';
+import { useState } from 'react'
+import { Info } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { useApi } from '../api/client.js'
+import { EmptyData, Tabs, useDebounce } from '../components/common.jsx'
+import RiskDetail from '../components/RiskDetail.jsx'
+import { Async, Badge, Card, PageHeader, Stat, inr, inrShort, num } from '../components/ui.jsx'
+import { useAuth } from '../context/AuthContext.jsx'
 
-export const Recommendations = ({ onNavigateToSimulator }) => {
-  const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filterPriority, setFilterPriority] = useState('');
-  const [filterStatus, setFilterStatus] = useState('Pending');
-  const [refreshing, setRefreshing] = useState(false);
+const PC = { Critical: '#f43f5e', High: '#fb923c', Medium: '#fbbf24', Watch: '#8592ad' }
 
-  useEffect(() => {
-    loadRecommendations();
-  }, [filterPriority, filterStatus]);
-
-  const loadRecommendations = async () => {
-    try {
-      setLoading(true);
-      const params = {};
-      if (filterPriority) params.priority = filterPriority;
-      if (filterStatus) params.status = filterStatus;
-
-      const res = await recommendationAPI.getAll(params);
-      setRecommendations(res.data);
-    } catch (err) {
-      console.error('Failed to load recommendations:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRefresh = async () => {
-    try {
-      setRefreshing(true);
-      await recommendationAPI.refresh();
-      loadRecommendations();
-    } catch (err) {
-      console.error('Failed to regenerate recommendations:', err);
-    } finally {
-      setRefreshing(false);
-    }
-  };
-
-  const handleMarkApplied = async (id) => {
-    try {
-      await recommendationAPI.updateStatus(id, 'Applied');
-      loadRecommendations();
-    } catch (err) {
-      alert('Failed to update recommendation status.');
-    }
-  };
-
-  const getActionIcon = (actionType) => {
-    switch (actionType) {
-      case 'Clearance Discount':
-        return <Tag className="w-5 h-5 text-rose-400" />;
-      case 'Bundling':
-        return <Boxes className="w-5 h-5 text-amber-400" />;
-      case 'Return to Supplier':
-        return <Truck className="w-5 h-5 text-sky-400" />;
-      case 'Liquidation':
-        return <Gavel className="w-5 h-5 text-purple-400" />;
-      default:
-        return <Lightbulb className="w-5 h-5 text-emerald-400" />;
-    }
-  };
-
+export default function Recommendations() {
+  const { ws, can } = useAuth()
+  const [tier, setTier] = useState('')
+  const [page, setPage] = useState(1)
+  const [q, setQ] = useState('')
+  const dq = useDebounce(q)
+  const [sel, setSel] = useState(null)
+  const st = useApi('/analytics/recommendations', { tier: tier || undefined, page, q: dq || undefined })
+  if (ws && !ws.has_data) return <><PageHeader title="Recommendations" /><EmptyData title="No inventory data available." canUpload={can('data.import')} /></>
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <Lightbulb className="w-6 h-6 text-amber-400" />
-            <span>Rule-Based Stock Recovery Engine</span>
-          </h2>
-          <p className="text-xs text-slate-400">
-            Automated prescriptive actions: Clearance Discounts, Strategic Bundling, RMAs, and Liquidation
-          </p>
-        </div>
-        <button
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 transition"
-        >
-          <RotateCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
-          <span>{refreshing ? 'Scanning Catalog...' : 'Re-Evaluate Catalog'}</span>
-        </button>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-800/40 p-4">
-        <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-500" />
-          <span className="text-xs font-medium text-slate-400">Filter Strategies:</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-slate-300 focus:border-sky-500 focus:outline-none"
-          >
-            <option value="">All Statuses</option>
-            <option value="Pending">Pending Action</option>
-            <option value="Applied">Applied / Completed</option>
-          </select>
-
-          <select
-            value={filterPriority}
-            onChange={(e) => setFilterPriority(e.target.value)}
-            className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-slate-300 focus:border-sky-500 focus:outline-none"
-          >
-            <option value="">All Priorities</option>
-            <option value="Critical">Critical Priority</option>
-            <option value="High">High Priority</option>
-            <option value="Medium">Medium Priority</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Recommendations Cards Grid */}
-      {loading ? (
-        <div className="flex h-64 items-center justify-center">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-sky-500 border-t-transparent"></div>
-        </div>
-      ) : recommendations.length === 0 ? (
-        <div className="rounded-xl border border-slate-800 bg-slate-800/40 p-12 text-center text-xs text-slate-400">
-          No recommendations match your current filter. Try selecting 'All Statuses' or click 'Re-Evaluate Catalog'.
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {recommendations.map((rec) => (
-            <div
-              key={rec.id}
-              className={`rounded-xl border p-5 flex flex-col justify-between transition ${
-                rec.status === 'Applied'
-                  ? 'border-emerald-500/20 bg-slate-900/40 opacity-75'
-                  : rec.priority === 'Critical'
-                  ? 'border-rose-500/40 bg-slate-800/70 shadow-lg shadow-rose-950/20'
-                  : 'border-slate-800 bg-slate-800/60'
-              }`}
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-lg bg-slate-900 border border-slate-700">
-                      {getActionIcon(rec.action_type)}
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-semibold tracking-wider text-slate-400 uppercase">
-                        {rec.action_type}
-                      </span>
-                      <h4 className="text-sm font-bold text-white leading-tight">
-                        {rec.title}
-                      </h4>
-                    </div>
-                  </div>
-
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                    rec.priority === 'Critical' ? 'bg-rose-500/20 text-rose-400 border-rose-500/30' :
-                    rec.priority === 'High' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
-                    'bg-sky-500/20 text-sky-400 border-sky-500/30'
-                  }`}>
-                    {rec.priority}
-                  </span>
-                </div>
-
-                <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                  {rec.details}
-                </p>
-
-                <div className="flex items-center justify-between text-xs border-t border-slate-800 pt-3">
-                  <span className="text-slate-400">Target Product:</span>
-                  <span className="font-semibold text-white">{rec.product_name}</span>
-                </div>
-
-                {rec.expected_recovery > 0 && (
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <span className="text-slate-400">Potential Recovery:</span>
-                    <span className="font-bold text-emerald-400">
-                      ₹{rec.expected_recovery.toLocaleString()}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-4 mt-2 border-t border-slate-800">
-                {rec.status === 'Applied' ? (
-                  <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
-                    <CheckCircle2 className="w-4 h-4" /> Action Applied
-                  </span>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => onNavigateToSimulator && onNavigateToSimulator()}
-                      className="text-xs text-sky-400 hover:text-sky-300 flex items-center gap-1 font-medium"
-                    >
-                      <span>Simulate Strategy</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => handleMarkApplied(rec.id)}
-                      className="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold shadow-sm transition"
-                    >
-                      Mark Executed
-                    </button>
-                  </>
-                )}
-              </div>
+    <>
+      <PageHeader title="Recommendations" subtitle="Specific actions for specific products, each with the reasons behind it. Financial effects are estimates from the simulator's model - not guarantees." />
+      <Async state={st}>{(d) => (<>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+          {Object.keys(PC).map((p) => <Stat key={p} label={`${p} priority`} value={num(d.priority_counts[p] || 0)} color={PC[p]} />)}
+          <Stat label="Estimated capital recovery" value={inrShort(d.estimated_recovery)} sub="estimate, 30-day clearance model" color="#34d3c1" /></div>
+        <div className="mb-4 mt-5 flex flex-wrap items-center gap-3"><Tabs value={tier} onChange={(v) => { setTier(v); setPage(1) }} tabs={[['', 'All'], ['reorder', 'Reorder'], ['clearance', 'Clearance'], ['promotion', 'Promotion'], ['monitor', 'Reduce / monitor'], ['supplier', 'Supplier']]} />
+          <input className="input !w-56 !py-1.5" placeholder="Search product" value={q} onChange={(e) => { setQ(e.target.value); setPage(1) }} aria-label="Search recommendations" /></div>
+        {d.items.length === 0 && <Card><p className="py-8 text-center text-sm text-muted">No recommendations in this view - nothing needs action right now.</p></Card>}
+        <div className="space-y-3">{d.items.map((r, i) => (
+          <article key={(r.product_id || 's') + r.type + i} className="card p-4">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div><div className="flex flex-wrap items-center gap-2"><h3 className="font-semibold text-slate-50">{r.product_name}</h3><Badge color={PC[r.priority]}>{r.priority}</Badge>{r.dsrs_score != null && <span className="text-xs text-muted">DSRS {r.dsrs_score}</span>}</div>
+                {r.sku && <p className="text-xs text-muted">{r.sku} · {r.category} · {num(r.quantity)} in stock</p>}</div>
+              {r.product_id && <button className="btn-ghost !py-1 text-xs" onClick={() => setSel(r.product_id)}>Why this score?</button>}
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default Recommendations;
+            <p className="mt-3 text-sm"><span className="text-xs font-semibold uppercase tracking-wide text-brand">Recommendation</span><br /><span className="text-base font-semibold text-slate-50">{r.action}</span></p>
+            <p className="mt-1 text-sm text-slate-300">{r.summary}</p>
+            <ul className="mt-2 space-y-1 text-sm text-muted">{r.reasons.map((x) => <li key={x}>• {x}</li>)}</ul>
+            {r.estimate?.capital_recovery != null && <div className="mt-3 rounded-lg bg-ink/60 p-3 text-xs"><p className="flex items-center gap-1 font-semibold text-amber-300"><Info size={12} />ESTIMATE</p>
+              <p className="mt-1 text-slate-300">Potential inventory reduction: {num(r.estimate.units_reduction)} units · Potential capital recovery: {inr(r.estimate.capital_recovery)} · Projected DSRS after: {r.estimate.projected_dsrs}{r.estimate.below_cost ? ' · priced below cost' : ''}</p></div>}
+            {r.estimate?.purchase_outlay != null && <p className="mt-3 rounded-lg bg-ink/60 p-3 text-xs text-slate-300">Estimated purchase outlay: {inr(r.estimate.purchase_outlay)} for {num(r.suggested_quantity)} units (quantity x current cost).</p>}
+            {r.estimate?.excess_units != null && <p className="mt-3 rounded-lg bg-ink/60 p-3 text-xs text-slate-300">Forecast excess: {num(r.estimate.excess_units)} units ({inr(r.estimate.excess_value)} at cost).</p>}
+            {r.product_id && r.suggested_discount > 0 && <div className="mt-3"><Link className="btn-ghost !py-1 text-xs" to={`/simulator?product=${r.product_id}&discount=${r.suggested_discount}`}>Open in simulator</Link></div>}
+          </article>))}</div>
+        {d.pages > 1 && <div className="mt-4 flex items-center justify-between text-xs text-muted"><span>Page {d.page} of {d.pages} · {num(d.total)} recommendations</span><div className="flex gap-2"><button className="btn-ghost" disabled={page <= 1} onClick={() => setPage(page - 1)}>Previous</button><button className="btn-ghost" disabled={page >= d.pages} onClick={() => setPage(page + 1)}>Next</button></div></div>}
+      </>)}</Async>
+      <RiskDetail productId={sel} onClose={() => setSel(null)} />
+    </>
+  )
+}
